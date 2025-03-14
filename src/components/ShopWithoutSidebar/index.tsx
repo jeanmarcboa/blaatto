@@ -28,7 +28,7 @@ const ShopWithoutSidebar = () => {
     shopAPI
       .shopList()
       .then((response) => {
-        setShopList(response.data);
+        // setShopList(response.data);
         let tmp = response.data.filter((shop) => shop.id == id);
         setCurrentShop(tmp[0]);
         setLoading(false);
@@ -37,7 +37,18 @@ const ShopWithoutSidebar = () => {
   };
 
   useEffect(() => {
-    fetchShopList();
+    // fetchShopList();
+    let result = shopData.filter((shop: any) => shop.shopId == id);
+    console.log("result", result);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    if (id) {
+      setShopList(result);
+      setCurrentShop(result[0].shop);
+    } else {
+      setShopList(shopData);
+    }
   }, []);
 
   return (
@@ -157,7 +168,7 @@ const ShopWithoutSidebar = () => {
                       : "flex flex-col gap-7.5"
                   }`}
                 >
-                  {shopData.map((item, key) =>
+                  {shopList.map((item, key) =>
                     productStyle === "grid" ? (
                       <SingleGridItem item={item} key={key} />
                     ) : (
