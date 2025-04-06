@@ -25,7 +25,11 @@ const Hero = () => {
 
           <div className="xl:max-w-[393px] w-full">
             <div className="flex flex-col sm:flex-row xl:flex-col gap-5">
-              <div className="w-full relative rounded-[10px] bg-white p-4 sm:p-7.5">
+              <HeroFeature />
+              <div className="w-full h-[250px] rounded-md overflow-hidden">
+                <img src="images/pub-exemple.gif" className="w-full" />
+              </div>
+              {/* <div className="w-full relative rounded-[10px] bg-white p-4 sm:p-7.5">
                 <div className="flex items-center gap-14">
                   <div>
                     <h2 className="max-w-[153px] font-semibold text-dark text-xl mb-20">
@@ -33,9 +37,7 @@ const Hero = () => {
                     </h2>
 
                     <div>
-                      {/* <p className="font-medium text-dark-4 text-custom-sm mb-1.5">
-                        limited time offer
-                      </p> */}
+                      
                       <span className="flex items-center gap-3">
                         <span className="font-medium text-heading-5 text-red">
                           1000F
@@ -65,9 +67,6 @@ const Hero = () => {
                     </h2>
 
                     <div>
-                      {/* <p className="font-medium text-dark-4 text-custom-sm mb-1.5">
-                        limited time offer
-                      </p> */}
                       <span className="flex items-center gap-3">
                         <span className="font-medium text-heading-5 text-red">
                           2.000F
@@ -88,14 +87,14 @@ const Hero = () => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
 
       {/* <!-- Hero features --> */}
-      <HeroFeature />
+      {/* <HeroFeature /> */}
     </section>
   );
 };

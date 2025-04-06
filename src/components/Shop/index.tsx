@@ -48,7 +48,7 @@ export const ShopList = () => {
 
   const fetchShopList = () => {
     shopAPI
-      .shopListByBusinessId(userInfo.accountId)
+      .shopListByBusinessId(userInfo?.id)
       .then((response) => {
         setShopList(response.data);
         setPageLoading(false);

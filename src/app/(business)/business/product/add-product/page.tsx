@@ -28,7 +28,7 @@ export default function AddProduct() {
 
   const fetchShopList = () => {
     shop
-      .shopListByBusinessId(userInfo.accountId)
+      .shopListByBusinessId(userInfo.id)
       .then((response) => {
         console.log("Liste des boutiques:", response.data);
         setShopList(response.data);
@@ -52,19 +52,27 @@ export default function AddProduct() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const formData = new FormData();
-    formData.append("label", productName);
-    formData.append("description", description);
-    formData.append("currency", "XOF");
-    formData.append("price", price);
-    formData.append("stock", stock);
-    formData.append("categoryId", category);
-    formData.append("shopId", shopId);
+    // const formData = new FormData();
+    // formData.append("label", productName);
+    // formData.append("description", description);
+    // formData.append("currency", "XOF");
+    // formData.append("price", price);
+    // formData.append("stock", stock);
+    // formData.append("categoryId", category);
+    // formData.append("shopId", shopId);
     // images.forEach((image, index) => formData.append("images", image));
-
+    let tmpData = {
+      label: productName,
+      description: description,
+      currency: "XOF",
+      price: Number(price),
+      stock: Number(stock),
+      categoryId: category,
+      shopId: shopId,
+    };
     // Envoi des données au backend
     product
-      .createProduct(formData)
+      .createProduct(tmpData)
       .then((response) => {
         console.log("Produit ajouté avec succès:", response);
         setLoading(false);

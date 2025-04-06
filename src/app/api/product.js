@@ -9,22 +9,22 @@ const headersConfig = (token) => {
 export default {
   createProduct: (data) => {
     // console.log(data);
-    return axios.post(`/api/proxy/products`, data);
+    return axios.post(`/api/products`, data);
   },
   addProductImages: (data, id) => {
     // console.log(data);
-    return axios.post(`/api/proxy/products/${id}/images`, data);
+    return axios.post(`/api/products/${id}/images`, data);
   },
   buyProduct: (uuid, data) => {
     // console.log(data);
-    return axios.post(`/api/proxy/products/${uuid}`, data);
+    return axios.post(`/api/products/${uuid}`, data);
   },
   productList: () => {
     // console.log(data);
-    return axios.get(`/api/proxy/products/`);
+    return axios.get(`/api/products/`);
   },
   productDetail: (uuid) => {
     // console.log(data);
-    return axios.get(`/api/proxy/products/${uuid}`);
+    return axios.get(`/api/products/${uuid}`);
   },
 };

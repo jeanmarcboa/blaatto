@@ -9,18 +9,18 @@ const headersConfig = (token) => {
 export default {
   createShop: (data) => {
     // console.log(data);
-    return axios.post(`/api/proxy/shops`, data);
+    return axios.post(`/api/shops`, data);
   },
   shopList: () => {
     // console.log(data);
-    return axios.get(`/api/proxy/shops/`);
+    return axios.get(`/api/shops/`);
   },
   shopListByBusinessId: (id) => {
     // console.log(data);
-    return axios.get(`/api/proxy/shops/merchant/${id}`);
+    return axios.get(`/api/shops/merchant/${id}`);
   },
   shopDetail: (uuid) => {
     // console.log(data);
-    return axios.get(`/api/proxy/shops/${uuid}`);
+    return axios.get(`/api/shops/${uuid}`);
   },
 };

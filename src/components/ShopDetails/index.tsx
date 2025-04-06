@@ -1,6 +1,7 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import PreLoader from "../Common/PreLoader";
 import Breadcrumb from "../Common/Breadcrumb";
 import Image from "next/image";
 import Newsletter from "../Common/Newsletter";
@@ -9,19 +10,21 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAppSelector } from "@/redux/store";
 import shopData from "../Shop/shopData";
 
+import productAPI from "@/app/api/product";
+
 const ShopDetails = () => {
+  const { id } = useParams();
   const [activeColor, setActiveColor] = useState("blue");
   const { openPreviewModal } = usePreviewSlider();
   const [product, setProduct] = useState<any>({});
+  const [productList, setProductList] = useState([]);
   const [previewImg, setPreviewImg] = useState(0);
-  const { id } = useParams();
-
   const [storage, setStorage] = useState("gb128");
   const [type, setType] = useState("active");
   const [sim, setSim] = useState("dual");
   const [quantity, setQuantity] = useState(1);
-
   const [activeTab, setActiveTab] = useState("tabThree");
+  const [loading, setLoading] = useState(true);
 
   const storages = [
     {
@@ -79,6 +82,22 @@ const ShopDetails = () => {
 
   const colors = ["red", "blue", "orange", "pink", "purple"];
 
+  const fetchProducts = () => {
+    productAPI
+      .productList()
+      .then((response) => {
+        setProductList(response.data);
+        let result = response.data.filter((item: any) => item.id === id);
+        setProduct(result[0]);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error("Error fetching products: ", error);
+      });
+  };
+
   // const alreadyExist = localStorage.getItem("productDetails");
   // const productFromStorage = useAppSelector(
   //   (state) => state.productDetailsReducer.value
@@ -87,10 +106,8 @@ const ShopDetails = () => {
   // const product = alreadyExist ? JSON.parse(alreadyExist) : productFromStorage;
 
   useEffect(() => {
-    // localStorage.setItem("productDetails", JSON.stringify(product));
-    const result = shopData.filter((item) => item.id === id);
-    setProduct(result[0]);
-  }, [product]);
+    fetchProducts();
+  }, []);
 
   // pass the product here when you get the real data.
   const handlePreviewSlider = () => {
@@ -101,9 +118,12 @@ const ShopDetails = () => {
 
   return (
     <>
-      <Breadcrumb title={"Shop Details"} pages={["shop details"]} />
-
-      {product.title === "" ? (
+      <Breadcrumb
+        title={product?.label ?? "Details de produit"}
+        pages={["details de produit"]}
+      />
+      {loading && <PreLoader />}
+      {product?.title === "" ? (
         "Please add product"
       ) : (
         <>
@@ -136,7 +156,7 @@ const ShopDetails = () => {
                       </button>
 
                       <Image
-                        src={product.imgs?.previews[previewImg]}
+                        src={"/images/products/default-placeholder.png"}
                         alt="products-details"
                         width={400}
                         height={400}
@@ -146,7 +166,7 @@ const ShopDetails = () => {
 
                   {/* ?  &apos;border-blue &apos; :  &apos;border-transparent&apos; */}
                   <div className="flex flex-wrap sm:flex-nowrap gap-4.5 mt-6">
-                    {product.imgs?.thumbnails.map((item, key) => (
+                    {product?.imgs?.thumbnails.map((item, key) => (
                       <button
                         onClick={() => setPreviewImg(key)}
                         key={key}
@@ -171,7 +191,7 @@ const ShopDetails = () => {
                 <div className="max-w-[539px] w-full">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="font-semibold text-xl sm:text-2xl xl:text-custom-3 text-dark">
-                      {product.title}
+                      {product?.label}
                     </h2>
 
                     {/* <div className="inline-flex font-medium text-custom-sm text-white bg-green rounded py-0.5 px-2.5">
@@ -325,10 +345,7 @@ const ShopDetails = () => {
                     <span className="text-sm sm:text-base text-dark">
                       Prix: {product?.price} FCFA
                     </span>
-                    <span className="line-through">
-                      {" "}
-                      ${product?.discountedPrice}{" "}
-                    </span>
+                    <span className="line-through"> ${product?.price} </span>
                   </h3>
 
                   {/* <ul className="flex flex-col gap-2">
@@ -1475,7 +1492,7 @@ const ShopDetails = () => {
             </div>
           </section>
 
-          <RecentlyViewdItems />
+          <RecentlyViewdItems data={productList} />
 
           <Newsletter />
         </>

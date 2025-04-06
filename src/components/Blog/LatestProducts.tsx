@@ -16,7 +16,7 @@ const LatestProducts = ({ products }) => {
             <div className="flex items-center gap-6" key={key}>
               <div className="flex items-center justify-center rounded-[10px] bg-gray-3 max-w-[90px] w-full h-22.5">
                 <Image
-                  src={product.imgs?.thumbnails?.[0]}
+                  src={product?.imgs?.thumbnails?.[0]}
                   alt="product"
                   width={74}
                   height={74}
@@ -26,10 +26,10 @@ const LatestProducts = ({ products }) => {
               <div>
                 <h3 className="font-medium text-dark mb-1 ease-out duration-200 hover:text-green">
                   <Link href={"/shop-details/" + product?.id}>
-                    {product.title}{" "}
+                    {product?.title}{" "}
                   </Link>
                 </h3>
-                <p className="text-custom-sm">Price: ${product.price}</p>
+                <p className="text-custom-sm">Price: ${product?.price}</p>
               </div>
             </div>
           ))}

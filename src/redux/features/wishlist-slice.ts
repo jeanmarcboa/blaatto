@@ -8,7 +8,6 @@ type WishListItem = {
   id: number;
   title: string;
   price: number;
-  discountedPrice: number;
   quantity: number;
   status?: string;
   imgs?: {
@@ -26,8 +25,7 @@ export const wishlist = createSlice({
   initialState,
   reducers: {
     addItemToWishlist: (state, action: PayloadAction<any>) => {
-      const { id, title, price, quantity, imgs, discountedPrice, status } =
-        action.payload;
+      const { id, title, price, quantity, imgs, status } = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
 
       if (existingItem) {
@@ -39,7 +37,6 @@ export const wishlist = createSlice({
           price,
           quantity,
           imgs,
-          discountedPrice,
           status,
         });
       }

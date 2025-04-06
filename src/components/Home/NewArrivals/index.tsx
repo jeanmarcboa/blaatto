@@ -1,10 +1,31 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import PreLoader from "@/components/Common/BtnPreLoader";
 import ProductItem from "@/components/Common/ProductItem";
 import shopData from "@/components/Shop/shopData";
+import productAPI from "@/app/api/product";
 
 const NewArrival = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchedProducts = () => {
+      productAPI
+        .productList()
+        .then((response) => {
+          setProducts(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    fetchedProducts();
+  }, []);
   return (
     <section className="overflow-hidden pt-15">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -39,7 +60,7 @@ const NewArrival = () => {
           </div>
 
           <Link
-            href="/shop-with-sidebar"
+            href="/shop"
             className="inline-flex font-medium text-custom-sm py-2.5 px-7 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-green hover:text-white hover:border-transparent"
           >
             Voir tous
@@ -48,10 +69,15 @@ const NewArrival = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
           {/* <!-- New Arrivals item --> */}
-          {shopData.map((item, key) => (
+          {products.map((item, key) => (
             <ProductItem item={item} key={key} />
           ))}
         </div>
+        {loading && (
+          <div className="text-center flex flex-row justify-center w-full">
+            <PreLoader color="green" />
+          </div>
+        )}
       </div>
     </section>
   );
