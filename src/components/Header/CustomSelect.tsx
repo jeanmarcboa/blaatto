@@ -30,18 +30,25 @@ const CustomSelect = ({ options }) => {
     };
   }, []);
 
+  useEffect(() => {
+    setSelectedOption(options[0]);
+  }, [options]);
+
   return (
-    <div className="dropdown-content custom-select relative" style={{ width: "200px" }}>
+    <div
+      className="dropdown-content custom-select relative"
+      style={{ width: "200px" }}
+    >
       <div
         className={`select-selected whitespace-nowrap ${
           isOpen ? "select-arrow-active" : ""
         }`}
         onClick={toggleDropdown}
       >
-        {selectedOption.label}
+        {selectedOption?.label ?? "Catégories"}
       </div>
       <div className={`select-items ${isOpen ? "" : "select-hide"}`}>
-        {options.slice(1, -1).map((option, index) => (
+        {options.slice(1, -1).map((option: any, index: number) => (
           <div
             key={index}
             onClick={() => handleOptionClick(option)}
@@ -49,7 +56,7 @@ const CustomSelect = ({ options }) => {
               selectedOption === option ? "same-as-selected" : ""
             }`}
           >
-            {option.label}
+            {option?.label}
           </div>
         ))}
       </div>

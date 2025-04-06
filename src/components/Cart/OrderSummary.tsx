@@ -10,7 +10,7 @@ const OrderSummary = ({ cartItems, shopId }) => {
 
   const selectTotalPrice = (items) => {
     return items.reduce((total, item) => {
-      return total + item.discountedPrice * item.quantity;
+      return total + item.price * item.quantity;
     }, 0);
   };
 
@@ -48,7 +48,7 @@ const OrderSummary = ({ cartItems, shopId }) => {
               </div>
               <div>
                 <p className="text-dark text-right">
-                  {item?.discountedPrice * item?.quantity} FCFA
+                  {item?.price * item?.quantity} FCFA
                 </p>
               </div>
             </div>

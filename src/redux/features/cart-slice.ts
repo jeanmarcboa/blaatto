@@ -9,7 +9,6 @@ type CartItem = {
   id: number;
   title: string;
   price: number;
-  discountedPrice: number;
   quantity: number;
   imgs?: {
     thumbnails: string[];
@@ -26,8 +25,7 @@ export const cart = createSlice({
   initialState,
   reducers: {
     addItemToCart: (state, action: PayloadAction<any>) => {
-      const { id, title, price, quantity, discountedPrice, imgs } =
-        action.payload;
+      const { id, title, price, quantity, imgs } = action.payload;
       const existingItem: any = state.items.find((item: any) => item.id === id);
 
       if (existingItem) {
@@ -62,7 +60,7 @@ export const selectCartItems = (state: RootState) => state.cartReducer.items;
 
 export const selectTotalPrice = createSelector([selectCartItems], (items) => {
   return items.reduce((total, item: any) => {
-    return total + item.discountedPrice * item.quantity;
+    return total + item.price * item.quantity;
   }, 0);
 });
 

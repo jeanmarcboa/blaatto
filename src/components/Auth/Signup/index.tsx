@@ -3,6 +3,7 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import PreLoader from "@/components/Common/BtnPreLoader";
 import useUser from "@/hooks/useUser";
 import React, { useState, useEffect } from "react";
 import { FiBriefcase, FiUser } from "react-icons/fi";
@@ -23,7 +24,11 @@ const Signup = () => {
   });
   const [profilType, setProfilTypes] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const [successFull, setSuccessfull] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { firstname, lastname, email, phoneNumber, password, username } =
+    formData;
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -32,6 +37,8 @@ const Signup = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
+    setError(false);
+    setSuccessfull(false);
     //gerenate username by first name and random number of characters
     const randomNumber = Math.floor(Math.random() * 10000);
     const username = `${formData.firstname.slice(0, 3)}${randomNumber}`;
@@ -46,17 +53,38 @@ const Signup = () => {
       password: formData.password,
     };
 
+    if (
+      !firstname ||
+      !lastname ||
+      !email ||
+      !phoneNumber ||
+      !password ||
+      !username
+    ) {
+      // alert("Veuillez remplir tous les champs");
+      setLoading(false);
+      setError(true);
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
     if (profilType === 1) {
       Account.signUpCustomer(tmpformdata)
         .then((response) => {
           console.log(response);
           setLoading(false);
           setLoginData(response.data);
-          router.push("/mon-compte");
+          router.push("/");
         })
         .catch((error) => {
           console.log(error);
           setLoading(false);
+          setError(true);
+          setErrorMessage("Une erreur s'est produite");
         });
     } else {
       Account.signUpMerchant(tmpformdata)
@@ -69,6 +97,8 @@ const Signup = () => {
         .catch((error) => {
           console.log(error);
           setLoading(false);
+          setError(true);
+          setErrorMessage("Une erreur s'est produite");
         });
     }
   };
@@ -83,6 +113,20 @@ const Signup = () => {
       <Breadcrumb title={"S'inscrire"} pages={["Signup"]} />
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+          <div className="flex items-center justify-center space-x-3">
+            {/* //Display message */}
+            {successFull && (
+              <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400">
+                <span className="font-medium">Bravo !</span> Vous avez été
+                connecté avec succès.
+              </div>
+            )}
+            {error && (
+              <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400">
+                <span className="font-medium">Oops !</span> {errorMessage}
+              </div>
+            )}
+          </div>
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7.5 xl:p-11">
             <div className="text-center mb-11">
               <h2 className="font-semibold text-xl sm:text-2xl xl:text-heading-5 text-dark mb-1.5">
@@ -297,7 +341,7 @@ const Signup = () => {
                     onClick={handleSubmit}
                     className="w-full flex justify-center font-medium text-white bg-green py-3 px-6 rounded-lg ease-out duration-200 hover:bg-green-dark mt-7.5"
                   >
-                    Créer un compte
+                    {loading ? <PreLoader /> : "Créer un compte"}
                   </button>
 
                   <p className="text-center mt-6">
@@ -310,6 +354,20 @@ const Signup = () => {
                     </Link>
                   </p>
                 </form>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center justify-center space-x-2 mt-4">
+            {/* //Display message */}
+            {successFull && (
+              <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400">
+                <span className="font-medium">Bravo !</span> Vous avez été
+                connecté avec succès.
+              </div>
+            )}
+            {error && (
+              <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400">
+                <span className="font-medium">Oops !</span> {errorMessage}
               </div>
             )}
           </div>

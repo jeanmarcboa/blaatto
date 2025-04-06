@@ -9,18 +9,18 @@ const headersConfig = (token) => {
 export default {
   createOrder: (data) => {
     // console.log(data);
-    return axios.post(`/api/proxy/orders`, data);
+    return axios.post(`/api/orders`, data);
   },
   buyOrder: (uuid, data) => {
     // console.log(data);
-    return axios.post(`/api/proxy/orders/${uuid}`, data);
+    return axios.post(`/api/orders/${uuid}`, data);
   },
   orderList: () => {
     // console.log(data);
-    return axios.get(`/api/proxy/orders/`);
+    return axios.get(`/api/orders/`);
   },
   orderDetail: (uuid) => {
     // console.log(data);
-    return axios.get(`/api/proxy/orders/${uuid}`);
+    return axios.get(`/api/orders/${uuid}`);
   },
 };

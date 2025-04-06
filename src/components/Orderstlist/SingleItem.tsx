@@ -42,7 +42,7 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div>
-              <h3 className="text-dark ease-out duration-200 hover:text-green">
+              <h3 className="text-red ease-out duration-200 hover:text-green">
                 <a href="#"> {item.reference} </a>
               </h3>
             </div>
@@ -56,11 +56,24 @@ const SingleItem = ({ item }) => {
 
       <div className="min-w-[150px]">
         <div className="flex items-center gap-1.5">
-          {item.deliver ? (
+          {/* {item.deliver ? (
             <span className="text-green"> Livré </span>
           ) : (
             <span className="text-red"> En attente </span>
-          )}
+          )} */}
+          <p
+            className={`inline-block text-custom-sm  py-0.5 px-2.5 rounded-[30px] capitalize ${
+              item.deliver
+                ? "text-green bg-green-light-6"
+                : !item.deliver
+                ? "text-red bg-red-light-6"
+                : item.status === "processing"
+                ? "text-yellow bg-yellow-light-4"
+                : "Unknown Status"
+            }`}
+          >
+            {item.deliver ? "Livré" : "En attente"}
+          </p>
         </div>
       </div>
 

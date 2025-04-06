@@ -4,7 +4,7 @@ const shopData: any = [
     title: "Manioc frais vendu par tricycle",
     reviews: 15,
     price: 80000,
-    discountedPrice: 50000,
+    price: 50000,
     id: "c85a530f-ade5-4d8b-892d-886f137c313c",
     imgs: {
       thumbnails: [
@@ -53,7 +53,7 @@ const shopData: any = [
     title: "Manioc par tricycle",
     reviews: 5,
     price: 75000,
-    discountedPrice: 45000,
+    price: 45000,
     id: "7ac7161e-191c-48c6-b816-d2e7f44f5b5e",
     imgs: {
       thumbnails: [
@@ -83,7 +83,7 @@ const shopData: any = [
     title: "Manioc frais vendu par Kg",
     reviews: 5,
     price: 100.0,
-    discountedPrice: 50.0,
+    price: 50.0,
     id: "8f7c725b-e936-47df-b420-15a605327507",
     imgs: {
       thumbnails: [
@@ -113,7 +113,7 @@ const shopData: any = [
     title: "Manioc frais par tricycle",
     reviews: 3,
     price: 70000,
-    discountedPrice: 50000,
+    price: 50000,
     id: "377d3315-f220-4fd7-b021-b1a0a435a45e",
     imgs: {
       thumbnails: [
@@ -162,7 +162,7 @@ const shopData: any = [
     title: "Attiéké vendu par bassine",
     reviews: 6,
     price: 10000,
-    discountedPrice: 6000,
+    price: 6000,
     id: "cd67bc49-e98b-4d1f-8de5-9db12f305fd9",
     imgs: {
       thumbnails: [
@@ -211,7 +211,7 @@ const shopData: any = [
     title: "Manioc Frais Tricycle",
     reviews: 15,
     price: 80000,
-    discountedPrice: 65000,
+    price: 65000,
     id: "1c00e610-0336-4551-bb79-b9fa3e68cfe4",
     imgs: {
       thumbnails: [
@@ -241,7 +241,7 @@ const shopData: any = [
     title: "Manioc Frais par tricycle",
     reviews: 15,
     price: 75000,
-    discountedPrice: 70000,
+    price: 70000,
     id: "23964a95-b3b1-4528-93e9-ea7d8adbca3d",
     imgs: {
       thumbnails: [
@@ -271,7 +271,7 @@ const shopData: any = [
     title: "Huile de palme de Man 1L",
     reviews: 15,
     price: 3500,
-    discountedPrice: 2000,
+    price: 2000,
     id: "195ef727-38bd-4361-8d1f-ba9c6a1f99ee",
     imgs: {
       thumbnails: [

@@ -161,7 +161,7 @@ const Cart = () => {
             <p className="pb-6">Votre panier est vide !</p>
 
             <Link
-              href="/shop-with-sidebar"
+              href="/shop"
               className="w-96 mx-auto flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
             >
               Continuer vos achats

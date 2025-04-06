@@ -15,7 +15,7 @@ const SingleItem = ({ item, removeItemFromCart }) => {
       <div className="w-full flex items-center gap-6">
         <div className="flex items-center justify-center rounded-[10px] bg-gray-3 max-w-[90px] w-full h-22.5">
           <Image
-            src={item.imgs?.thumbnails[0]}
+            src={"/images/products/default-placeholder.png"}
             alt="product"
             width={100}
             height={100}
@@ -24,9 +24,9 @@ const SingleItem = ({ item, removeItemFromCart }) => {
 
         <div>
           <h3 className="font-medium text-dark mb-1 ease-out duration-200 hover:text-green">
-            <a href="#"> {item.title} </a>
+            <a href="#"> {item?.label} </a>
           </h3>
-          <p className="text-custom-sm">Prix: {item.discountedPrice} FCFA</p>
+          <p className="text-custom-sm">Prix: {item.price} FCFA</p>
         </div>
       </div>
 

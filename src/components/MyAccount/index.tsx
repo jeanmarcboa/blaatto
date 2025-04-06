@@ -1,13 +1,32 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Breadcrumb from "../Common/Breadcrumb";
+import PreLoader from "@/components/Common/BtnPreLoader";
 import Image from "next/image";
 import AddressModal from "./AddressModal";
 import Orders from "../Orders";
+import useUser from "@/hooks/useUser";
+
+//import accounts restAPI
+import accountAPI from "@/app/api/account";
 
 const MyAccount = () => {
+  const { userInfo, isLoggedIn, deleteLoginData } = useUser();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [addressModal, setAddressModal] = useState(false);
+  const [item, setItem] = useState(userInfo);
+  const [passwordItem, setpasswordItem] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [type, setType] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [successFull, setSuccessfull] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const openAddressModal = () => {
     setAddressModal(true);
@@ -17,9 +36,152 @@ const MyAccount = () => {
     setAddressModal(false);
   };
 
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setItem({ ...item, [name]: value });
+  };
+  const handlePasswordInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setpasswordItem({ ...passwordItem, [name]: value });
+  };
+
+  const handleInfoSubmit = async (e: any) => {
+    e.preventDefault();
+    setType("account-info");
+    setLoading(true);
+    setError(false);
+    setSuccessfull(false);
+    const { firstname, lastname, email, phoneNumber, password, username } =
+      item;
+
+    if (!firstname || !lastname || !email) {
+      // alert("Veuillez remplir tous les champs");
+      setLoading(false);
+      setError(true);
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    accountAPI
+      .updateUserAccount(item, userInfo?.id)
+      .then((response) => {
+        console.log(response);
+        setLoading(false);
+        // setLoginData(response.data);
+        setSuccessfull(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        setErrorMessage("Une erreur s'est produite");
+      });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setType("account-info");
+    setLoading(true);
+    setError(false);
+    setSuccessfull(false);
+    const { firstname, lastname, email, phoneNumber, password, username } =
+      item;
+
+    if (!lastname || !firstname || !email || !phoneNumber) {
+      // alert("Veuillez remplir tous les champs");
+      setLoading(false);
+      setError(true);
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    accountAPI
+      .updateUserAccount(item, userInfo?.id)
+      .then((response) => {
+        console.log(response);
+        setLoading(false);
+        // setLoginData(response.data);
+        setSuccessfull(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        setErrorMessage("Une erreur s'est produite");
+      });
+  };
+
+  const handlePasswordSubmit = (e: any) => {
+    e.preventDefault();
+    setType("password");
+
+    console.log(passwordItem);
+    console.log(type);
+    if (
+      passwordItem?.oldPassword === "" ||
+      passwordItem?.newPassword === "" ||
+      passwordItem?.confirmPassword === ""
+    ) {
+      setError(true);
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+    if (passwordItem?.newPassword !== passwordItem?.confirmPassword) {
+      setError(true);
+      setErrorMessage("Les mots de passe ne correspondent pas");
+      return;
+    }
+    setLoading(true);
+    setError(false);
+    setSuccessfull(false);
+    accountAPI
+      .updateUserPassword(
+        {
+          oldPassword: passwordItem?.oldPassword,
+          newPassword: passwordItem?.newPassword,
+        },
+        userInfo?.id
+      )
+      .then((response) => {
+        console.log(response);
+        setSuccessfull(true);
+        setErrorMessage("Mot de passe modifié avec succès");
+        setpasswordItem({
+          oldPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(true);
+        setErrorMessage("Une erreur s'est produite");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push("/signin");
+      return;
+    }
+  }, [isLoggedIn]);
+
+  if (!isLoggedIn) {
+    router.push("/signin");
+    return;
+  }
+
   return (
     <>
-      <Breadcrumb title={"My Account"} pages={["my account"]} />
+      <Breadcrumb title={"Mon compte"} pages={["mon compte"]} />
 
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -39,9 +201,11 @@ const MyAccount = () => {
 
                   <div>
                     <p className="font-medium text-dark mb-0.5">
-                      James Septimus
+                      {userInfo?.firstname + " " + userInfo?.lastname}
                     </p>
-                    <p className="text-custom-xs">Member Since Sep 2020</p>
+                    <p className="text-custom-xs">
+                      Membre depuis {userInfo?.createdAt.slice(0, 10)}
+                    </p>
                   </div>
                 </div>
 
@@ -88,7 +252,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Dashboard
+                      Tableau de bord
                     </button>
                     <button
                       onClick={() => setActiveTab("orders")}
@@ -125,10 +289,10 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Orders
+                      Commandes
                     </button>
 
-                    <button
+                    {/* <button
                       onClick={() => setActiveTab("downloads")}
                       className={`flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-green hover:text-white ${
                         activeTab === "downloads"
@@ -153,8 +317,8 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Downloads
-                    </button>
+                      Téléchargement
+                    </button> */}
 
                     <button
                       onClick={() => setActiveTab("addresses")}
@@ -183,7 +347,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Addresses
+                      Adresses
                     </button>
 
                     <button
@@ -215,11 +379,11 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Account Details
+                      Détails du compte
                     </button>
 
                     <button
-                      onClick={() => setActiveTab("logout")}
+                      onClick={() => deleteLoginData()}
                       className={`flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-green hover:text-white ${
                         activeTab === "logout"
                           ? "text-white bg-green"
@@ -243,7 +407,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Logout
+                      Se déconnecter
                     </button>
                   </div>
                 </div>
@@ -261,20 +425,24 @@ const MyAccount = () => {
               }`}
             >
               <p className="text-dark">
-                Hello Annie (not Annie?
+                Hello {userInfo?.firstname + " " + userInfo?.lastname} (vous{" "}
+                {"n'êtes"} pas {userInfo?.firstname + " " + userInfo?.lastname}{" "}
+                ?{" "}
                 <a
                   href="#"
+                  onClick={() => deleteLoginData()}
                   className="text-red ease-out duration-200 hover:underline"
                 >
-                  Log Out
+                  Se déconnecter
                 </a>
                 )
               </p>
 
               <p className="text-custom-sm mt-4">
-                From your account dashboard you can view your recent orders,
-                manage your shipping and billing addresses, and edit your
-                password and account details.
+                Depuis le tableau de bord de votre compte, vous pouvez consulter
+                vos commandes récentes, gérer vos adresses de livraison et de
+                facturation et modifier votre mot de passe et les détails de
+                votre compte.
               </p>
             </div>
             {/* <!-- dashboard tab content end -->
@@ -308,7 +476,7 @@ const MyAccount = () => {
               <div className="xl:max-w-[370px] w-full bg-white shadow-1 rounded-xl">
                 <div className="flex items-center justify-between py-5 px-4 sm:pl-7.5 sm:pr-6 border-b border-gray-3">
                   <p className="font-medium text-xl text-dark">
-                    Shipping Address
+                    Adresse de livraison
                   </p>
 
                   <button
@@ -357,7 +525,8 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Name: James Septimus
+                      Nom complet:{" "}
+                      {userInfo?.firstname + " " + userInfo?.lastname}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -376,7 +545,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Email: jamse@example.com
+                      Email: {userInfo?.email}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -405,7 +574,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Phone: 1234 567890
+                      Téléphone: {userInfo?.phoneNumber}
                     </p>
 
                     <p className="flex gap-2.5 text-custom-sm">
@@ -440,7 +609,7 @@ const MyAccount = () => {
               <div className="xl:max-w-[370px] w-full bg-white shadow-1 rounded-xl">
                 <div className="flex items-center justify-between py-5 px-4 sm:pl-7.5 sm:pr-6 border-b border-gray-3">
                   <p className="font-medium text-xl text-dark">
-                    Billing Address
+                    Adresse de facturation
                   </p>
 
                   <button
@@ -489,7 +658,8 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Name: James Septimus
+                      Nom complet:{" "}
+                      {userInfo?.firstname + " " + userInfo?.lastname}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -508,7 +678,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Email: jamse@example.com
+                      Email: {userInfo?.email}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -537,7 +707,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Phone: 1234 567890
+                      Téléphone: {userInfo?.phoneNumber}
                     </p>
 
                     <p className="flex gap-2.5 text-custom-sm">
@@ -563,7 +733,7 @@ const MyAccount = () => {
                           </clipPath>
                         </defs>
                       </svg>
-                      Address: 7398 Smoke Ranch RoadLas Vegas, Nevada 89128
+                      Adresse: 7398 Smoke Ranch RoadLas Vegas, Nevada 89128
                     </p>
                   </div>
                 </div>
@@ -579,33 +749,47 @@ const MyAccount = () => {
             >
               <form>
                 <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
+                  <div className="flex items-center justify-center space-x-3">
+                    {/* //Display message */}
+                    {type === "account-info" && successFull && (
+                      <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
+                        <span className="font-medium">Bravo !</span> Mot de
+                        passe modifié avec succès.
+                      </div>
+                    )}
+
+                    {type === "account-info" && error && (
+                      <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400 w-full">
+                        <span className="font-medium">Oops !</span>{" "}
+                        {errorMessage}
+                      </div>
+                    )}
+                  </div>
                   <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                     <div className="w-full">
                       <label htmlFor="firstName" className="block mb-2.5">
-                        First Name <span className="text-red">*</span>
+                        Prénom <span className="text-red">*</span>
                       </label>
 
                       <input
                         type="text"
-                        name="firstName"
-                        id="firstName"
-                        placeholder="Jhon"
-                        value="Jhon"
+                        name="firstname"
+                        value={item?.firstname}
+                        onChange={handleInputChange}
                         className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                       />
                     </div>
 
                     <div className="w-full">
                       <label htmlFor="lastName" className="block mb-2.5">
-                        Last Name <span className="text-red">*</span>
+                        Nom <span className="text-red">*</span>
                       </label>
 
                       <input
                         type="text"
-                        name="lastName"
-                        id="lastName"
-                        placeholder="Deo"
-                        value="Deo"
+                        name="lastname"
+                        value={item?.lastname}
+                        onChange={handleInputChange}
                         className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                       />
                     </div>
@@ -613,57 +797,60 @@ const MyAccount = () => {
 
                   <div className="mb-5">
                     <label htmlFor="countryName" className="block mb-2.5">
-                      Country/ Region <span className="text-red">*</span>
+                      Email <span className="text-red">*</span>
                     </label>
 
-                    <div className="relative">
-                      <select className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20">
-                        <option value="0">Australia</option>
-                        <option value="1">America</option>
-                        <option value="2">England</option>
-                      </select>
-
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-4">
-                        <svg
-                          className="fill-current"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M2.41469 5.03569L2.41467 5.03571L2.41749 5.03846L7.76749 10.2635L8.0015 10.492L8.23442 10.2623L13.5844 4.98735L13.5844 4.98735L13.5861 4.98569C13.6809 4.89086 13.8199 4.89087 13.9147 4.98569C14.0092 5.08024 14.0095 5.21864 13.9155 5.31345C13.9152 5.31373 13.915 5.31401 13.9147 5.31429L8.16676 10.9622L8.16676 10.9622L8.16469 10.9643C8.06838 11.0606 8.02352 11.0667 8.00039 11.0667C7.94147 11.0667 7.89042 11.0522 7.82064 10.9991L2.08526 5.36345C1.99127 5.26865 1.99154 5.13024 2.08609 5.03569C2.18092 4.94086 2.31986 4.94086 2.41469 5.03569Z"
-                            fill=""
-                            stroke=""
-                            stroke-width="0.666667"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    <input
+                      type="email"
+                      name="email"
+                      value={item?.email}
+                      onChange={handleInputChange}
+                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    />
                   </div>
 
                   <button
                     type="submit"
+                    onClick={handleInfoSubmit}
                     className="inline-flex font-medium text-white bg-green py-3 px-7 rounded-md ease-out duration-200 hover:bg-green-dark"
                   >
-                    Save Changes
+                    {type == "account-info" && loading ? (
+                      <PreLoader />
+                    ) : (
+                      "Enregistrer les modifications"
+                    )}
                   </button>
                 </div>
 
                 <p className="text-custom-sm mt-5 mb-9">
-                  This will be how your name will be displayed in the account
-                  section and in reviews
+                  Votre nom sera affiché ainsi dans la section Compte et dans
+                  les avis.
                 </p>
 
                 <p className="font-medium text-xl sm:text-2xl text-dark mb-7">
-                  Password Change
+                  Changement de mot de passe
                 </p>
 
                 <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
+                  <div className="flex items-center justify-center space-x-3">
+                    {/* //Display message */}
+                    {type === "password" && successFull && (
+                      <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
+                        <span className="font-medium">Bravo !</span> Mot de
+                        passe modifié avec succès.
+                      </div>
+                    )}
+
+                    {type === "password" && error && (
+                      <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400 w-full">
+                        <span className="font-medium">Oops !</span>{" "}
+                        {errorMessage}
+                      </div>
+                    )}
+                  </div>
                   <div className="mb-5">
                     <label htmlFor="oldPassword" className="block mb-2.5">
-                      Old Password
+                      Ancien mot de passe
                     </label>
 
                     <input
@@ -671,13 +858,14 @@ const MyAccount = () => {
                       name="oldPassword"
                       id="oldPassword"
                       autoComplete="on"
+                      onChange={handlePasswordInputChange}
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
                   </div>
 
                   <div className="mb-5">
                     <label htmlFor="newPassword" className="block mb-2.5">
-                      New Password
+                      Nouveau mot de passe
                     </label>
 
                     <input
@@ -685,32 +873,36 @@ const MyAccount = () => {
                       name="newPassword"
                       id="newPassword"
                       autoComplete="on"
+                      onChange={handlePasswordInputChange}
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
                   </div>
 
                   <div className="mb-5">
-                    <label
-                      htmlFor="confirmNewPassword"
-                      className="block mb-2.5"
-                    >
-                      Confirm New Password
+                    <label htmlFor="confirmPassword" className="block mb-2.5">
+                      Confirmer le nouveau mot de passe
                     </label>
 
                     <input
                       type="password"
-                      name="confirmNewPassword"
-                      id="confirmNewPassword"
+                      name="confirmPassword"
+                      id="confirmPassword"
                       autoComplete="on"
+                      onChange={handlePasswordInputChange}
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
                   </div>
 
                   <button
                     type="submit"
+                    onClick={handlePasswordSubmit}
                     className="inline-flex font-medium text-white bg-green py-3 px-7 rounded-md ease-out duration-200 hover:bg-green-dark"
                   >
-                    Change Password
+                    {type == "password" && loading ? (
+                      <PreLoader />
+                    ) : (
+                      "Changer le mot de passe"
+                    )}
                   </button>
                 </div>
               </form>
@@ -721,7 +913,17 @@ const MyAccount = () => {
         </div>
       </section>
 
-      <AddressModal isOpen={addressModal} closeModal={closeAddressModal} />
+      <AddressModal
+        isOpen={addressModal}
+        closeModal={closeAddressModal}
+        item={item}
+        handleInputChange={handleInputChange}
+        loading={loading}
+        handleSubmit={handleSubmit}
+        successFull={successFull}
+        error={error}
+        errorMessage={errorMessage}
+      />
     </>
   );
 };

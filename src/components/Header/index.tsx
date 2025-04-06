@@ -4,13 +4,18 @@ import Link from "next/link";
 import CustomSelect from "./CustomSelect";
 import { menuData } from "./menuData";
 import Dropdown from "./Dropdown";
+import useUser from "@/hooks/useUser";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
 
+import categoriesAPI from "@/app/api/categories";
+
 const Header = () => {
+  const { isLoggedIn, userInfo } = useUser();
+  const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
@@ -46,6 +51,21 @@ const Header = () => {
     { label: "Autres", value: "6" },
   ];
 
+  const fetchedCategories = () => {
+    categoriesAPI
+      .categorieList()
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de récupération des catégories:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchedCategories();
+  }, []);
+
   return (
     <header
       className={`fixed left-0 top-0 w-full z-9999 bg-white transition-all ease-in-out duration-300 ${
@@ -73,7 +93,7 @@ const Header = () => {
             <div className="max-w-[475px] w-full">
               <form>
                 <div className="flex items-center">
-                  <CustomSelect options={options} />
+                  <CustomSelect options={categories} />
 
                   <div className="relative max-w-[333px] sm:min-w-[333px] w-full">
                     {/* <!-- divider --> */}
@@ -157,7 +177,10 @@ const Header = () => {
 
             <div className="flex w-full lg:w-auto justify-between items-center gap-5">
               <div className="flex items-center gap-5">
-                <Link href="/signin" className="flex items-center gap-2.5">
+                <Link
+                  href={isLoggedIn ? "/my-account" : "/signin"}
+                  className="flex items-center gap-2.5"
+                >
                   <svg
                     width="24"
                     height="24"
@@ -184,7 +207,7 @@ const Header = () => {
                       Compte
                     </span>
                     <p className="font-medium text-custom-sm text-dark">
-                      Se connecter
+                      {isLoggedIn ? userInfo.firstname : "Se connecter"}
                     </p>
                   </div>
                 </Link>

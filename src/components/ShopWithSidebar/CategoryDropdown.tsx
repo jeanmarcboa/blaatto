@@ -35,7 +35,7 @@ const CategoryItem = ({ category }) => {
           </svg>
         </div>
 
-        <span>{category.name}</span>
+        <span>{category?.label}</span>
       </div>
 
       <span
@@ -43,7 +43,7 @@ const CategoryItem = ({ category }) => {
           selected ? "text-white bg-green" : "bg-gray-2"
         } inline-flex rounded-[30px] text-custom-xs px-2 ease-out duration-200 group-hover:text-white group-hover:bg-green`}
       >
-        {category.products}
+        {category?.products}
       </span>
     </button>
   );

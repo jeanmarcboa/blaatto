@@ -77,15 +77,15 @@ const SingleItem = ({ item }: { item: any }) => {
               />
             </div>
 
-            <p className="text-custom-sm">({item.reviews})</p>
+            <p className="text-custom-sm">({item?.reviews})</p>
           </div>
 
           <h3 className="font-medium text-dark ease-out duration-200 hover:text-green mb-1.5">
-            <Link href={"/shop-details/" + item?.id}> {item.title} </Link>
+            <Link href={"/shop-details/" + item?.id}> {item.label} </Link>
           </h3>
 
           <span className="flex items-center justify-center gap-2 font-medium text-lg">
-            <span className="text-dark">{item.discountedPrice} F</span>
+            <span className="text-dark">{item.price} F</span>
             <span className="text-dark-4 line-through">{item.price} F</span>
           </span>
           <div className="flex flex-row justify-center gap-2 mt-2">
@@ -106,7 +106,12 @@ const SingleItem = ({ item }: { item: any }) => {
         </div>
 
         <div className="flex justify-center items-center">
-          <Image src={item.imgs.previews[0]} alt="" width={280} height={280} />
+          <Image
+            src={item?.Photo?.url ?? "/images/products/default-placeholder.png"}
+            alt=""
+            width={280}
+            height={280}
+          />
         </div>
 
         <div className="absolute right-0 bottom-0 translate-x-full u-w-full flex flex-col gap-2 p-5.5 ease-linear duration-300 group-hover:translate-x-0">

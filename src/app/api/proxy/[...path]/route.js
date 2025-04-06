@@ -17,33 +17,32 @@ export async function DELETE(req, { params }) {
 }
 
 async function proxyRequest(req, params) {
-  try {
-    const url = `${BASE_API_URL}/${params.path.join("/")}`; // Reconstitue l'URL complète
-    const method = req.method;
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: req.headers.get("Authorization") || "", // Ajoute l’Authorization si nécessaire
-    };
-
-    const body =
-      method !== "GET" && method !== "DELETE" ? await req.text() : null; // Pas de body pour GET/DELETE
-
-    const response = await fetch(url, {
-      method,
-      headers,
-      body: body || undefined,
-    });
-
-    const data = await response.json();
-
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: "Something went wrong" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  // try {
+  //   const url = `${BASE_API_URL}/${params.path.join("/")}`; // Reconstitue l'URL complète
+  //   const method = req.method;
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //     Authorization: req.headers.get("Authorization") || "", // Ajoute l’Authorization si nécessaire
+  //   };
+  //   const body =
+  //     method !== "GET" && method !== "DELETE" ? await req.text() : null; // Pas de body pour GET/DELETE
+  //   const response = await fetch(url, {
+  //     method,
+  //     headers,
+  //     body: body || undefined,
+  //   });
+  //   const data = await response.json();
+  //   return new Response(JSON.stringify(data), {
+  //     status: response.status,
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  // } catch (error) {
+  //   return new Response(
+  //     JSON.stringify({ error: "Something went wrong", message: error }),
+  //     {
+  //       status: 500,
+  //       headers: { "Content-Type": "application/json" },
+  //     }
+  //   );
+  // }
 }

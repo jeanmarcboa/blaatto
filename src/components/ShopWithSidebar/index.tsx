@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import PreLoader from "@/components/Common/BtnPreLoader";
 import Breadcrumb from "../Common/Breadcrumb";
 import CustomSelect from "./CustomSelect";
 import CategoryDropdown from "./CategoryDropdown";
@@ -11,7 +12,13 @@ import shopData from "../Shop/shopData";
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
 
+import productAPI from "@/app/api/product";
+import categoriesAPI from "@/app/api/categories";
+
 const ShopWithSidebar = () => {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
@@ -30,15 +37,15 @@ const ShopWithSidebar = () => {
     { label: "Old Products", value: "2" },
   ];
 
-  const categories = [
-    { name: "Catégories", products: 10, isRefined: true },
-    { name: "Fruits", products: 10, isRefined: true },
-    { name: "Legumes", products: 10, isRefined: true },
-    { name: "Graines", products: 10, isRefined: true },
-    { name: "Fleurs", products: 10, isRefined: true },
-    { name: "Plantes", products: 10, isRefined: true },
-    { name: "Autres", products: 10, isRefined: true },
-  ];
+  // const categories = [
+  //   { name: "Catégories", products: 10, isRefined: true },
+  //   { name: "Fruits", products: 10, isRefined: true },
+  //   { name: "Legumes", products: 10, isRefined: true },
+  //   { name: "Graines", products: 10, isRefined: true },
+  //   { name: "Fleurs", products: 10, isRefined: true },
+  //   { name: "Plantes", products: 10, isRefined: true },
+  //   { name: "Autres", products: 10, isRefined: true },
+  // ];
 
   const genders = [
     {
@@ -73,6 +80,34 @@ const ShopWithSidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   });
+
+  const fetchedCategories = () => {
+    categoriesAPI
+      .categorieList()
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de récupération des catégories:", error);
+      });
+  };
+
+  useEffect(() => {
+    const fetchedProducts = () => {
+      productAPI
+        .productList()
+        .then((response) => {
+          setProducts(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    fetchedProducts();
+    fetchedCategories();
+  }, []);
 
   return (
     <>
@@ -252,7 +287,7 @@ const ShopWithSidebar = () => {
                     : "flex flex-col gap-7.5"
                 }`}
               >
-                {shopData.map((item, key) =>
+                {products.map((item, key) =>
                   productStyle === "grid" ? (
                     <SingleGridItem item={item} key={key} />
                   ) : (
@@ -260,6 +295,13 @@ const ShopWithSidebar = () => {
                   )
                 )}
               </div>
+
+              {loading && (
+                <div className="text-center flex flex-row justify-center w-full">
+                  <PreLoader color="green" />
+                </div>
+              )}
+
               {/* <!-- Products Grid Tab Content End --> */}
 
               {/* <!-- Products Pagination Start --> */}

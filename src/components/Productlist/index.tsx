@@ -4,10 +4,12 @@ import Link from "next/link";
 import Breadcrumb from "../Common/Breadcrumb";
 import { useAppSelector } from "@/redux/store";
 import SingleItem from "./SingleItem";
+import useUser from "@/hooks/useUser";
 
 import product from "@/app/api/product";
 
 export const Productlist = () => {
+  const { userInfo } = useUser();
   const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);
   const [products, setProducts] = useState([]);
 
@@ -15,7 +17,12 @@ export const Productlist = () => {
     product
       .productList()
       .then((response) => {
-        setProducts(response.data);
+        let results = response.data.filter(
+          (item: any) => item.shop.accountId === userInfo.accountId
+        );
+        console.log("userInfo.id", userInfo.id);
+        console.log("userInfo.id", userInfo.accountId);
+        setProducts(results);
       })
       .catch((error) => {
         console.log(error);
@@ -24,6 +31,8 @@ export const Productlist = () => {
 
   useEffect(() => {
     fetchProducts();
+    console.log("id", userInfo.id);
+    console.log("accountId", userInfo.accountId);
   }, []);
 
   return (

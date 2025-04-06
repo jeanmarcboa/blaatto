@@ -75,7 +75,7 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[205px]">
-        <p className="text-dark">{item.discountedPrice} FCFA</p>
+        <p className="text-dark">{item.price} FCFA</p>
       </div>
 
       <div className="min-w-[265px]">

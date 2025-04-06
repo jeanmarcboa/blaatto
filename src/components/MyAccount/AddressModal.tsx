@@ -1,6 +1,17 @@
 import React, { useEffect } from "react";
+import PreLoader from "@/components/Common/BtnPreLoader";
 
-const AddressModal = ({ isOpen, closeModal }) => {
+const AddressModal = ({
+  isOpen,
+  closeModal,
+  item,
+  handleInputChange,
+  loading,
+  handleSubmit,
+  successFull,
+  errorMessage,
+  error,
+}) => {
   useEffect(() => {
     // closing modal while clicking outside
     function handleClickOutside(event) {
@@ -24,6 +35,18 @@ const AddressModal = ({ isOpen, closeModal }) => {
         isOpen ? "block z-99999" : "hidden"
       }`}
     >
+      {successFull && (
+        <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
+          <span className="font-medium">Bravo !</span> Information modifié avec
+          succès.
+        </div>
+      )}
+
+      {error && (
+        <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400 w-full">
+          <span className="font-medium">Oops !</span> {errorMessage}
+        </div>
+      )}
       <div className="flex items-center justify-center ">
         <div
           x-show="addressModal"
@@ -56,13 +79,27 @@ const AddressModal = ({ isOpen, closeModal }) => {
               <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                 <div className="w-full">
                   <label htmlFor="name" className="block mb-2.5">
-                    Name
+                    Nom
                   </label>
 
                   <input
                     type="text"
-                    name="name"
-                    value="James Septimus"
+                    name="lastname"
+                    value={item?.lastname}
+                    onChange={handleInputChange}
+                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="name" className="block mb-2.5">
+                    Prénom
+                  </label>
+
+                  <input
+                    type="text"
+                    name="firstname"
+                    value={item?.firstname}
+                    onChange={handleInputChange}
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />
                 </div>
@@ -75,7 +112,8 @@ const AddressModal = ({ isOpen, closeModal }) => {
                   <input
                     type="email"
                     name="email"
-                    value="jamse@example.com"
+                    value={item?.email}
+                    onChange={handleInputChange}
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />
                 </div>
@@ -84,26 +122,28 @@ const AddressModal = ({ isOpen, closeModal }) => {
               <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                 <div className="w-full">
                   <label htmlFor="phone" className="block mb-2.5">
-                    Phone
+                    Téléphone
                   </label>
 
                   <input
                     type="text"
                     name="phone"
-                    value="1234 567890"
+                    value={item?.phoneNumber}
+                    onChange={handleInputChange}
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />
                 </div>
 
                 <div className="w-full">
                   <label htmlFor="address" className="block mb-2.5">
-                    Address
+                    Adresse
                   </label>
 
                   <input
                     type="text"
                     name="address"
                     value="7398 Smoke Ranch RoadLas Vegas, Nevada 89128"
+                    onChange={handleInputChange}
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />
                 </div>
@@ -111,9 +151,10 @@ const AddressModal = ({ isOpen, closeModal }) => {
 
               <button
                 type="submit"
+                onClick={handleSubmit}
                 className="inline-flex font-medium text-white bg-green py-3 px-7 rounded-md ease-out duration-200 hover:bg-green-dark"
               >
-                Save Changes
+                {loading ? <PreLoader /> : "Enregistrer les modifications"}
               </button>
             </form>
           </div>

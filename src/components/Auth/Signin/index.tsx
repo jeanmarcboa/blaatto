@@ -1,6 +1,7 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
+import PreLoader from "@/components/Common/BtnPreLoader";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import useUser from "@/hooks/useUser";
@@ -17,6 +18,9 @@ const Signin = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const [successFull, setSuccessfull] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -26,17 +30,39 @@ const Signin = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
+    setError(false);
+    setSuccessfull(false);
+
+    if (!formData.username || !formData.password) {
+      // alert("Veuillez remplir tous les champs");
+      setLoading(false);
+      setError(true);
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
 
     Account.signIn(formData)
       .then((response) => {
         console.log(response);
         setLoading(false);
         setLoginData(response.data);
-        router.push("/");
+        setSuccessfull(true);
+        setTimeout(() => {
+          if (response.data.role.code === "MERCHANT") {
+            router.push("/business");
+          } else {
+            router.push("/");
+          }
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
+        setErrorMessage("Une erreur s'est produite");
       });
   };
 
@@ -45,6 +71,21 @@ const Signin = () => {
       <Breadcrumb title={"Se connecter"} pages={["Signin"]} />
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+          <div className="flex items-center justify-center space-x-3">
+            {/* //Display message */}
+            {successFull && (
+              <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400">
+                <span className="font-medium">Bravo !</span> Vous avez été
+                connecté avec succès.
+              </div>
+            )}
+            {error && (
+              <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400">
+                <span className="font-medium">Oops !</span> {errorMessage}
+              </div>
+            )}
+          </div>
+
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7.5 xl:p-11">
             <div className="text-center mb-11">
               <h2 className="font-semibold text-xl sm:text-2xl xl:text-heading-5 text-dark mb-1.5">
@@ -91,7 +132,7 @@ const Signin = () => {
                   onClick={handleSubmit}
                   className="w-full flex justify-center font-medium text-white bg-green py-3 px-6 rounded-lg ease-out duration-200 hover:bg-green-dark mt-7.5"
                 >
-                  Connectez-vous au compte
+                  {loading ? <PreLoader /> : "Connectez-vous au compte"}
                 </button>
 
                 <a
