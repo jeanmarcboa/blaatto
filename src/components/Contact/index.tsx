@@ -142,7 +142,7 @@ const Contact = () => {
                       type="text"
                       name="phone"
                       id="phone"
-                      placeholder="Enter your phone"
+                      placeholder="Entrez votre numéro de téléphone"
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
                   </div>

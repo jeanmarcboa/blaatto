@@ -9,7 +9,7 @@ import { addItemToCart } from "@/redux/features/cart-slice";
 
 import Image from "next/image";
 
-const SingleItem = ({ item }) => {
+const SingleItem = ({ item, openEditModal }) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -56,13 +56,21 @@ const SingleItem = ({ item }) => {
 
       <div className="min-w-[10%]">
         <div className="flex items-center gap-1.5">
-          <span className="text-green"> {item?.stock ?? 0} </span>
+          <span
+            className={`inline-block text-custom-sm  py-0.5 px-2.5 rounded-[30px] capitalize ${
+              item?.enabled
+                ? "text-green bg-green-light-6"
+                : "text-red bg-red-light-6"
+            }`}
+          >
+            {item?.enabled ? "Actif" : "Désactivé"}
+          </span>
         </div>
       </div>
 
       <div className="min-w-[20%] flex justify-end">
         <button
-          onClick={() => handleRemoveFromWishlist()}
+          onClick={() => openEditModal(item)}
           aria-label="button for remove product from wishlist"
           className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 mr-4 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-blue-light-5 hover:border-blue-light-4 hover:text-green"
         >

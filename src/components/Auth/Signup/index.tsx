@@ -253,7 +253,7 @@ const Signup = () => {
                         name="lastname"
                         id="lastname"
                         onChange={handleInputChange}
-                        placeholder="Enter your full name"
+                        placeholder="Entrez votre nom"
                         className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                       />
                     </div>
@@ -267,7 +267,7 @@ const Signup = () => {
                         name="firstname"
                         id="firstname"
                         onChange={handleInputChange}
-                        placeholder="Enter your full name"
+                        placeholder="Entrez votre prénom"
                         className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                       />
                     </div>
@@ -283,7 +283,7 @@ const Signup = () => {
                       name="email"
                       id="email"
                       onChange={handleInputChange}
-                      placeholder="Enter your email address"
+                      placeholder="Entrez votre adresse email"
                       className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
                   </div>
@@ -298,7 +298,7 @@ const Signup = () => {
                       name="phoneNumber"
                       id="phoneNumber"
                       onChange={handleInputChange}
-                      placeholder="Enter your phone number"
+                      placeholder="Entrez votre numéro de téléphone"
                       className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
                   </div>
@@ -313,7 +313,7 @@ const Signup = () => {
                       name="password"
                       id="password"
                       onChange={handleInputChange}
-                      placeholder="Enter your password"
+                      placeholder="Entrez votre mot de passe"
                       autoComplete="on"
                       className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />

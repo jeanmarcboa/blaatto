@@ -54,15 +54,18 @@ const Signin = () => {
         setTimeout(() => {
           if (response.data.role.code === "MERCHANT") {
             router.push("/business");
+          } else if (response.data.role.code === "ADMIN") {
+            router.push("/admin");
           } else {
             router.push("/");
           }
         }, 1000);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err.message);
         setLoading(false);
-        setErrorMessage("Une erreur s'est produite");
+        setError(true);
+        setErrorMessage(err.response.data.message);
       });
   };
 
@@ -102,7 +105,7 @@ const Signin = () => {
                   </label>
 
                   <input
-                    type="email"
+                    type="text"
                     name="username"
                     id="username"
                     placeholder="Entrez votre nom d'utilisateur"
@@ -120,7 +123,7 @@ const Signin = () => {
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="Enter your password"
+                    placeholder="Entrez votre mot de passe"
                     autoComplete="on"
                     onChange={handleInputChange}
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
@@ -135,16 +138,16 @@ const Signin = () => {
                   {loading ? <PreLoader /> : "Connectez-vous au compte"}
                 </button>
 
-                <a
-                  href="#"
+                <Link
+                  href="/password_reset"
                   className="block text-center text-dark-4 mt-4.5 ease-out duration-200 hover:text-dark"
                 >
                   Vous avez oublié votre mot de passe ?
-                </a>
+                </Link>
 
                 <span className="relative z-1 block font-medium text-center mt-4.5">
                   <span className="block absolute -z-1 left-0 top-1/2 h-px w-full bg-gray-3"></span>
-                  <span className="inline-block px-3 bg-white">Or</span>
+                  <span className="inline-block px-3 bg-white">Ou</span>
                 </span>
 
                 {/* <div className="flex flex-col gap-4.5 mt-4.5">

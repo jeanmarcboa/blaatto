@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useAppSelector } from "@/redux/store";
 import React from "react";
 import { useSelector } from "react-redux";
+import sepMillier from "../Common/numberSeparator";
 
 const OrderSummary = ({ cartItems, shopId }) => {
   // const cartItems = useAppSelector((state) => state.cartReducer.items);
@@ -48,7 +49,7 @@ const OrderSummary = ({ cartItems, shopId }) => {
               </div>
               <div>
                 <p className="text-dark text-right">
-                  {item?.price * item?.quantity} FCFA
+                  {sepMillier(item?.price * item?.quantity)} FCFA
                 </p>
               </div>
             </div>
@@ -61,7 +62,7 @@ const OrderSummary = ({ cartItems, shopId }) => {
             </div>
             <div>
               <p className="font-medium text-lg text-dark text-right">
-                {totalPrice} FCFA
+                {sepMillier(totalPrice)} FCFA
               </p>
             </div>
           </div>

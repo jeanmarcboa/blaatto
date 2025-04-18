@@ -17,11 +17,11 @@ export const Wishlist = () => {
             <button className="text-blue">Effacer le panier des favoris</button>
           </div>
 
-          <div className="bg-white rounded-[10px] shadow-1">
+          <div className="bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden">
             <div className="w-full overflow-x-auto">
               <div className="min-w-[1170px]">
                 {/* <!-- table header --> */}
-                <div className="flex items-center py-5.5 px-10">
+                <div className="flex items-center bg-gray-1 py-5.5 px-10">
                   <div className="min-w-[83px]"></div>
                   <div className="min-w-[387px]">
                     <p className="text-dark">Produit</p>

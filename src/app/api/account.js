@@ -19,7 +19,7 @@ export default {
     // console.log(data);
     return axios.post(`/api/accounts/merchants`, data);
   },
-  signInAdmin: (data) => {
+  signUpAdmin: (data) => {
     // console.log(data);
     return axios.post(`/api/accounts/admins`, data);
   },
@@ -29,10 +29,13 @@ export default {
   updateUserPassword: (data, uuid) => {
     return axios.put(`/api/accounts/${uuid}/update-password`, data);
   },
-  resetPassword: (id, data, token) => {
+  resetPassword: (uuid, data) => {
     return axios.put(`/api/accounts/${uuid}/reset-password`, data);
   },
   requestResetPassword: (id, data) => {
     return axios.post(`/api/accounts/init-reset-password`, data);
+  },
+  userAccountList: (param) => {
+    return axios.get(`/api/accounts${param ?? ""}`);
   },
 };

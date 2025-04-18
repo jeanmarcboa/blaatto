@@ -28,7 +28,7 @@ const OrderActions = ({ toggleEdit, toggleDetails }: any) => {
           />
         </svg>
       </button>
-      <button onClick={toggleEdit} className="hover:bg-gray-2 rounded-sm p-2">
+      {/* <button onClick={toggleEdit} className="hover:bg-gray-2 rounded-sm p-2">
         <svg
           width="16"
           height="18"
@@ -43,7 +43,7 @@ const OrderActions = ({ toggleEdit, toggleDetails }: any) => {
             fill="#495270"
           />
         </svg>
-      </button>
+      </button> */}
     </>
   );
 };

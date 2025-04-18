@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import "../css/euclid-circular-a-font.css";
 import "../css/style.css";
+import "rsuite/dist/rsuite-no-reset.min.css";
 // import Header from "../../components/Header";
 import Header from "../../components/HeaderAdmin";
 import SideBar from "@/components/SideBar";

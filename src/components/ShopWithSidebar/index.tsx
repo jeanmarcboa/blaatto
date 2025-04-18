@@ -7,17 +7,27 @@ import CategoryDropdown from "./CategoryDropdown";
 import GenderDropdown from "./GenderDropdown";
 import SizeDropdown from "./SizeDropdown";
 import ColorsDropdwon from "./ColorsDropdwon";
+import ShopsDropdown from "./ShopsDropdown";
 import PriceDropdown from "./PriceDropdown";
 import shopData from "../Shop/shopData";
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
 
 import productAPI from "@/app/api/product";
-import categoriesAPI from "@/app/api/categories";
+import categoriesAPI from "@/app/api/categoriesServices";
+import shopAPI from "@/app/api/shop";
 
 const ShopWithSidebar = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [shopList, setShopList] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedShops, setSelectedShops] = useState([]);
+  const [searchQuery, setSearchQuery] = useState({});
+  const [categoryQuery, setCategoryQuery] = useState("");
+  const [shopQuery, setShopQuery] = useState("");
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
   const [loading, setLoading] = useState(true);
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
@@ -37,16 +47,6 @@ const ShopWithSidebar = () => {
     { label: "Old Products", value: "2" },
   ];
 
-  // const categories = [
-  //   { name: "Catégories", products: 10, isRefined: true },
-  //   { name: "Fruits", products: 10, isRefined: true },
-  //   { name: "Legumes", products: 10, isRefined: true },
-  //   { name: "Graines", products: 10, isRefined: true },
-  //   { name: "Fleurs", products: 10, isRefined: true },
-  //   { name: "Plantes", products: 10, isRefined: true },
-  //   { name: "Autres", products: 10, isRefined: true },
-  // ];
-
   const genders = [
     {
       name: "Men",
@@ -61,6 +61,51 @@ const ShopWithSidebar = () => {
       products: 8,
     },
   ];
+
+  const fetchShopList = () => {
+    shopAPI
+      .shopList()
+      .then((response) => setShopList(response.data))
+      .catch((error) => console.error(error));
+  };
+
+  const handleCategoryChange = async (data: any) => {
+    setSelectedCategories(data);
+    console.log("first", data);
+    let tmpSearchQuery = { ...searchQuery };
+    tmpSearchQuery["categoryId"] = data;
+    if (data.length === 0) {
+      delete tmpSearchQuery["categoryId"];
+    }
+    setSearchQuery({ ...searchQuery, ["categoryId"]: data });
+    fetchedProductsWithQuery(tmpSearchQuery);
+  };
+
+  const handleShopChange = async (data: any) => {
+    setSelectedShops(data);
+    let tmpSearchQuery = { ...searchQuery };
+    tmpSearchQuery["shopId"] = data;
+    if (data.length === 0) {
+      delete tmpSearchQuery["shopId"];
+    }
+    setSearchQuery({ ...searchQuery, ["shopId"]: data });
+    fetchedProductsWithQuery(tmpSearchQuery);
+  };
+
+  const handlePricRangeChange = async (data: any) => {
+    let tmpSearchQuery = { ...searchQuery };
+    tmpSearchQuery["min"] = data?.from;
+    tmpSearchQuery["max"] = data?.to;
+    if (data.from == "0" && data.to == "0") {
+      delete tmpSearchQuery["min"];
+      delete tmpSearchQuery["max"];
+    }
+    setSearchQuery(tmpSearchQuery);
+  };
+
+  const handleSubmitPrice = () => {
+    fetchedProductsWithQuery(searchQuery);
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
@@ -88,12 +133,59 @@ const ShopWithSidebar = () => {
         setCategories(response.data);
       })
       .catch((error) => {
-        console.error("Erreur lors de récupération des catégories:", error);
+        console.log("Erreur lors de récupération des catégories:");
       });
   };
 
-  useEffect(() => {
-    const fetchedProducts = () => {
+  const fetchedProductsWithQuery = (data: any) => {
+    setLoading(true);
+    productAPI
+      .searchProductList(data)
+      .then((response) => {
+        setProducts(response.data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error(error);
+      });
+  };
+  // const fetchedProductsWithQuery = (params) => {
+  //   console.log("searchQuery", searchQuery);
+  //   console.log("searchQuery length", searchQuery.length);
+  //   if (searchQuery.length === 0) {
+  //     productAPI
+  //       .searchProductList(params)
+  //       .then((response) => {
+  //         // if (params.length > 0) {
+  //         //   setSearchQuery(searchQuery + "&" + params);
+  //         // } else {
+  //         //   setSearchQuery(searchQuery);
+  //         // }
+  //         setProducts(response.data);
+  //         setLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   } else {
+  //     productAPI
+  //       .productList(searchQuery + "&" + params)
+  //       .then((response) => {
+  //         setProducts(response.data);
+  //         setLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   }
+  // };
+  const fetchedProducts = () => {
+    let jointure =
+      // let tmpQuery = searchQuery
+      // categoryQuery
       productAPI
         .productList()
         .then((response) => {
@@ -103,10 +195,12 @@ const ShopWithSidebar = () => {
         .catch((error) => {
           console.error(error);
         });
-    };
+  };
 
+  useEffect(() => {
     fetchedProducts();
     fetchedCategories();
+    fetchShopList();
   }, []);
 
   return (
@@ -161,15 +255,25 @@ const ShopWithSidebar = () => {
                   <div className="bg-white shadow-1 rounded-lg py-4 px-5">
                     <div className="flex items-center justify-between">
                       <p>Filtre:</p>
-                      <button className="text-green">Effacer</button>
+                      {/* <button className="text-green">Effacer</button> */}
                     </div>
                   </div>
 
                   {/* <!-- category box --> */}
-                  <CategoryDropdown categories={categories} />
+                  <CategoryDropdown
+                    categories={categories}
+                    selectedCategories={selectedCategories}
+                    handleCategoryChange={handleCategoryChange}
+                  />
 
-                  {/* <!-- gender box --> */}
-                  {/* <GenderDropdown genders={genders} /> */}
+                  {/* <!-- shop box --> */}
+                  {shopList.length > 0 && (
+                    <ShopsDropdown
+                      genders={shopList}
+                      selectedShops={selectedShops}
+                      handleShopChange={handleShopChange}
+                    />
+                  )}
 
                   {/* // <!-- size box --> */}
                   {/* <SizeDropdown /> */}
@@ -178,7 +282,10 @@ const ShopWithSidebar = () => {
                   {/* <ColorsDropdwon /> */}
 
                   {/* // <!-- price range box --> */}
-                  <PriceDropdown />
+                  <PriceDropdown
+                    handlePricRangeChange={handlePricRangeChange}
+                    handleSubmitPrice={handleSubmitPrice}
+                  />
                 </div>
               </form>
             </div>
@@ -192,10 +299,11 @@ const ShopWithSidebar = () => {
                   <div className="flex flex-wrap items-center gap-4">
                     {/* <CustomSelect options={options} /> */}
 
-                    <p>
+                    {/* <p>
                       Affichage <span className="text-dark">9 / 50</span>{" "}
                       Produits
-                    </p>
+                    </p> */}
+                    <p>Affichage</p>
                   </div>
 
                   {/* <!-- top bar right --> */}
@@ -287,14 +395,22 @@ const ShopWithSidebar = () => {
                     : "flex flex-col gap-7.5"
                 }`}
               >
-                {products.map((item, key) =>
-                  productStyle === "grid" ? (
-                    <SingleGridItem item={item} key={key} />
-                  ) : (
-                    <SingleListItem item={item} key={key} />
-                  )
-                )}
+                {!loading &&
+                  products.map((item, key) =>
+                    productStyle === "grid" ? (
+                      <SingleGridItem item={item} key={key} />
+                    ) : (
+                      <SingleListItem item={item} key={key} />
+                    )
+                  )}
               </div>
+              {!loading && products.length === 0 && (
+                <div className="text-center flex flex-row justify-center w-full">
+                  <h3 className="text-custom-sm text-gray-900">
+                    Aucun produit trouvé.
+                  </h3>
+                </div>
+              )}
 
               {loading && (
                 <div className="text-center flex flex-row justify-center w-full">
@@ -305,7 +421,7 @@ const ShopWithSidebar = () => {
               {/* <!-- Products Grid Tab Content End --> */}
 
               {/* <!-- Products Pagination Start --> */}
-              <div className="flex justify-center mt-15">
+              {/* <div className="flex justify-center mt-15">
                 <div className="bg-white shadow-1 rounded-md p-2">
                   <ul className="flex items-center">
                     <li>
@@ -419,7 +535,7 @@ const ShopWithSidebar = () => {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
               {/* <!-- Products Pagination End --> */}
             </div>
             {/* // <!-- Content End --> */}

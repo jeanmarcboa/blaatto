@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import { useParams, useRouter } from "next/navigation";
 import Breadcrumb from "../Common/Breadcrumb";
 import PreLoader from "@/components/Common/BtnPreLoader";
@@ -12,7 +13,7 @@ import useUser from "@/hooks/useUser";
 import accountAPI from "@/app/api/account";
 
 const MyAccount = () => {
-  const { userInfo, isLoggedIn, deleteLoginData } = useUser();
+  const { userInfo, isLoggedIn, setLoginData, deleteLoginData } = useUser();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [addressModal, setAddressModal] = useState(false);
@@ -69,9 +70,15 @@ const MyAccount = () => {
     accountAPI
       .updateUserAccount(item, userInfo?.id)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setLoading(false);
-        // setLoginData(response.data);
+        let tmpInfo = { ...userInfo };
+        tmpInfo["firstname"] = firstname;
+        tmpInfo["lastname"] = lastname;
+        tmpInfo["email"] = email;
+        tmpInfo["phoneNumber"] = phoneNumber;
+        tmpInfo["username"] = username;
+        setLoginData(tmpInfo);
         setSuccessfull(true);
       })
       .catch((error) => {
@@ -204,7 +211,8 @@ const MyAccount = () => {
                       {userInfo?.firstname + " " + userInfo?.lastname}
                     </p>
                     <p className="text-custom-xs">
-                      Membre depuis {userInfo?.createdAt.slice(0, 10)}
+                      Membre depuis{" "}
+                      {dayjs(userInfo?.createdAt).format("DD/MM/YYYY")}
                     </p>
                   </div>
                 </div>
@@ -753,8 +761,8 @@ const MyAccount = () => {
                     {/* //Display message */}
                     {type === "account-info" && successFull && (
                       <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
-                        <span className="font-medium">Bravo !</span> Mot de
-                        passe modifié avec succès.
+                        <span className="font-medium">Bravo !</span> Vos
+                        Informations ont été modifié avec succès.
                       </div>
                     )}
 
@@ -764,6 +772,22 @@ const MyAccount = () => {
                         {errorMessage}
                       </div>
                     )}
+                  </div>
+                  <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
+                    <div className="w-full">
+                      <label htmlFor="firstName" className="block mb-2.5">
+                        Nom d&apos;utilisateur{" "}
+                        <span className="text-red">*</span>
+                      </label>
+
+                      <input
+                        type="text"
+                        name="username"
+                        value={item?.username}
+                        onChange={handleInputChange}
+                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                     <div className="w-full">
@@ -804,6 +828,19 @@ const MyAccount = () => {
                       type="email"
                       name="email"
                       value={item?.email}
+                      onChange={handleInputChange}
+                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    />
+                  </div>
+                  <div className="mb-5">
+                    <label htmlFor="countryName" className="block mb-2.5">
+                      Téléphone <span className="text-red">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      name="phoneNumber"
+                      value={item?.phoneNumber}
                       onChange={handleInputChange}
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />

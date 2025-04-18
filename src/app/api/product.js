@@ -11,6 +11,14 @@ export default {
     // console.log(data);
     return axios.post(`/api/products`, data);
   },
+  importProduct: (data) => {
+    // console.log(data);
+    return axios.post(`/api/products/upload`, data);
+  },
+  updateProduct: (id, data) => {
+    // console.log(data);
+    return axios.put(`/api/products/${id}`, data);
+  },
   addProductImages: (data, id) => {
     // console.log(data);
     return axios.post(`/api/products/${id}/images`, data);
@@ -21,7 +29,11 @@ export default {
   },
   productList: () => {
     // console.log(data);
-    return axios.get(`/api/products/`);
+    return axios.get(`/api/products`);
+  },
+  searchProductList: (searchQuery) => {
+    // console.log(data);
+    return axios.post(`/api/products/search`, searchQuery);
   },
   productDetail: (uuid) => {
     // console.log(data);

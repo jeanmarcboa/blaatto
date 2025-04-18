@@ -23,4 +23,7 @@ export default {
     // console.log(data);
     return axios.get(`/api/shops/${uuid}`);
   },
+  shopEdited: (id, data) => {
+    return axios.put(`/api/shops/${id}`, data);
+  },
 };
