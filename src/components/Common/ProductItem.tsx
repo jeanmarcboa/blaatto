@@ -10,6 +10,7 @@ import { updateproductDetails } from "@/redux/features/product-details";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
+import sepMillier from "./numberSeparator";
 
 const ProductItem = ({ item }: { item: any }) => {
   const { openModal } = useModalContext();
@@ -165,8 +166,10 @@ const ProductItem = ({ item }: { item: any }) => {
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">{item.price} F</span>
-        <span className="text-dark-4 line-through">{item.price} F</span>
+        <span className="text-dark">{sepMillier(item.price)} F</span>
+        <span className="text-dark-4 line-through">
+          {sepMillier(item.price)} F
+        </span>
       </span>
       <div className="flex flex-row gap-2 mt-2">
         <Link href={"/boutique/" + item?.shop?.id}>

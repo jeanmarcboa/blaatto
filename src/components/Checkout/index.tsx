@@ -2,7 +2,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import Breadcrumb from "../Common/Breadcrumb";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import useUser from "@/hooks/useUser";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
@@ -15,8 +16,10 @@ import Billing from "./Billing";
 
 import orderAPI from "../../app/api/order";
 import accountAPI from "../../app/api/account";
+import sepMillier from "../Common/numberSeparator";
 
 const Checkout = () => {
+  const router = useRouter();
   const { id } = useParams();
   const cartItems = useAppSelector((state) => state.cartReducer.items);
   const [selectedCartItems, setSelectedCartItems] = useState([]);
@@ -24,9 +27,7 @@ const Checkout = () => {
   const [totalPrice, setTotalPrice] = useState("");
   const [userID, setUserID] = useState("");
   const [loading, setLoading] = useState(false);
-  const { value, isLoggedIn } = useAppSelector(
-    (state) => state.userAccountReducer
-  );
+  const { userInfo, isLoggedIn } = useUser();
 
   const [billingInfo, setBillingInfo] = useState<any>({});
 
@@ -79,20 +80,13 @@ const Checkout = () => {
     setTotalPrice(tmpTotalPrice);
   }, []);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setBillingInfo((val) => ({ ...val, value }));
-      setUserID(value.id);
-    }
-  }, [value]);
-
   const createUserAccountFromBillingInfo = () => {
     console.log(billingInfo);
     let data = {
       lastname: billingInfo?.lastname,
       firstname: billingInfo?.firstname,
       email: billingInfo?.email,
-      phoneNumber: billingInfo?.phone,
+      phoneNumber: billingInfo?.phoneNumber,
       username: billingInfo?.lastname,
       password: billingInfo?.password,
     };
@@ -117,31 +111,42 @@ const Checkout = () => {
       quantity: item.quantity,
     }));
 
-    const order = {
+    const orderLogged = {
       accountId: id,
       products: orderProducts,
+      email: billingInfo?.email,
+      lastname: billingInfo?.lastname,
+      firstname: billingInfo?.firstname,
+    };
+    const orderNologged = {
+      products: orderProducts,
+      email: billingInfo?.email,
+      lastname: billingInfo?.lastname,
+      firstname: billingInfo?.firstname,
     };
     orderAPI
-      .createOrder(order)
+      .createOrder(isLoggedIn ? orderLogged : orderNologged)
       .then((response) => {
         console.log("Order created successfully", response);
         // pay order and redirect to order confirmation page
         let payData = {
           deliveryAddress: billingInfo?.deliveryAddress,
-          phoneNumber: billingInfo?.phone,
+          phoneNumber: billingInfo?.phoneNumber,
         };
 
         orderAPI
           .buyOrder(response.data.id, payData)
-          .then((response) => {
-            console.log("Order paid successfully", response);
-            window.location.href = "/order/confirmation";
+          .then((req) => {
+            console.log("Order paid successfully", req);
+            // router.push("/order/confirmation");
+            window.location.href = req.data?.data?.gateway_payment_url;
             setLoading(false);
           })
           .catch((error) => {
             console.error("Error paying order", error);
             setTimeout(() => {
-              window.location.href = "/order/confirmation";
+              // router.push("/order/confirmation");
+              router.push("/error");
               setLoading(false);
             }, 2000);
           });
@@ -149,7 +154,7 @@ const Checkout = () => {
       .catch((error) => {
         console.error("Error creating order", error);
         setLoading(false);
-        window.location.href = "/error";
+        router.push("/error");
       });
   };
 
@@ -164,11 +169,24 @@ const Checkout = () => {
 
     // Submit order
     if (!isLoggedIn) {
-      createUserAccountFromBillingInfo();
+      // createUserAccountFromBillingInfo();
+      setOrder("");
     } else {
-      setOrder(value.id);
+      setOrder(userInfo?.id);
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setBillingInfo({
+        lastname: userInfo?.lastname,
+        firstname: userInfo?.firstname,
+        email: userInfo?.email,
+        phoneNumber: userInfo?.phoneNumber,
+      });
+      setUserID(userInfo.id);
+    }
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -186,27 +204,8 @@ const Checkout = () => {
                 <Billing
                   handleChangeBillingInfo={handleChangeBillingInfo}
                   billingInfo={billingInfo}
+                  isLoggedIn={isLoggedIn}
                 />
-
-                {/* <!-- address box two --> */}
-                {/* <Shipping /> */}
-
-                {/* <!-- others note box --> */}
-                {/* <div className="bg-white shadow-1 rounded-[10px] p-4 sm:p-8.5 mt-7.5">
-                  <div>
-                    <label htmlFor="notes" className="block mb-2.5">
-                      Other Notes (optional)
-                    </label>
-
-                    <textarea
-                      name="notes"
-                      id="notes"
-                      rows={5}
-                      placeholder="Notes about your order, e.g. speacial notes for delivery."
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                    ></textarea>
-                  </div>
-                </div> */}
               </div>
 
               {/* // <!-- checkout right --> */}
@@ -245,7 +244,7 @@ const Checkout = () => {
                         </div>
                         <div>
                           <p className="text-dark text-right">
-                            {item.price * item.quantity} FCFA
+                            {sepMillier(item.price * item.quantity)} FCFA
                           </p>
                         </div>
                       </div>
@@ -264,7 +263,7 @@ const Checkout = () => {
                       </div>
                       <div>
                         <p className="font-medium text-lg text-dark text-right">
-                          {totalPrice} FCFA
+                          {sepMillier(totalPrice)} FCFA
                         </p>
                       </div>
                     </div>

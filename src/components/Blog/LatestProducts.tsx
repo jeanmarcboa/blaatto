@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import sepMillier from "../Common/numberSeparator";
 
 const LatestProducts = ({ products }) => {
   return (
@@ -29,7 +30,9 @@ const LatestProducts = ({ products }) => {
                     {product?.title}{" "}
                   </Link>
                 </h3>
-                <p className="text-custom-sm">Price: ${product?.price}</p>
+                <p className="text-custom-sm">
+                  Price: ${sepMillier(product?.price)}
+                </p>
               </div>
             </div>
           ))}

@@ -2,7 +2,8 @@
 
 import Home from "@/components/Home";
 import React, { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import useUser from "@/hooks/useUser";
 import Link from "next/link";
 import {
   FiHome,
@@ -18,6 +19,8 @@ import {
 import { Metadata } from "next";
 
 export default function SideBar() {
+  const router = useRouter();
+  const { userInfo, isLoggedIn, setLoginData, deleteLoginData } = useUser();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(null);
@@ -31,7 +34,12 @@ export default function SideBar() {
   // const toggleSubMenu = () => setIsSubMenuOpen(!isSubMenuOpen);
 
   const menuItems = [
-    { title: "Tableau de bord", icon: <FiHome />, link: "/business" },
+    {
+      title: "Tableau de bord",
+      icon: <FiHome />,
+      link: "/business",
+      path: "/business",
+    },
     {
       title: "Boutiques",
       icon: <FiBriefcase />,
@@ -47,6 +55,10 @@ export default function SideBar() {
           title: "Ajouter un nouveau produit",
           link: "/business/product/add-product",
         },
+        {
+          title: "Importer des produits",
+          link: "/business/product/import",
+        },
       ],
       path: "/business/product",
     },
@@ -57,9 +69,19 @@ export default function SideBar() {
       path: "/business/commandes",
     },
     // { title: "Clients", icon: <FiUsers />, link: "/signup" },
-    { title: "Transactions", icon: <FiLayers />, link: "/signup" },
+    {
+      title: "Transactions",
+      icon: <FiLayers />,
+      link: "/business/transactions/list",
+      path: "/business/transactions",
+    },
     // { title: "Paiement", icon: <FiCreditCard />, link: "/signup" },
   ];
+
+  if (!isLoggedIn) {
+    router.push("/signin");
+    return;
+  }
 
   return (
     <>
@@ -262,20 +284,25 @@ export default function SideBar() {
           </> */}
           <div className="my-4 bg-dark-2 h-[1px]"></div>
           <Link
-            href="/signup"
-            className="text-dark ease-out duration-200 hover:text-green pl-2"
+            href="/business/account"
+            className={`p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-green text-white ease-out duration-200 hover:text-white pl-2 ${
+              pathname.includes("/business/account")
+                ? "bg-green"
+                : "hover:bg-green"
+            }`}
           >
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-              <FiUser />
-              <span className="text-[15px] ml-4 text-gray-200">Profil</span>
-            </div>
+            <FiUser />
+            <span className="text-[15px] ml-4 text-gray-200">Profil</span>
           </Link>
-          <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+          <button
+            onClick={() => deleteLoginData()}
+            className="p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer text-white ease-out duration-200 hover:text-red pl-2"
+          >
             <FiLogOut />
             <span className="text-[15px] ml-4 text-gray-200">
               Se déconnecter
             </span>
-          </div>
+          </button>
         </div>
       </div>
     </>

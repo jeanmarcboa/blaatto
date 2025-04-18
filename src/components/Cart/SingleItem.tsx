@@ -7,6 +7,7 @@ import {
 } from "@/redux/features/cart-slice";
 
 import Image from "next/image";
+import sepMillier from "../Common/numberSeparator";
 
 const SingleItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
@@ -55,7 +56,7 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[180px]">
-        <p className="text-dark">{item.price} FCFA</p>
+        <p className="text-dark">{sepMillier(item.price)} FCFA</p>
       </div>
 
       <div className="min-w-[275px]">
@@ -111,7 +112,7 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[200px]">
-        <p className="text-dark">{item.price * quantity} FCFA</p>
+        <p className="text-dark">{sepMillier(item.price * quantity)} FCFA</p>
       </div>
 
       <div className="min-w-[50px] flex justify-end">

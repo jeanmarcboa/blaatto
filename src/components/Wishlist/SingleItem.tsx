@@ -6,6 +6,7 @@ import { removeItemFromWishlist } from "@/redux/features/wishlist-slice";
 import { addItemToCart } from "@/redux/features/cart-slice";
 
 import Image from "next/image";
+import sepMillier from "../Common/numberSeparator";
 
 const SingleItem = ({ item }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -75,7 +76,7 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[205px]">
-        <p className="text-dark">{item.price} FCFA</p>
+        <p className="text-dark">{sepMillier(item.price)} FCFA</p>
       </div>
 
       <div className="min-w-[265px]">

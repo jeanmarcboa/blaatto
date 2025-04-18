@@ -10,7 +10,6 @@ const initialState = {
     title: "",
     reviews: 0,
     price: 0,
-    price: 0,
     img: "",
     images: [],
     id: "",

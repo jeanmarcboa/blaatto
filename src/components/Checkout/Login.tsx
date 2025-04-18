@@ -1,7 +1,63 @@
 import React, { useState } from "react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import useUser from "@/hooks/useUser";
+import PreLoader from "../Common/BtnPreLoader";
+
+//import accounts restAPI
+import accountAPI from "@/app/api/account";
 
 const Login = () => {
+  const router = useRouter();
+  const { setLoginData } = useUser();
   const [dropdown, setDropdown] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [successFull, setSuccessfull] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(false);
+    setSuccessfull(false);
+
+    if (!formData.username || !formData.password) {
+      // alert("Veuillez remplir tous les champs");
+      setLoading(false);
+      setError(true);
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    accountAPI
+      .signIn(formData)
+      .then((response) => {
+        setLoading(false);
+        setSuccessfull(true);
+        setTimeout(() => {
+          setLoginData(response.data);
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+        setError(true);
+        setErrorMessage(err.response.data.message);
+      });
+  };
 
   return (
     <div className="bg-white shadow-1 rounded-[10px]">
@@ -40,26 +96,37 @@ const Login = () => {
           dropdown ? "block" : "hidden"
         } pt-7.5 pb-8.5 px-4 sm:px-8.5`}
       >
-        <p className="text-custom-sm mb-6">
-          If you didn&apos;t Logged in, Please Log in first.
-        </p>
+        <div className="flex items-center justify-center space-x-3">
+          {successFull && (
+            <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
+              <span className="font-medium">Bravo !</span> Vous avez été
+              connecté avec succès.
+            </div>
+          )}
+          {error && (
+            <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400 w-full">
+              <span className="font-medium">Oops !</span> {errorMessage}
+            </div>
+          )}
+        </div>
 
         <div className="mb-5">
           <label htmlFor="name" className="block mb-2.5">
-            Username or Email
+            Nom d&apos;utilisateur
           </label>
 
           <input
             type="text"
-            name="name"
-            id="name"
+            name="username"
+            id="username"
+            onChange={handleInputChange}
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
 
         <div className="mb-5">
           <label htmlFor="password" className="block mb-2.5">
-            Password
+            Mot de passe
           </label>
 
           <input
@@ -67,15 +134,17 @@ const Login = () => {
             name="password"
             id="password"
             autoComplete="on"
+            onChange={handleInputChange}
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
 
         <button
           type="submit"
+          onClick={handleSubmit}
           className="inline-flex font-medium text-white bg-green py-3 px-10.5 rounded-md ease-out duration-200 hover:bg-green-dark"
         >
-          Login
+          {loading ? <PreLoader /> : "Connectez-vous au compte"}
         </button>
       </div>
     </div>

@@ -2,8 +2,8 @@ import Signin from "@/components/Auth/Signin";
 import React from "react";
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Signin Page | Blaatto",
-  description: "This is Signin Page for NextCommerce Template",
+  title: "Se connecter | Blaatto",
+  description: "This is Signin Page for Blaatto",
   // other metadata
 };
 

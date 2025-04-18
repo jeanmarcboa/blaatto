@@ -4,13 +4,22 @@ import Slider from "react-slider";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
 
-const PriceDropdown = () => {
+const PriceDropdown = ({ handlePricRangeChange, handleSubmitPrice }) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
   const [selectedPrice, setSelectedPrice] = useState({
     from: 0,
-    to: 100,
+    to: 10000,
   });
+
+  const handlePriceChange = (e) => {
+    let range = {
+      from: Math.floor(e[0]),
+      to: Math.ceil(e[1]),
+    };
+    setSelectedPrice(range);
+    handlePricRangeChange(range);
+  };
 
   return (
     <div className="bg-white shadow-1 rounded-lg">
@@ -53,12 +62,9 @@ const PriceDropdown = () => {
               id="range-slider-gradient"
               className="margin-lg"
               step={"any"}
-              onInput={(e) =>
-                setSelectedPrice({
-                  from: Math.floor(e[0]),
-                  to: Math.ceil(e[1]),
-                })
-              }
+              min={0}
+              max={1000000}
+              onInput={(e) => handlePriceChange(e)}
             />
 
             <div className="price-amount flex items-center justify-between pt-4">
@@ -79,6 +85,14 @@ const PriceDropdown = () => {
                   {selectedPrice.to}
                 </span>
               </div>
+            </div>
+            <div>
+              <button
+                onClick={handleSubmitPrice}
+                className="flex flex-row justify-center w-full text-center font-medium text-custom-sm text-white bg-green py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"
+              >
+                Valider
+              </button>
             </div>
           </div>
         </div>

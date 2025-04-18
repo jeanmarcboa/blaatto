@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import Image from "next/image";
+import sepMillier from "../Common/numberSeparator";
 
 const SingleGridItem = ({ item }: { item: any }) => {
   const { openModal } = useModalContext();
@@ -115,7 +116,7 @@ const SingleGridItem = ({ item }: { item: any }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2.5 mb-2">
+      {/* <div className="flex items-center gap-2.5 mb-2">
         <div className="flex items-center gap-1">
           <Image
             src="/images/icons/icon-star.svg"
@@ -150,15 +151,17 @@ const SingleGridItem = ({ item }: { item: any }) => {
         </div>
 
         <p className="text-custom-sm">({item.reviews})</p>
-      </div>
+      </div> */}
 
       <h3 className="font-medium text-dark ease-out duration-200 hover:text-green mb-1.5">
         <Link href={"/shop-details/" + item?.id}> {item.label} </Link>
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">${item.price}</span>
-        <span className="text-dark-4 line-through">${item.price}</span>
+        <span className="text-dark">${sepMillier(item.price)}</span>
+        <span className="text-dark-4 line-through">
+          ${sepMillier(item.price)}
+        </span>
       </span>
       <div className="flex flex-row gap-2 mt-2">
         <Link href={"/boutique/" + item?.shop?.id}>

@@ -2,29 +2,106 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Breadcrumb from "../Common/Breadcrumb";
-import { useAppSelector } from "@/redux/store";
+import useUser from "@/hooks/useUser";
+import PreLoader from "@/components/Common/BtnPreLoader";
 import SingleItem from "./SingleItem";
 
 import product from "@/app/api/product";
 import orderAPI from "@/app/api/order";
+import shopAPI from "@/app/api/shop";
 
 export const Orderstlist = () => {
-  const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);
+  const { userInfo } = useUser();
   const [orders, setOrders] = useState([]);
+  const [tmpOrders, setTmpOrders] = useState([]);
+  const [shopList, setShopList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fetchProducts = () => {
-    orderAPI
-      .orderList()
+  const OrderStatus = [
+    { label: "En Cours" },
+    { label: "Payé" },
+    { label: "En traitement" },
+    { label: "Expédié" },
+    { label: "Livré" },
+    { label: "Annulé" },
+  ];
+
+  const handleChangeText = async (event: any) => {
+    const { value } = event.target;
+
+    if (value.length >= 2) {
+      const results = tmpOrders?.filter((item: any) => {
+        return item.reference.toLowerCase().includes(value.toLowerCase());
+      });
+
+      setOrders(results);
+    }
+    if (value.length === 0) {
+      setOrders(tmpOrders);
+    }
+  };
+
+  const handleChangeShop = (e: any) => {
+    const value = e.target.value;
+    setLoading(true);
+    let results = tmpOrders.filter((item: any) => item.shopId == value);
+    setOrders(results);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    if (value == "all") {
+      setOrders(tmpOrders);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
+  };
+
+  const handleChangeStatus = (e: any) => {
+    const value = e.target.value;
+    setLoading(true);
+    let results = tmpOrders.filter((item: any) => item.status == value);
+    setOrders(results);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    if (value == "all") {
+      setOrders(tmpOrders);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
+  };
+
+  const fetchShopList = () => {
+    shopAPI
+      .shopListByBusinessId(userInfo?.id)
       .then((response) => {
-        setOrders(response.data);
+        setShopList(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  const fetchOrders = () => {
+    let paramsData = "?accountId=" + userInfo?.id;
+    orderAPI
+      .orderList(paramsData)
+      .then((response) => {
+        setOrders(response.data);
+        setTmpOrders(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
-    fetchProducts();
+    fetchOrders();
+    fetchShopList();
   }, []);
 
   return (
@@ -38,11 +115,50 @@ export const Orderstlist = () => {
             </h2>
           </div>
 
-          <div className="bg-white rounded-[10px] shadow-1">
+          <div className="mb-4 flex flex-row">
+            <select
+              name="shopId"
+              onChange={handleChangeShop}
+              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+            >
+              <option value="all">Toutes les boutiques</option>
+              {shopList.map((shop: any) => (
+                <option key={shop?.id} value={shop?.id}>
+                  {shop?.label}
+                </option>
+              ))}
+            </select>
+            <select
+              name="branche"
+              onChange={handleChangeStatus}
+              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+            >
+              <option value="all">Toutes les status</option>
+              {OrderStatus.map((item: any) => (
+                <option key={item?.label} value={item?.label}>
+                  {item?.label}
+                </option>
+              ))}
+            </select>
+
+            <div className="w-3/4">
+              <div className="relative">
+                <input
+                  type="search"
+                  // value={searchValue}
+                  onChange={handleChangeText}
+                  className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Rechercher une commande..."
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden">
             <div className="w-full overflow-x-auto">
               <div className="min-w-[1170px]">
                 {/* <!-- table header --> */}
-                <div className="flex items-center py-5.5 px-10">
+                <div className="flex items-center bg-gray-1 py-5.5 px-10">
                   {/* <div className="min-w-[83px]"></div> */}
                   <div className="min-w-[350px]">
                     <p className="text-dark">Commande</p>
@@ -65,9 +181,24 @@ export const Orderstlist = () => {
                 </div>
 
                 {/* <!-- wish item --> */}
-                {orders.map((item, key) => (
-                  <SingleItem item={item} key={key} />
-                ))}
+                {!loading &&
+                  orders.map((item, key) => (
+                    <SingleItem item={item} key={key} />
+                  ))}
+                {!loading && orders.length === 0 && (
+                  <div className="flex items-center justify-center py-5.5 px-10">
+                    <div className="min-w-[350px]">
+                      <p className="text-dark">
+                        Vous n&apos;avez aucune commande !
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {loading && (
+                  <div className="flex justify-center items-center m-4">
+                    <PreLoader color="green" />
+                  </div>
+                )}
               </div>
             </div>
           </div>

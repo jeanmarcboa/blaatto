@@ -9,6 +9,7 @@ import { addItemToCart } from "@/redux/features/cart-slice";
 import Image from "next/image";
 import Link from "next/link";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+import sepMillier from "@/components/Common/numberSeparator";
 
 const SingleItem = ({ item }: { item: any }) => {
   const { openModal } = useModalContext();
@@ -85,8 +86,10 @@ const SingleItem = ({ item }: { item: any }) => {
           </h3>
 
           <span className="flex items-center justify-center gap-2 font-medium text-lg">
-            <span className="text-dark">{item.price} F</span>
-            <span className="text-dark-4 line-through">{item.price} F</span>
+            <span className="text-dark">{sepMillier(item.price)} F</span>
+            <span className="text-dark-4 line-through">
+              {sepMillier(item.price)} F
+            </span>
           </span>
           <div className="flex flex-row justify-center gap-2 mt-2">
             <Link href={"/boutique/" + item?.shop?.id}>

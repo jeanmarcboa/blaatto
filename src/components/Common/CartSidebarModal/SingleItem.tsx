@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Image from "next/image";
+import sepMillier from "../numberSeparator";
 
 const SingleItem = ({ item, removeItemFromCart }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +27,7 @@ const SingleItem = ({ item, removeItemFromCart }) => {
           <h3 className="font-medium text-dark mb-1 ease-out duration-200 hover:text-green">
             <a href="#"> {item?.label} </a>
           </h3>
-          <p className="text-custom-sm">Prix: {item.price} FCFA</p>
+          <p className="text-custom-sm">Prix: {sepMillier(item.price)} FCFA</p>
         </div>
       </div>
 

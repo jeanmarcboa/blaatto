@@ -11,13 +11,17 @@ export default {
     // console.log(data);
     return axios.post(`/api/orders`, data);
   },
+  updateOrder: (uuid, data) => {
+    // console.log(data);
+    return axios.put(`/api/orders/${uuid}`, data);
+  },
   buyOrder: (uuid, data) => {
     // console.log(data);
-    return axios.post(`/api/orders/${uuid}`, data);
+    return axios.post(`/api/orders/${uuid}/purchase`, data);
   },
-  orderList: () => {
+  orderList: (queryParams) => {
     // console.log(data);
-    return axios.get(`/api/orders/`);
+    return axios.get(`/api/orders${queryParams ?? ""}`);
   },
   orderDetail: (uuid) => {
     // console.log(data);

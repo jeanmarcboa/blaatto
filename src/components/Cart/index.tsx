@@ -83,11 +83,11 @@ const Cart = () => {
               ))}
             </div>
 
-            <div className="bg-white rounded-[10px] shadow-1">
+            <div className="bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden">
               <div className="w-full overflow-x-auto">
                 <div className="min-w-[1170px]">
                   {/* <!-- table header --> */}
-                  <div className="flex items-center py-5.5 px-7.5">
+                  <div className="flex items-center bg-gray-1 py-5.5 px-7.5">
                     <div className="min-w-[400px]">
                       <p className="text-dark">Produit</p>
                     </div>
