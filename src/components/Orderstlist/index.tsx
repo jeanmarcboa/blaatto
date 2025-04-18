@@ -43,8 +43,11 @@ export const Orderstlist = () => {
 
   const handleChangeShop = (e: any) => {
     const value = e.target.value;
+    console.log(value);
     setLoading(true);
-    let results = tmpOrders.filter((item: any) => item.shopId == value);
+    let results = tmpOrders.filter(
+      (item: any) => item?.OrderItem[0]?.product?.shopId == value
+    );
     setOrders(results);
     setTimeout(() => {
       setLoading(false);
@@ -74,20 +77,31 @@ export const Orderstlist = () => {
   };
 
   const fetchShopList = () => {
-    shopAPI
-      .shopListByBusinessId(userInfo?.id)
-      .then((response) => {
-        setShopList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (userInfo?.role?.code === "ADMIN") {
+      shopAPI
+        .shopList()
+        .then((response) => {
+          setShopList(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      shopAPI
+        .shopListByBusinessId(userInfo?.id)
+        .then((response) => {
+          setShopList(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const fetchOrders = () => {
     let paramsData = "?accountId=" + userInfo?.id;
     orderAPI
-      .orderList(paramsData)
+      .orderList(userInfo?.role?.code === "ADMIN" ? "" : paramsData)
       .then((response) => {
         setOrders(response.data);
         setTmpOrders(response.data);
