@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
+import useUser from "@/hooks/useUser";
 import dayjs from "dayjs";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
@@ -12,6 +13,7 @@ import Image from "next/image";
 
 const SingleItem = ({ item }) => {
   const router = useRouter();
+  const { userInfo } = useUser();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleRemoveFromWishlist = () => {
@@ -88,7 +90,13 @@ const SingleItem = ({ item }) => {
 
       <div className="min-w-[150px] flex justify-end">
         <button
-          onClick={() => router.push("/business/commandes/view/" + item?.id)}
+          onClick={() =>
+            router.push(
+              `${
+                userInfo?.role?.code === "ADMIN" ? "/admin" : "/business"
+              }/commandes/view/${item?.id}`
+            )
+          }
           aria-label="button for remove product from wishlist"
           className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 mr-4 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-green-light-6 hover:border-green-light-4 hover:text-green"
         >
