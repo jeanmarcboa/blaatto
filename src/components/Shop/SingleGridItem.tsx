@@ -45,7 +45,9 @@ const SingleGridItem = ({ item }: { item: any }) => {
     <div className="group">
       <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-white shadow-1 min-h-[270px] mb-4">
         <Image
-          src={item?.Photo?.url ?? "/images/products/default-placeholder.png"}
+          src={
+            item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
+          }
           alt=""
           width={250}
           height={250}
@@ -158,9 +160,9 @@ const SingleGridItem = ({ item }: { item: any }) => {
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">${sepMillier(item.price)}</span>
+        <span className="text-dark">{sepMillier(item.price)} F</span>
         <span className="text-dark-4 line-through">
-          ${sepMillier(item.price)}
+          {sepMillier(item.price)} F
         </span>
       </span>
       <div className="flex flex-row gap-2 mt-2">
