@@ -6,9 +6,9 @@ import useUser from "@/hooks/useUser";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import SingleItem from "./SingleItem";
 
-import product from "@/app/api/product";
-import orderAPI from "@/app/api/order";
-import shopAPI from "@/app/api/shop";
+import product from "@/app/api/productServices";
+import orderAPI from "@/app/api/orderServices";
+import shopAPI from "@/app/api/shopServices";
 
 export const Orderstlist = () => {
   const { userInfo } = useUser();

@@ -5,7 +5,7 @@ import data from "./categoryData";
 import Image from "next/image";
 
 // Import services
-import shopAPI from "@/app/api/shop";
+import shopAPI from "@/app/api/shopServices";
 
 // Import Swiper styles
 import "swiper/css/navigation";

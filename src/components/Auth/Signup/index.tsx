@@ -9,7 +9,7 @@ import React, { useState, useEffect } from "react";
 import { FiBriefcase, FiUser } from "react-icons/fi";
 
 //import accounts restAPI
-import Account from "../../../app/api/account";
+import Account from "../../../app/api/accountServices";
 
 const Signup = () => {
   const { setLoginData } = useUser();

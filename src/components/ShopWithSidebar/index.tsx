@@ -13,9 +13,9 @@ import shopData from "../Shop/shopData";
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
 
-import productAPI from "@/app/api/product";
+import productAPI from "@/app/api/productServices";
 import categoriesAPI from "@/app/api/categoriesServices";
-import shopAPI from "@/app/api/shop";
+import shopAPI from "@/app/api/shopServices";
 
 const ShopWithSidebar = () => {
   const [products, setProducts] = useState([]);

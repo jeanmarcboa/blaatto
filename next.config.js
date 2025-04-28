@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 // next.config.js
 const nextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "http://localhost:8080/:path*",
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/:path*",
+  //       destination: "http://localhost:8080/:path*",
+  //     },
+  //   ];
+  // },
   // async rewrites() {
   //   return [
   //     {
@@ -17,15 +17,15 @@ const nextConfig = {
   //     },
   //   ];
   // },
-  //   async rewrites() {
-  //     return [
-  //       {
-  //         source: "/api/:path*",
-  //         destination:
-  //           "https://onufemme-admin-ws.f9tkixr0bx6.eu-gb.codeengine.appdomain.cloud/:path*",
-  //       },
-  //     ];
-  //   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination:
+          "https://onufemme-admin-ws.f9tkixr0bx6.eu-gb.codeengine.appdomain.cloud/:path*",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

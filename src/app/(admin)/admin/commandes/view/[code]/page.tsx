@@ -7,8 +7,8 @@ import sepMillier from "@/components/Common/numberSeparator";
 import { useParams, useRouter } from "next/navigation";
 import PageLoader from "@/components/Common/PreLoader";
 import PreLoader from "@/components/Common/BtnPreLoader";
-import product from "@/app/api/product";
-import orderAPI from "@/app/api/order";
+import product from "@/app/api/productServices";
+import orderAPI from "@/app/api/orderServices";
 
 export default function AddProduct() {
   const { code } = useParams();

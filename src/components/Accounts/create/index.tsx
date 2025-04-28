@@ -7,8 +7,8 @@ import useUser from "@/hooks/useUser";
 import React, { useState, useEffect } from "react";
 
 //import accounts restAPI
-import Account from "../../../app/api/account";
-import Shop from "../../../app/api/shop";
+import Account from "../../../app/api/accountServices";
+import Shop from "../../../app/api/shopServices";
 
 const ShopCreation = () => {
   const router = useRouter();

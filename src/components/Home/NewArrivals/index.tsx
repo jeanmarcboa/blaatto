@@ -6,7 +6,7 @@ import Link from "next/link";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import ProductItem from "@/components/Common/ProductItem";
 import shopData from "@/components/Shop/shopData";
-import productAPI from "@/app/api/product";
+import productAPI from "@/app/api/productServices";
 
 const NewArrival = () => {
   const [products, setProducts] = useState([]);

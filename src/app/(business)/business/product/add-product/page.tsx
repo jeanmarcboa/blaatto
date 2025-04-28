@@ -4,9 +4,9 @@
 import { useState, useEffect } from "react";
 import useUser from "@/hooks/useUser";
 import PreLoader from "@/components/Common/BtnPreLoader";
-import product from "@/app/api/product";
+import product from "@/app/api/productServices";
 import categ from "@/app/api/categoriesServices";
-import shop from "@/app/api/shop";
+import shop from "@/app/api/shopServices";
 
 export default function AddProduct() {
   const { userInfo } = useUser();

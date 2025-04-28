@@ -8,9 +8,9 @@ import useUser from "@/hooks/useUser";
 import SingleItem from "./accountList/SingleItem";
 import AccountEditModal from "./AccountEditModal";
 
-import productAPI from "@/app/api/product";
-import shopAPI from "@/app/api/shop";
-import accountAPI from "@/app/api/account";
+import productAPI from "@/app/api/productServices";
+import shopAPI from "@/app/api/shopServices";
+import accountAPI from "@/app/api/accountServices";
 
 export const AccountList = () => {
   // const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);

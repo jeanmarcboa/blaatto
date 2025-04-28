@@ -14,8 +14,8 @@ import { useAppSelector } from "@/redux/store";
 import SingleItem from "./SingleItem";
 import useUser from "@/hooks/useUser";
 
-import product from "@/app/api/product";
-import shopAPI from "@/app/api/shop";
+import product from "@/app/api/productServices";
+import shopAPI from "@/app/api/shopServices";
 
 export const Productlist = () => {
   const { userInfo } = useUser();

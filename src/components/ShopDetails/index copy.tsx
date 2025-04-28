@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import shopData from "../Shop/shopData";
 
-import productAPI from "@/app/api/product";
+import productAPI from "@/app/api/productServices";
 import sepMillier from "../Common/numberSeparator";
 
 const ShopDetails = () => {

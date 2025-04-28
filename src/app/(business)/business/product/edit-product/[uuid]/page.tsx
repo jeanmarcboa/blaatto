@@ -6,9 +6,9 @@ import { useParams, useRouter } from "next/navigation";
 import PageLoader from "@/components/Common/PreLoader";
 import useUser from "@/hooks/useUser";
 import PreLoader from "@/components/Common/BtnPreLoader";
-import product from "@/app/api/product";
+import product from "@/app/api/productServices";
 import categ from "@/app/api/categoriesServices";
-import shop from "@/app/api/shop";
+import shop from "@/app/api/shopServices";
 
 export default function AddProduct() {
   const { userInfo } = useUser();

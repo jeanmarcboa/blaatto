@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import SingleOrderItem from "@/components/Orderstlist/SingleOrderItem";
-import product from "@/app/api/product";
+import product from "@/app/api/productServices";
 import categ from "@/app/api/categoriesServices";
 
 export default function AddProduct() {
