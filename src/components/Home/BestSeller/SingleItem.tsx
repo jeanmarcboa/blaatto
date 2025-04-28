@@ -45,7 +45,7 @@ const SingleItem = ({ item }: { item: any }) => {
       <div className="relative overflow-hidden rounded-lg bg-[#F6F7FB] min-h-[403px]">
         <div className="text-center px-4 py-7.5">
           <div className="flex items-center justify-center gap-2.5 mb-2">
-            <div className="flex items-center gap-1">
+            {/* <div className="flex items-center gap-1">
               <Image
                 src="/images/icons/icon-star.svg"
                 alt="star icon"
@@ -76,9 +76,9 @@ const SingleItem = ({ item }: { item: any }) => {
                 width={14}
                 height={14}
               />
-            </div>
+            </div> */}
 
-            <p className="text-custom-sm">({item?.reviews})</p>
+            {/* <p className="text-custom-sm">({item?.reviews})</p> */}
           </div>
 
           <h3 className="font-medium text-dark ease-out duration-200 hover:text-green mb-1.5">
@@ -110,7 +110,9 @@ const SingleItem = ({ item }: { item: any }) => {
 
         <div className="flex justify-center items-center">
           <Image
-            src={item?.Photo?.url ?? "/images/products/default-placeholder.png"}
+            src={
+              item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
+            }
             alt=""
             width={280}
             height={280}

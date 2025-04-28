@@ -46,7 +46,9 @@ const SingleListItem = ({ item }: { item: any }) => {
       <div className="flex">
         <div className="shadow-list relative overflow-hidden flex items-center justify-center max-w-[270px] w-full sm:min-h-[270px] p-4">
           <Image
-            src={item?.Photo?.url ?? "/images/products/default-placeholder.png"}
+            src={
+              item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
+            }
             alt=""
             width={250}
             height={250}
@@ -122,9 +124,9 @@ const SingleListItem = ({ item }: { item: any }) => {
             </h3>
 
             <span className="flex items-center gap-2 font-medium text-lg">
-              <span className="text-dark">${sepMillier(item.price)}</span>
+              <span className="text-dark">{sepMillier(item.price)} F</span>
               <span className="text-dark-4 line-through">
-                ${sepMillier(item.price)}
+                {sepMillier(item.price)} F
               </span>
             </span>
             <div className="flex flex-row gap-2 mt-2">
