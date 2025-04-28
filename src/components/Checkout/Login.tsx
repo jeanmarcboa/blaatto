@@ -5,7 +5,7 @@ import useUser from "@/hooks/useUser";
 import PreLoader from "../Common/BtnPreLoader";
 
 //import accounts restAPI
-import accountAPI from "@/app/api/account";
+import accountAPI from "@/app/api/accountServices";
 
 const Login = () => {
   const router = useRouter();

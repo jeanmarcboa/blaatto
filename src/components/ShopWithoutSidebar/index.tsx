@@ -9,7 +9,7 @@ import SingleListItem from "../Shop/SingleListItem";
 import CustomSelect from "../ShopWithSidebar/CustomSelect";
 
 import shopData from "../Shop/shopData";
-import shopAPI from "@/app/api/shop";
+import shopAPI from "@/app/api/shopServices";
 
 const ShopWithoutSidebar = () => {
   const [productStyle, setProductStyle] = useState("grid");

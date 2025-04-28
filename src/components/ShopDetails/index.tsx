@@ -25,7 +25,7 @@ const ShopDetails = () => {
   const [product, setProduct] = useState<any>({});
   const [productList, setProductList] = useState([]);
   const [previewImg, setPreviewImg] = useState(0);
-  const [previewMainImg, setPreviewMainImg] = useState({});
+  const [previewMainImg, setPreviewMainImg] = useState<any>({});
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
 
