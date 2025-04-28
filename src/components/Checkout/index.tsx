@@ -14,8 +14,8 @@ import PaymentMethod from "./PaymentMethod";
 import Coupon from "./Coupon";
 import Billing from "./Billing";
 
-import orderAPI from "../../app/api/order";
-import accountAPI from "../../app/api/account";
+import orderAPI from "../../app/api/orderServices";
+import accountAPI from "../../app/api/accountServices";
 import sepMillier from "../Common/numberSeparator";
 
 const Checkout = () => {

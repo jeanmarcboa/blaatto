@@ -1,4 +1,5 @@
 "use client";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useCallback, useRef } from "react";
 import "swiper/css/navigation";
@@ -7,8 +8,10 @@ import Image from "next/image";
 
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAppSelector } from "@/redux/store";
+import useImagesPreview from "@/hooks/useImagesPreview";
 
 const PreviewSliderModal = () => {
+  const { productImages, setUpdateproductImages } = useImagesPreview();
   const { closePreviewModal, isModalPreviewOpen } = usePreviewSlider();
 
   const data = useAppSelector((state) => state.productDetailsReducer.value);
@@ -16,13 +19,15 @@ const PreviewSliderModal = () => {
   const sliderRef = useRef(null);
 
   const handlePrev = useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slidePrev();
+    if (sliderRef.current && sliderRef.current.swiper) {
+      sliderRef.current.swiper.slidePrev();
+    }
   }, []);
 
   const handleNext = useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slideNext();
+    if (sliderRef.current && sliderRef.current.swiper) {
+      sliderRef.current.swiper.slideNext();
+    }
   }, []);
 
   return (
@@ -95,17 +100,26 @@ const PreviewSliderModal = () => {
         </button>
       </div>
 
-      <Swiper ref={sliderRef} slidesPerView={1} spaceBetween={20}>
-        <SwiperSlide>
-          <div className="flex justify-center items-center">
-            <Image
-              src={"/images/products/product-2-bg-1.png"}
-              alt={"product image"}
-              width={450}
-              height={450}
-            />
-          </div>
-        </SwiperSlide>
+      <Swiper
+        ref={sliderRef}
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        slidesPerView={1}
+        spaceBetween={20}
+        pagination={{ clickable: true }}
+        navigation={true}
+      >
+        {productImages?.map((image: any, index: number) => (
+          <SwiperSlide key={index}>
+            <div className="flex justify-center items-center">
+              <Image
+                src={image.url}
+                alt={"product image"}
+                width={450}
+                height={450}
+              />
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

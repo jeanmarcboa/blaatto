@@ -14,8 +14,8 @@ import { useAppSelector } from "@/redux/store";
 import SingleItem from "./SingleItem";
 import useUser from "@/hooks/useUser";
 
-import product from "@/app/api/product";
-import shopAPI from "@/app/api/shop";
+import product from "@/app/api/productServices";
+import shopAPI from "@/app/api/shopServices";
 
 export const Productlist = () => {
   const { userInfo } = useUser();
@@ -76,6 +76,7 @@ export const Productlist = () => {
     }, 1000);
     if (value02 == "all") {
       setProducts(tmpProducts);
+      // fetchProductsAll();
       setTimeout(() => {
         setLoading(false);
       }, 1000);
@@ -99,9 +100,9 @@ export const Productlist = () => {
     });
   };
 
-  const fetchProducts = () => {
+  const fetchProducts = (params: any) => {
     product
-      .productList()
+      .productList(params)
       .then((response) => {
         if (userInfo.role.code === "ADMIN") {
           setProducts(response.data);
@@ -125,6 +126,34 @@ export const Productlist = () => {
       });
   };
 
+  const fetchProductsAll = async () => {
+    await product
+      .productList()
+      .then((response) => {
+        setProducts(response.data);
+        setTmpProducts(response.data);
+        setPageLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setPageLoading(false);
+      });
+  };
+
+  const fetchProductsAllForMerchant = async () => {
+    await product
+      .productList("accountId=" + userInfo.id)
+      .then((response) => {
+        setProducts(response.data);
+        setTmpProducts(response.data);
+        setPageLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setPageLoading(false);
+      });
+  };
+
   const fetchShopList = () => {
     shopAPI
       .shopListByBusinessId(userInfo?.id)
@@ -137,7 +166,11 @@ export const Productlist = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    if (userInfo.role.code === "ADMIN") {
+      fetchProductsAll();
+    } else {
+      fetchProductsAllForMerchant();
+    }
     fetchShopList();
     console.log("id", userInfo.id);
     console.log("accountId", userInfo.accountId);
@@ -149,7 +182,12 @@ export const Productlist = () => {
       <section className="overflow-hidden py-20 bg-gray-2 min-h-screen">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
-            <h2 className="font-medium text-dark text-2xl">Mes produits</h2>
+            <h2 className="font-medium text-dark text-2xl">
+              {" "}
+              {userInfo?.role?.code === "ADMIN"
+                ? "Tous les produits"
+                : "Mes produits"}
+            </h2>
 
             <Link
               href="/business/product/add-product"

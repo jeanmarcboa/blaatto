@@ -18,10 +18,10 @@ import { useRouter } from "next/navigation";
 import SingleItem from "@/components/Orderstlist/ShortSingleItem";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-import accountAPI from "@/app/api/account";
-import productAPI from "@/app/api/product";
-import orderAPI from "@/app/api/order";
-import shopAPI from "@/app/api/shop";
+import accountAPI from "@/app/api/accountServices";
+import productAPI from "@/app/api/productServices";
+import orderAPI from "@/app/api/orderServices";
+import shopAPI from "@/app/api/shopServices";
 
 // export const metadata: Metadata = {
 //   title: "Blaatto | Accueil",

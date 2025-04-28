@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import shopData from "../Shop/shopData";
 
-import productAPI from "@/app/api/product";
+import productAPI from "@/app/api/productServices";
 import sepMillier from "../Common/numberSeparator";
 
 const ShopDetails = () => {
@@ -134,7 +134,10 @@ const ShopDetails = () => {
                       </button>
 
                       <Image
-                        src={"/images/products/default-placeholder.png"}
+                        src={
+                          product?.Photo[0]?.url ??
+                          "/images/products/default-placeholder.png"
+                        }
                         alt="products-details"
                         width={400}
                         height={400}
@@ -144,7 +147,7 @@ const ShopDetails = () => {
 
                   {/* ?  &apos;border-blue &apos; :  &apos;border-transparent&apos; */}
                   <div className="flex flex-wrap sm:flex-nowrap gap-4.5 mt-6">
-                    {product?.imgs?.thumbnails.map((item, key) => (
+                    {product?.Photo?.map((item, key) => (
                       <button
                         onClick={() => setPreviewImg(key)}
                         key={key}
@@ -157,7 +160,10 @@ const ShopDetails = () => {
                         <Image
                           width={50}
                           height={50}
-                          src={item}
+                          src={
+                            item?.url ??
+                            "/images/products/default-placeholder.png"
+                          }
                           alt="thumbnail"
                         />
                       </button>

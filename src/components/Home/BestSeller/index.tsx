@@ -6,14 +6,15 @@ import SingleItem from "./SingleItem";
 import Image from "next/image";
 import Link from "next/link";
 import shopData from "@/components/Shop/shopData";
-import productAPI from "@/app/api/product";
+import productAPI from "@/app/api/productServices";
 const BestSeller = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchedProducts = () => {
+      let params = "enabled=true";
       productAPI
-        .productList()
+        .productList(params)
         .then((response) => {
           setProducts(response.data);
           setLoading(false);

@@ -6,6 +6,7 @@ import Breadcrumb from "../Common/Breadcrumb";
 import Image from "next/image";
 import Newsletter from "../Common/Newsletter";
 import RecentlyViewdItems from "./RecentlyViewd";
+import useImagesPreview from "@/hooks/useImagesPreview";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
@@ -13,16 +14,18 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import shopData from "../Shop/shopData";
 
-import productAPI from "@/app/api/product";
+import productAPI from "@/app/api/productServices";
 import sepMillier from "../Common/numberSeparator";
 
 const ShopDetails = () => {
+  const { productImages, setUpdateproductImages } = useImagesPreview();
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const { openPreviewModal } = usePreviewSlider();
   const [product, setProduct] = useState<any>({});
   const [productList, setProductList] = useState([]);
   const [previewImg, setPreviewImg] = useState(0);
+  const [previewMainImg, setPreviewMainImg] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +36,9 @@ const ShopDetails = () => {
         setProductList(response.data);
         let result = response.data.filter((item: any) => item.id === id);
         setProduct(result[0]);
+        setPreviewMainImg(result[0].Photo[0]);
+        //save photo to use in preview slider
+        setUpdateproductImages(result[0].Photo);
         setTimeout(() => {
           setLoading(false);
         }, 1000);
@@ -112,7 +118,11 @@ const ShopDetails = () => {
                       </button>
 
                       <Image
-                        src={"/images/products/default-placeholder.png"}
+                        src={
+                          product?.Photo?.length > 0
+                            ? previewMainImg?.url
+                            : "/images/products/default-placeholder.png"
+                        }
                         alt="products-details"
                         width={400}
                         height={400}
@@ -122,9 +132,12 @@ const ShopDetails = () => {
 
                   {/* ?  &apos;border-blue &apos; :  &apos;border-transparent&apos; */}
                   <div className="flex flex-wrap sm:flex-nowrap gap-4.5 mt-6">
-                    {product?.imgs?.thumbnails.map((item, key) => (
+                    {product?.Photo?.map((item, key) => (
                       <button
-                        onClick={() => setPreviewImg(key)}
+                        onClick={() => {
+                          setPreviewImg(key);
+                          setPreviewMainImg(item);
+                        }}
                         key={key}
                         className={`flex items-center justify-center w-15 sm:w-25 h-15 sm:h-25 overflow-hidden rounded-lg bg-gray-2 shadow-1 ease-out duration-200 border-2 hover:border-blue ${
                           key === previewImg
@@ -135,7 +148,7 @@ const ShopDetails = () => {
                         <Image
                           width={50}
                           height={50}
-                          src={item}
+                          src={item?.url}
                           alt="thumbnail"
                         />
                       </button>

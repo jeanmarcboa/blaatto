@@ -45,7 +45,9 @@ const SingleGridItem = ({ item }: { item: any }) => {
     <div className="group">
       <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-white shadow-1 min-h-[270px] mb-4">
         <Image
-          src={item?.Photo?.url ?? "/images/products/default-placeholder.png"}
+          src={
+            item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
+          }
           alt=""
           width={250}
           height={250}

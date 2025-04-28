@@ -6,9 +6,9 @@ import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
 import useUser from "@/hooks/useUser";
 import PreLoader from "@/components/Common/BtnPreLoader";
-import product from "@/app/api/product";
+import product from "@/app/api/productServices";
 import categ from "@/app/api/categoriesServices";
-import shop from "@/app/api/shop";
+import shop from "@/app/api/shopServices";
 
 export default function AddProduct() {
   const { userInfo } = useUser();
@@ -32,6 +32,7 @@ export default function AddProduct() {
     // Do something with the files
     setUploadedfiles(acceptedFiles);
   }, []);
+  
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
       onDrop,

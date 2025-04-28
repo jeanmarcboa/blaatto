@@ -13,9 +13,9 @@ import shopData from "../Shop/shopData";
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
 
-import productAPI from "@/app/api/product";
+import productAPI from "@/app/api/productServices";
 import categoriesAPI from "@/app/api/categoriesServices";
-import shopAPI from "@/app/api/shop";
+import shopAPI from "@/app/api/shopServices";
 
 const ShopWithSidebar = () => {
   const [products, setProducts] = useState([]);
@@ -183,18 +183,19 @@ const ShopWithSidebar = () => {
   //   }
   // };
   const fetchedProducts = () => {
-    let jointure =
-      // let tmpQuery = searchQuery
-      // categoryQuery
-      productAPI
-        .productList()
-        .then((response) => {
-          setProducts(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    // let jointure =
+    // let tmpQuery = searchQuery
+    // categoryQuery
+    let params = "enabled=true";
+    productAPI
+      .productList(params)
+      .then((response) => {
+        setProducts(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   useEffect(() => {
