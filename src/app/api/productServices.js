@@ -27,9 +27,9 @@ export default {
     // console.log(data);
     return axios.post(`/api/products/${uuid}`, data);
   },
-  productList: () => {
+  productList: (query) => {
     // console.log(data);
-    return axios.get(`/api/products`);
+    return axios.get(`/api/products${query ? "?" + query : ""}`);
   },
   searchProductList: (searchQuery) => {
     // console.log(data);

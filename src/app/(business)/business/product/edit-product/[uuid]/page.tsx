@@ -1,10 +1,12 @@
 // pages/admin/add-product.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import PageLoader from "@/components/Common/PreLoader";
 import useUser from "@/hooks/useUser";
+import { useDropzone } from "react-dropzone";
+import { FiUpload } from "react-icons/fi";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import product from "@/app/api/productServices";
 import categ from "@/app/api/categoriesServices";
@@ -25,6 +27,7 @@ export default function AddProduct() {
   const [shopId, setShopId] = useState("");
   const [currency, setCurrency] = useState("XOF");
   const [images, setImages] = useState<any>([]);
+  const [uploadedfiles, setUploadedfiles] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [successFull, setSuccessfull] = useState(false);
@@ -35,6 +38,18 @@ export default function AddProduct() {
     const files = Array.from(e.target.files);
     setImages(files);
   };
+
+  const onDrop = useCallback((acceptedFiles) => {
+    // Do something with the files
+    setUploadedfiles(acceptedFiles);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive, fileRejections } =
+    useDropzone({
+      onDrop,
+      multiple: true,
+      accept: {},
+    });
 
   const fetchShopList = () => {
     shop
@@ -101,20 +116,23 @@ export default function AddProduct() {
         console.log("Produit ajouté avec succès:", response);
         setLoading(false);
         setSuccessfull(true);
-        if (images.length !== 0) {
-          const imgsformData = new FormData();
-          imgsformData.append("files", images);
-          product
-            .addProductImages(imgsformData, response.data.id)
-            .then(() => {
-              console.log(
-                "Images ajoutées avec succès pour le produit:",
-                response.data.id
-              );
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+        if (uploadedfiles.length !== 0) {
+          for (let i = 0; i < uploadedfiles.length; i++) {
+            let element = uploadedfiles[i];
+            const imgsformData = new FormData();
+            imgsformData.append("files", element);
+            product
+              .addProductImages(imgsformData, uuid)
+              .then(() => {
+                console.log(
+                  "Images ajoutées avec succès pour le produit:",
+                  response.data.id
+                );
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
         }
       })
       .catch((error) => {
@@ -311,22 +329,49 @@ export default function AddProduct() {
                 </div>
                 <div className="p-6">
                   <div className="mt-4">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageChange}
-                      className="block w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    />
-                    <div className="mt-2">
-                      {images.length > 0 && (
-                        <ul className="list-disc pl-5">
-                          {images.map((image, index) => (
-                            <li key={index} className="text-sm text-gray-700">
-                              {image.name}
-                            </li>
-                          ))}
-                        </ul>
+                    <div>
+                      <div
+                        {...getRootProps()}
+                        className={`min-h-[200px] flex items-center justify-center border-2 border-dashed bg-gray-1 border-gray-4 rounded-2xl p-6 cursor-pointer transition duration-300 ${
+                          isDragActive
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-300 bg-gray-1"
+                        }`}
+                      >
+                        <input {...getInputProps()} />
+                        {isDragActive ? (
+                          <div className="flex flex-col justify-center items-center gap-2">
+                            <FiUpload className="text-3xl text-gray-500" />
+                            <p className="text-gray-500 text-center">
+                              Déposez les fichiers ici...
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col justify-center items-center gap-2">
+                            <FiUpload className="text-3xl text-gray-500" />
+                            <p className="text-gray-500 text-center">
+                              Glissez-déposez des fichiers ici, ou cliquez pour
+                              sélectionner des fichiers
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="mt-4">
+                      {uploadedfiles.length > 0 && (
+                        <div className="border border-gray-4 rounded-lg p-4 bg-gray-50">
+                          <h2 className="text-sm font-medium mb-2 text-gray-700">
+                            Fichiers sélectionnés :
+                          </h2>
+                          <ul className="text-sm text-gray-600 space-y-1">
+                            {uploadedfiles.map((file: any, index: number) => (
+                              <li key={index}>
+                                📄 {file.name} ({(file.size / 1024).toFixed(2)}{" "}
+                                Ko)
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       )}
                     </div>
                   </div>

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import ProductItem from "@/components/Common/ProductItem";
-import shopData from "@/components/Shop/shopData";
+// import shopData from "@/components/Shop/shopData";
 import productAPI from "@/app/api/productServices";
 
 const NewArrival = () => {
@@ -13,8 +13,9 @@ const NewArrival = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchedProducts = () => {
+      let params = "enabled=true";
       productAPI
-        .productList()
+        .productList(params)
         .then((response) => {
           setProducts(response.data);
           setLoading(false);

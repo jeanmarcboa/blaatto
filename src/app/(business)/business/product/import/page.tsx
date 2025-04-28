@@ -32,6 +32,7 @@ export default function AddProduct() {
     // Do something with the files
     setUploadedfiles(acceptedFiles);
   }, []);
+  
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
       onDrop,

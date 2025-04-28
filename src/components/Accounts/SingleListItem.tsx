@@ -46,7 +46,9 @@ const SingleListItem = ({ item }: { item: any }) => {
       <div className="flex">
         <div className="shadow-list relative overflow-hidden flex items-center justify-center max-w-[270px] w-full sm:min-h-[270px] p-4">
           <Image
-            src={item?.Photo?.url ?? "/images/products/default-placeholder.png"}
+            src={
+              item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
+            }
             alt=""
             width={250}
             height={250}

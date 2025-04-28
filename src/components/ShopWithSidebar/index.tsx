@@ -183,18 +183,19 @@ const ShopWithSidebar = () => {
   //   }
   // };
   const fetchedProducts = () => {
-    let jointure =
-      // let tmpQuery = searchQuery
-      // categoryQuery
-      productAPI
-        .productList()
-        .then((response) => {
-          setProducts(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    // let jointure =
+    // let tmpQuery = searchQuery
+    // categoryQuery
+    let params = "enabled=true";
+    productAPI
+      .productList(params)
+      .then((response) => {
+        setProducts(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   useEffect(() => {

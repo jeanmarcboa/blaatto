@@ -12,8 +12,9 @@ const BestSeller = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchedProducts = () => {
+      let params = "enabled=true";
       productAPI
-        .productList()
+        .productList(params)
         .then((response) => {
           setProducts(response.data);
           setLoading(false);
