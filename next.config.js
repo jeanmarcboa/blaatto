@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 // next.config.js
 const nextConfig = {
+  images: {
+    domains: ["eu-004.s3.synologyc2.net"],
+  },
   // async rewrites() {
   //   return [
   //     {
