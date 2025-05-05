@@ -10,6 +10,8 @@ import CustomSelect from "../ShopWithSidebar/CustomSelect";
 
 import shopData from "../Shop/shopData";
 import shopAPI from "@/app/api/shopServices";
+import productAPI from "@/app/api/productServices";
+import router from "next/router";
 
 const ShopWithoutSidebar = () => {
   const [productStyle, setProductStyle] = useState("grid");
@@ -28,26 +30,44 @@ const ShopWithoutSidebar = () => {
     shopAPI
       .shopList()
       .then((response) => {
-        // setShopList(response.data);
-        let tmp = response.data.filter((shop) => shop.id == id);
+        let tmp = response.data.filter((shop: any) => shop.id == id);
         setCurrentShop(tmp[0]);
-        setLoading(false);
       })
       .catch((error) => console.error(error));
   };
 
+  const fetchShopProductsList = () => {
+    productAPI
+      .productList()
+      .then((response) => {
+        let tmp = response.data.filter((line: any) => line?.shopId == id);
+        setShopList(tmp);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     // fetchShopList();
-    let result = shopData.filter((shop: any) => shop.shopId == id);
-    console.log("result", result);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    // let result = shopData.filter((shop: any) => shop.shopId == id);
+    // console.log("result", result);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 2000);
+    // if (id) {
+    //   setShopList(result);
+    //   setCurrentShop(result[0]?.shop);
+    // } else {
+    //   setShopList(shopData);
+    // }
     if (id) {
-      setShopList(result);
-      setCurrentShop(result[0].shop);
+      fetchShopList();
+      fetchShopProductsList();
     } else {
-      setShopList(shopData);
+      router.push("/");
     }
   }, []);
 
@@ -168,7 +188,7 @@ const ShopWithoutSidebar = () => {
                       : "flex flex-col gap-7.5"
                   }`}
                 >
-                  {shopList.map((item, key) =>
+                  {shopList?.map((item, key) =>
                     productStyle === "grid" ? (
                       <SingleGridItem item={item} key={key} />
                     ) : (
@@ -179,7 +199,7 @@ const ShopWithoutSidebar = () => {
                 {/* <!-- Products Grid Tab Content End --> */}
 
                 {/* <!-- Products Pagination Start --> */}
-                <div className="flex justify-center mt-15">
+                {/* <div className="flex justify-center mt-15">
                   <div className="bg-white shadow-1 rounded-md p-2">
                     <ul className="flex items-center">
                       <li>
@@ -293,7 +313,7 @@ const ShopWithoutSidebar = () => {
                       </li>
                     </ul>
                   </div>
-                </div>
+                </div> */}
                 {/* <!-- Products Pagination End --> */}
               </div>
               {/* // <!-- Content End --> */}
