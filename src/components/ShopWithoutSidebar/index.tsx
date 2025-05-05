@@ -10,8 +10,11 @@ import CustomSelect from "../ShopWithSidebar/CustomSelect";
 
 import shopData from "../Shop/shopData";
 import shopAPI from "@/app/api/shopServices";
+import productAPI from "@/app/api/productServices";
+import { useRouter } from "next/navigation";
 
 const ShopWithoutSidebar = () => {
+  const router = useRouter();
   const [productStyle, setProductStyle] = useState("grid");
   const [shopList, setShopList] = useState([]);
   const [currentShop, setCurrentShop] = useState<any>({});
@@ -62,13 +65,8 @@ const ShopWithoutSidebar = () => {
     //   setShopList(shopData);
     // }
     if (id) {
-<<<<<<< HEAD
-      setShopList(result);
-      setCurrentShop(result[0]?.shop);
-=======
       fetchShopList();
       fetchShopProductsList();
->>>>>>> main
     } else {
       router.push("/");
     }
