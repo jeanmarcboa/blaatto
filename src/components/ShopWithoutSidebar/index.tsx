@@ -11,9 +11,10 @@ import CustomSelect from "../ShopWithSidebar/CustomSelect";
 import shopData from "../Shop/shopData";
 import shopAPI from "@/app/api/shopServices";
 import productAPI from "@/app/api/productServices";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 const ShopWithoutSidebar = () => {
+  const router = useRouter();
   const [productStyle, setProductStyle] = useState("grid");
   const [shopList, setShopList] = useState([]);
   const [currentShop, setCurrentShop] = useState<any>({});
