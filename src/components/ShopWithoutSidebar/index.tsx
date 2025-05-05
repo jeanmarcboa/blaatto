@@ -45,7 +45,7 @@ const ShopWithoutSidebar = () => {
     }, 2000);
     if (id) {
       setShopList(result);
-      setCurrentShop(result[0].shop);
+      setCurrentShop(result[0]?.shop);
     } else {
       setShopList(shopData);
     }
