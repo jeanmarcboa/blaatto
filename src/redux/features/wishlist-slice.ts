@@ -6,14 +6,12 @@ type InitialState = {
 
 type WishListItem = {
   id: number;
-  title: string;
+  label: string;
   price: number;
   quantity: number;
   status?: string;
-  imgs?: {
-    thumbnails: string[];
-    previews: string[];
-  };
+  Photo?: {};
+  stock?: number;
 };
 
 const initialState: InitialState = {
@@ -25,7 +23,8 @@ export const wishlist = createSlice({
   initialState,
   reducers: {
     addItemToWishlist: (state, action: PayloadAction<any>) => {
-      const { id, title, price, quantity, imgs, status } = action.payload;
+      const { id, label, price, quantity, Photo, status, stock } =
+        action.payload;
       const existingItem = state.items.find((item) => item.id === id);
 
       if (existingItem) {
@@ -33,11 +32,12 @@ export const wishlist = createSlice({
       } else {
         state.items.push({
           id,
-          title,
+          label,
           price,
           quantity,
-          imgs,
+          Photo,
           status,
+          stock,
         });
       }
     },
