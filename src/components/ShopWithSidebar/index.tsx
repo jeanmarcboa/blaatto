@@ -210,13 +210,15 @@ const ShopWithSidebar = () => {
     if (cat) {
       let tmpSearchQuery = { ...searchQuery };
       tmpSearchQuery["categoryIds"] = [cat];
+      setSelectedCategories([cat]);
       setSearchQuery({ ...searchQuery, ["categoryIds"]: [cat] });
       fetchedProductsWithQuery(tmpSearchQuery);
+    } else {
+      fetchedProducts();
     }
-  }, []);
+  }, [cat]);
 
   useEffect(() => {
-    fetchedProducts();
     fetchedCategories();
     fetchShopList();
   }, []);

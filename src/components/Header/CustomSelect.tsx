@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
+import {
+  useParams,
+  useRouter,
+  useSearchParams,
+  redirect,
+} from "next/navigation";
 
 const CustomSelect = ({ options }) => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
@@ -11,6 +18,11 @@ const CustomSelect = ({ options }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     toggleDropdown();
+    if (option.id !== "0") {
+      setTimeout(() => {
+        router.push("/shop?cat=" + option.id);
+      }, 600);
+    }
   };
 
   useEffect(() => {
@@ -45,15 +57,16 @@ const CustomSelect = ({ options }) => {
         }`}
         onClick={toggleDropdown}
       >
-        {selectedOption?.label ?? "Catégories"}
+        {selectedOption?.label}
       </div>
       <div className={`select-items ${isOpen ? "" : "select-hide"}`}>
-        {options.slice(1, -1).map((option: any, index: number) => (
+        {/* //Don't show the selected option */}
+        {options.map((option: any, index: number) => (
           <div
             key={index}
             onClick={() => handleOptionClick(option)}
             className={`select-item ${
-              selectedOption === option ? "same-as-selected" : ""
+              selectedOption === option ? "hidden" : ""
             }`}
           >
             {option?.label}
