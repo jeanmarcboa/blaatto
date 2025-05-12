@@ -8,6 +8,7 @@ import {
 } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
+import sepMillier from "@/components/Common/numberSeparator";
 import SingleItem from "./SingleItem";
 import Link from "next/link";
 import EmptyCart from "./EmptyCart";
@@ -95,7 +96,9 @@ const CartSidebarModal = () => {
             <div className="flex items-center justify-between gap-5 mb-6">
               <p className="font-medium text-xl text-dark">Sous total:</p>
 
-              <p className="font-medium text-xl text-dark">${totalPrice}</p>
+              <p className="font-medium text-xl text-dark">
+                {sepMillier(totalPrice)} FCFA
+              </p>
             </div>
 
             <div className="flex items-center gap-4">

@@ -75,20 +75,31 @@ export const Orderstlist = () => {
   };
 
   const fetchShopList = () => {
-    shopAPI
-      .shopListByBusinessId(userInfo?.id)
-      .then((response) => {
-        setShopList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (userInfo.role.code === "ADMIN") {
+      shopAPI
+        .shopList()
+        .then((response) => {
+          setShopList(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      shopAPI
+        .shopListByBusinessId(userInfo?.id)
+        .then((response) => {
+          setShopList(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const fetchOrders = () => {
     let paramsData = "?accountId=" + userInfo?.id;
     orderAPI
-      .orderList(paramsData)
+      .orderList(userInfo.role.code === "ADMIN" ? "" : paramsData)
       .then((response) => {
         setOrders(response.data);
         setTmpOrders(response.data);
