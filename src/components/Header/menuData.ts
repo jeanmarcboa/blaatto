@@ -13,16 +13,16 @@ export const menuData: Menu[] = [
     newTab: false,
     path: "/shop",
   },
-  {
-    id: 3,
-    title: "Blog",
-    newTab: false,
-    path: "/blogs/blog-details-with-sidebar",
-  },
-  {
-    id: 3,
-    title: "Contact",
-    newTab: false,
-    path: "/contact",
-  },
+  // {
+  //   id: 3,
+  //   title: "Blog",
+  //   newTab: false,
+  //   path: "/blogs/blog-details-with-sidebar",
+  // },
+  // {
+  //   id: 3,
+  //   title: "Contact",
+  //   newTab: false,
+  //   path: "/contact",
+  // },
 ];
