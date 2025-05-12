@@ -137,23 +137,36 @@ export default function AddProduct() {
                     <h3 className="font-bold">Facturation</h3>
                     <div className="flex flex-col">
                       <span>
-                        {details?.customFields?.firstname +
-                          " " +
-                          details?.customFields?.lastname}
+                        {details?.customFields?.firstname ??
+                          details?.account?.firstname ??
+                          "--"}{" "}
+                        {details?.customFields?.lastname ??
+                          details?.account?.lastname ??
+                          "--"}
                       </span>
-                      <span>{details?.customFields?.address ?? "--"}</span>
+                      <span>
+                        {details?.customFields?.address ??
+                          details?.account?.address ??
+                          "--"}
+                      </span>
                     </div>
                     <div>
                       <h3 className="font-bold mt-4">Email</h3>
                       <div>
-                        <span>{details?.customFields?.email ?? "--"}</span>
+                        <span>
+                          {details?.customFields?.email ??
+                            details?.account?.email ??
+                            "--"}
+                        </span>
                       </div>
                     </div>
                     <div>
                       <h3 className="font-bold mt-4">Téléphone</h3>
                       <div>
                         <span>
-                          {details?.customFields?.phoneNumber ?? "--"}
+                          {details?.customFields?.phoneNumber ??
+                            details?.account?.phoneNumber ??
+                            "--"}
                         </span>
                       </div>
                     </div>
@@ -162,23 +175,36 @@ export default function AddProduct() {
                     <h3 className="font-bold">Expédition</h3>
                     <div className="flex flex-col">
                       <span>
-                        {details?.customFields?.firstname +
-                          " " +
-                          details?.customFields?.lastname}
+                        {details?.customFields?.firstname ??
+                          details?.account?.firstname ??
+                          "--"}{" "}
+                        {details?.customFields?.lastname ??
+                          details?.account?.lastname ??
+                          "--"}
                       </span>
-                      <span>{details?.customFields?.address ?? "--"}</span>
+                      <span>
+                        {details?.customFields?.address ??
+                          details?.account?.address ??
+                          "--"}
+                      </span>
                     </div>
                     <div>
                       <h3 className="font-bold mt-4">Email</h3>
                       <div>
-                        <span>{details?.customFields?.email ?? "--"}</span>
+                        <span>
+                          {details?.customFields?.email ??
+                            details?.account?.email ??
+                            "--"}
+                        </span>
                       </div>
                     </div>
                     <div>
                       <h3 className="font-bold mt-4">Téléphone</h3>
                       <div>
                         <span>
-                          {details?.customFields?.phoneNumber ?? "--"}
+                          {details?.customFields?.phoneNumber ??
+                            details?.account?.phoneNumber ??
+                            "--"}
                         </span>
                       </div>
                     </div>

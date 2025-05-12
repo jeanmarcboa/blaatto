@@ -34,7 +34,7 @@ const SingleItem = ({ item }) => {
           <div className="w-full flex items-center gap-5.5">
             <div>
               <h3 className="text-red ease-out duration-200 hover:text-green">
-                <a href="#"> {item?.Transaction[0]?.reference} </a>
+                <a href="#"> {item?.Transaction[0]?.reference ?? "--"} </a>
               </h3>
             </div>
           </div>
