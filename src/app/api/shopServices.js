@@ -11,9 +11,9 @@ export default {
     // console.log(data);
     return axios.post(`/api/shops`, data);
   },
-  shopList: () => {
+  shopList: (params) => {
     // console.log(data);
-    return axios.get(`/api/shops/`);
+    return axios.get(`/api/shops${params ?? ""}`);
   },
   shopListByBusinessId: (id) => {
     // console.log(data);
