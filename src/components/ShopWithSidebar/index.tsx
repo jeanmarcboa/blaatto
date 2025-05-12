@@ -71,8 +71,9 @@ const ShopWithSidebar = () => {
   ];
 
   const fetchShopList = () => {
+    let params = "?enabled=true";
     shopAPI
-      .shopList()
+      .shopList(params)
       .then((response) => setShopList(response.data))
       .catch((error) => console.error(error));
   };

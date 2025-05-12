@@ -28,8 +28,9 @@ const ShopWithoutSidebar = () => {
   ];
 
   const fetchShopList = () => {
+    let params = "?enabled=true";
     shopAPI
-      .shopList()
+      .shopList(params)
       .then((response) => {
         let tmp = response.data.filter((shop: any) => shop.id == id);
         setCurrentShop(tmp[0]);
