@@ -55,6 +55,13 @@ const Header = () => {
     categoriesAPI
       .categorieList()
       .then((response) => {
+        let tmp = response.data;
+        // tmp = [...tmp, { label: "Catégories", value: "0" }];
+        console.log(tmp.length);
+
+        //Add "Catégories" to the beginning of the array
+        tmp.unshift({ id: "0", label: "Catégories", value: "0" });
+        console.log(tmp);
         setCategories(response.data);
       })
       .catch((error) => {

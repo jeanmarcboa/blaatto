@@ -1,5 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import {
+  useParams,
+  useRouter,
+  useSearchParams,
+  redirect,
+} from "next/navigation";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import Breadcrumb from "../Common/Breadcrumb";
 import CustomSelect from "./CustomSelect";
@@ -18,6 +24,8 @@ import categoriesAPI from "@/app/api/categoriesServices";
 import shopAPI from "@/app/api/shopServices";
 
 const ShopWithSidebar = () => {
+  const searchParams = useSearchParams();
+  const cat = searchParams.get("cat");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [shopList, setShopList] = useState([]);
@@ -73,22 +81,22 @@ const ShopWithSidebar = () => {
     setSelectedCategories(data);
     console.log("first", data);
     let tmpSearchQuery = { ...searchQuery };
-    tmpSearchQuery["categoryId"] = data;
+    tmpSearchQuery["categoryIds"] = data;
     if (data.length === 0) {
-      delete tmpSearchQuery["categoryId"];
+      delete tmpSearchQuery["categoryIds"];
     }
-    setSearchQuery({ ...searchQuery, ["categoryId"]: data });
+    setSearchQuery({ ...searchQuery, ["categoryIds"]: data });
     fetchedProductsWithQuery(tmpSearchQuery);
   };
 
   const handleShopChange = async (data: any) => {
     setSelectedShops(data);
     let tmpSearchQuery = { ...searchQuery };
-    tmpSearchQuery["shopId"] = data;
+    tmpSearchQuery["shopIds"] = data;
     if (data.length === 0) {
-      delete tmpSearchQuery["shopId"];
+      delete tmpSearchQuery["shopIds"];
     }
-    setSearchQuery({ ...searchQuery, ["shopId"]: data });
+    setSearchQuery({ ...searchQuery, ["shopIds"]: data });
     fetchedProductsWithQuery(tmpSearchQuery);
   };
 
@@ -199,7 +207,18 @@ const ShopWithSidebar = () => {
   };
 
   useEffect(() => {
-    fetchedProducts();
+    if (cat) {
+      let tmpSearchQuery = { ...searchQuery };
+      tmpSearchQuery["categoryIds"] = [cat];
+      setSelectedCategories([cat]);
+      setSearchQuery({ ...searchQuery, ["categoryIds"]: [cat] });
+      fetchedProductsWithQuery(tmpSearchQuery);
+    } else {
+      fetchedProducts();
+    }
+  }, [cat]);
+
+  useEffect(() => {
     fetchedCategories();
     fetchShopList();
   }, []);
