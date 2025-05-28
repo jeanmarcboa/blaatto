@@ -23,11 +23,15 @@ export default {
     // console.log(data);
     return axios.post(`/api/accounts/admins`, data);
   },
-  updateUserAccount: (data, uuid) => {
-    return axios.put(`/api/accounts/${uuid}`, data);
+  updateUserAccount: (data, uuid, token) => {
+    return axios.put(`/api/accounts/${uuid}`, data, headersConfig(token));
   },
-  updateUserPassword: (data, uuid) => {
-    return axios.put(`/api/accounts/${uuid}/update-password`, data);
+  updateUserPassword: (data, uuid, token) => {
+    return axios.put(
+      `/api/accounts/${uuid}/update-password`,
+      data,
+      headersConfig(token)
+    );
   },
   resetPassword: (uuid, data) => {
     return axios.put(`/api/accounts/${uuid}/reset-password`, data);
@@ -35,7 +39,13 @@ export default {
   requestResetPassword: (id, data) => {
     return axios.post(`/api/accounts/init-reset-password`, data);
   },
-  userAccountList: (param) => {
-    return axios.get(`/api/accounts${param ?? ""}`);
+  userAccountList: (param, token) => {
+    return axios.get(`/api/accounts${param ?? ""}`, headersConfig(token));
+  },
+  uploadDocument: (data, token) => {
+    return axios.post(`/api/accounts/documents`, data, headersConfig(token));
+  },
+  documentsTypes: () => {
+    return axios.get(`/api/documents-types`);
   },
 };

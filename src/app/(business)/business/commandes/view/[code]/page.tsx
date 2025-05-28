@@ -5,12 +5,14 @@ import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import sepMillier from "@/components/Common/numberSeparator";
 import { useParams, useRouter } from "next/navigation";
+import useUser from "@/hooks/useUser";
 import PageLoader from "@/components/Common/PreLoader";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import product from "@/app/api/productServices";
 import orderAPI from "@/app/api/orderServices";
 
 export default function AddProduct() {
+  const { userInfo } = useUser();
   const { code } = useParams();
   const [details, setDetails] = useState<any>([]);
   const [status, setStatus] = useState("");
@@ -31,7 +33,7 @@ export default function AddProduct() {
 
   const fetchOrderDetails = () => {
     orderAPI
-      .orderDetail(code)
+      .orderDetail(code, userInfo?.access_token)
       .then((response) => {
         setDetails(response.data);
         setPageLoading(false);
@@ -52,7 +54,7 @@ export default function AddProduct() {
 
     // Envoi des données au backend
     orderAPI
-      .updateOrder(details.id, data)
+      .updateOrder(details.id, data, userInfo?.access_token)
       .then((data) => {
         console.log("Produit ajouté avec succès:", data);
         setTimeout(() => {
@@ -79,7 +81,7 @@ export default function AddProduct() {
     <>
       <div className="p-0">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">
-          Détails Commande
+          Détails Commande - {details?.reference}
         </h1>
         {successFull && (
           <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
@@ -115,22 +117,6 @@ export default function AddProduct() {
                       <span>
                         {dayjs(details?.createdAt).format("DD-MM-YYYY, HH:mm")}
                       </span>
-                    </div>
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Etat
-                      </label>
-                      <select
-                        onChange={(e) => setStatus(e.target.value)}
-                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Choisir un état</option>
-                        {OrderStatus.map((item) => (
-                          <option key={item?.label} value={item?.label}>
-                            {item?.label}
-                          </option>
-                        ))}
-                      </select>
                     </div>
                   </div>
                   <div className="md:w-[30%]">
@@ -246,7 +232,9 @@ export default function AddProduct() {
                           key={key}
                         >
                           <div className="min-w-[45%]">
-                            <p className="text-dark">{item?.product?.label}</p>
+                            <p className="text-dark">
+                              {item?.product?.designation?.label}
+                            </p>
                           </div>
 
                           <div className="min-w-[25%]">
@@ -287,7 +275,24 @@ export default function AddProduct() {
                     Actions de commande
                   </h2>
                 </div>
+
                 <div className="p-6">
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Etat
+                    </label>
+                    <select
+                      onChange={(e) => setStatus(e.target.value)}
+                      className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                      <option value="">Choisir un état</option>
+                      {OrderStatus.map((item) => (
+                        <option key={item?.label} value={item?.label}>
+                          {item?.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <button
                     type="submit"
                     className="flex flex-row justify-center w-full text-center font-medium text-custom-sm text-white bg-green py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"

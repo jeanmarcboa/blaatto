@@ -42,7 +42,7 @@ const SingleItem = ({ item }) => {
                 width={200}
                 height={200}
                 src={
-                  item?.Photo[0]?.url ??
+                  item?.Product_Photo?.[0]?.photo?.url ??
                   "/images/products/default-placeholder.png"
                 }
                 alt="product"
@@ -51,7 +51,7 @@ const SingleItem = ({ item }) => {
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-green">
-                <a href="#"> {item.label} </a>
+                <a href="#"> {item?.designation?.label} </a>
               </h3>
             </div>
           </div>

@@ -3,8 +3,8 @@ import ShopWithSidebar from "@/components/ShopWithSidebar";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Shop Page | Blaatto",
-  description: "This is Shop Page for NextCommerce Template",
+  title: "La boutique | Blaatto",
+  description: "",
   // other metadata
 };
 

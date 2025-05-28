@@ -43,18 +43,10 @@ export default function HomePage() {
   const [productsMostAsked, setProductsMostAsked] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [fetchingStat, setFetchingStat] = useState(true);
   const [messageAlert, setMessageAlert] = useState([]);
-  const data = {
-    boutiques: 5,
-    produits: 120,
-    commandes: 245,
-    dernierCommande: "Client123 - 2025-04-15",
-    produitsLesPlusVendus: [
-      { nom: "Produit A", ventes: 50 },
-      { nom: "Produit B", ventes: 45 },
-      { nom: "Produit C", ventes: 40 },
-    ],
-  };
+  const [sortBy, setSortBy] = useState("price");
+  const [selectedShop, setSelectedShop] = useState("");
 
   const handleChangeShop = (e: any) => {
     const value = e.target.value;
@@ -74,9 +66,9 @@ export default function HomePage() {
 
   const checkStockForAllProducts = (products) => {
     products.forEach((product) => {
-      if (product.stock <= 700) {
+      if (product.stock <= product?.limit ?? 5) {
         // Make sure that only one alert is triggered for each condition
-        let tmpAlert = `Il ne reste plus que ${product.stock} article(s) en stock pour ${product.label}.`;
+        let tmpAlert = `Il ne reste plus que ${product.stock} article(s) en stock pour ${product?.designation?.label}.`;
 
         // Push tmpAlert message to the setMessageAlert
         setMessageAlert((prev) => [...prev, { message: tmpAlert }]);
@@ -84,50 +76,52 @@ export default function HomePage() {
     });
   };
 
-  const handleProductsMostAsked = (data: any) => {
+  const handleProductsMostAsked = (uuid: string, sortBy: string) => {
     setTimeout(() => {
-      setFetching(false);
+      setFetchingStat(true);
     }, 1000);
-    // const recruitMostAsked = data.filter(
-    //   (item: any) =>
-    //     item.title === "Les compétences les plus demandées au recrutement"
-    // );
-    // const tmpMetiers = recruitMostAsked[0].classement.map((item: any) => ({
-    //   title: item.metier,
-    //   value: item.value,
-    // }));
-    // let tmpMetierName: string[] = [];
-    // tmpMetiers.map((item: any) => tmpMetierName.push(item.title));
-    // let tmpMetierValue: number[] = [];
-    // tmpMetiers.map((item: any) => tmpMetierValue.push(item.value));
-    let tmpMetierMostAsked = {
-      labels: ["A", "B", "C", "D", "E"],
-      datasets: [
-        {
-          label: "# of Votes",
-          data: [12, 19, 3, 5, 2],
-          backgroundColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
-    setProductsMostAsked(tmpMetierMostAsked);
-    setTimeout(() => {
-      setFetching(false);
-    }, 2000);
+    setSortBy(sortBy);
+    setSelectedShop(uuid);
+    let query = "limit=5&sortBy=" + { sortBy } + "&enabledOnly=true";
+    productAPI.productListTopSelling(uuid, query).then((response) => {
+      const data = [];
+      const labels = [];
+      for (let i = 0; i < response.data.length; i++) {
+        sortBy === "price" && data.push(response.data[i].total_revenue);
+        sortBy === "quantity" && data.push(response.data[i].quantity_sold);
+        labels.push(
+          response.data[i].product_details?.designation?.label ?? "produit-" + i
+        );
+      }
+      let tmpMetierMostAsked = {
+        labels: labels,
+        datasets: [
+          {
+            label: "# of Votes",
+            data: data,
+            backgroundColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      };
+      setProductsMostAsked(tmpMetierMostAsked);
+      setTimeout(() => {
+        setFetchingStat(false);
+      }, 2000);
+    });
   };
 
   const fetchProducts = async () => {
@@ -152,7 +146,7 @@ export default function HomePage() {
   const fetchOrders = async () => {
     let paramsData = "?accountId=" + userInfo?.id;
     orderAPI
-      .orderList(paramsData)
+      .orderList(paramsData, userInfo?.access_token)
       .then((response) => {
         setOrders(response.data);
         setTmpOrders(response.data);
@@ -164,9 +158,14 @@ export default function HomePage() {
 
   const fetchShopList = () => {
     shopAPI
-      .shopListByBusinessId(userInfo?.id)
+      .shopListByBusinessId(userInfo?.id, userInfo?.access_token)
       .then((response) => {
         setShops(response.data);
+        if (response.data.length > 0) {
+          setTimeout(() => {
+            handleProductsMostAsked(response.data?.[0]?.id, "price");
+          }, 1000);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -177,7 +176,6 @@ export default function HomePage() {
     fetchProducts();
     fetchOrders();
     fetchShopList();
-    handleProductsMostAsked("");
   }, []);
 
   return (
@@ -245,7 +243,7 @@ export default function HomePage() {
                 <select
                   name="branche"
                   onChange={handleChangeShop}
-                  className="block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="all">Toutes les boutiques</option>
                   {shops.map((shop: any) => (
@@ -309,18 +307,21 @@ export default function HomePage() {
                 </h3>
                 <select
                   name="branche"
-                  onChange={handleChangeShop}
-                  className="block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  onChange={(e) =>
+                    handleProductsMostAsked(selectedShop, e.target.value)
+                  }
+                  className="block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
-                  <option value="all">Toutes les boutiques</option>
-                  {shops.map((shop: any) => (
-                    <option key={shop?.id} value={shop?.id}>
-                      {shop?.label}
-                    </option>
-                  ))}
+                  <option value="price">Par prix</option>
+                  <option value="quantity">Par quantité</option>
                 </select>
               </div>
-              {!fetching && <Pie data={productsMostAsked} />}
+              {!fetchingStat && <Pie data={productsMostAsked} />}
+              {fetchingStat && (
+                <div className="flex justify-center items-center m-4">
+                  <PreLoader color="green" />
+                </div>
+              )}
             </div>
           </div>
         </div>

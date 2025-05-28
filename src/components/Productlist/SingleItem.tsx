@@ -38,7 +38,7 @@ const SingleItem = ({ item }) => {
             <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
               <Image
                 src={
-                  item?.Photo[0]?.url ??
+                  item?.Product_Photo?.[0]?.photo?.url ??
                   "/images/products/default-placeholder.png"
                 }
                 alt="product"
@@ -49,7 +49,9 @@ const SingleItem = ({ item }) => {
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-green">
-                <Link href={"/shop-details/" + item.id}> {item.label} </Link>
+                <Link href={"/shop-details/" + item.id}>
+                  {item?.designation?.label}
+                </Link>
               </h3>
             </div>
           </div>

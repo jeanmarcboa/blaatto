@@ -1,6 +1,8 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import dayjs from "dayjs";
+import sepMillier from "../Common/numberSeparator";
+import useUser from "@/hooks/useUser";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { FiEye, FiLink, FiTrash } from "react-icons/fi";
@@ -11,6 +13,7 @@ import { addItemToCart } from "@/redux/features/cart-slice";
 import Image from "next/image";
 
 const SingleItem = ({ item }) => {
+  const { userInfo } = useUser();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -65,13 +68,19 @@ const SingleItem = ({ item }) => {
         </div>
       </div>
 
-      <div className="min-w-[180px]">
-        <p className="text-dark">
-          {item?.Transaction[0]?.amount} {item.currency}
-        </p>
-      </div>
+      {userInfo.role.code !== "ADMIN" && (
+        <div className="min-w-[180px]">
+          <p className="text-dark">
+            {sepMillier(item?.Transaction[0]?.amount)} {item.currency}
+          </p>
+        </div>
+      )}
 
-      <div className="min-w-[250px]">
+      <div
+        className={
+          userInfo.role.code === "ADMIN" ? "min-w-[375px]" : "min-w-[250px]"
+        }
+      >
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div>
@@ -85,7 +94,13 @@ const SingleItem = ({ item }) => {
 
       <div className="min-w-[120px] flex justify-end">
         <button
-          onClick={() => router.push("/business/commandes/view/" + item?.id)}
+          onClick={() =>
+            router.push(
+              `${
+                userInfo.role.code === "ADMIN" ? "/admin" : "/business"
+              }/commandes/view/${item?.id}`
+            )
+          }
           aria-label="button for remove product from wishlist"
           className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 mr-4 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-green-light-6 hover:border-green-light-4 hover:text-green"
         >

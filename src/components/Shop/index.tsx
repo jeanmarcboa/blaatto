@@ -17,6 +17,7 @@ export const ShopList = () => {
   const [shopList, setShopList] = useState([]);
   const [shopTmpList, setShopTmpList] = useState([]);
   const { setLoginData, userInfo } = useUser();
+
   const [formData, setFormData] = useState({
     label: "",
     phoneNumber: "",
@@ -104,7 +105,7 @@ export const ShopList = () => {
     setError(false);
 
     shopAPI
-      .createShop(formData)
+      .createShop(formData, userInfo?.access_token)
       .then((response) => {
         console.log(response);
         setLoading(false);
@@ -135,7 +136,7 @@ export const ShopList = () => {
     setError(false);
     item["enabled"] = item.enabled == "1" ? true : false;
     shopAPI
-      .shopEdited(item?.id, item)
+      .shopEdited(item?.id, item, userInfo?.access_token)
       .then((response) => {
         console.log(response);
         setLoading(false);
@@ -175,7 +176,7 @@ export const ShopList = () => {
         });
     } else {
       shopAPI
-        .shopListByBusinessId(userInfo?.id)
+        .shopListByBusinessId(userInfo?.id, userInfo?.access_token)
         .then((response) => {
           setShopList(response.data);
           setPageLoading(false);
@@ -189,7 +190,7 @@ export const ShopList = () => {
 
   const fetchMerchantList = () => {
     accountAPI
-      .userAccountList("?role=MERCHANT")
+      .userAccountList("?role=MERCHANT", userInfo?.access_token)
       .then((response) => {
         setMerchantList(response.data);
       })
@@ -209,7 +210,11 @@ export const ShopList = () => {
       <section className="overflow-hidden pb-20 bg-gray-2">
         <div className="w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
-            <h2 className="font-medium text-dark text-2xl">Mes boutiques</h2>
+            <h2 className="font-medium text-dark text-2xl">
+              {userInfo?.role?.code === "ADMIN"
+                ? "Toutes les boutiques"
+                : "Mes boutiques"}
+            </h2>
           </div>
           {successFull && (
             <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
@@ -224,7 +229,7 @@ export const ShopList = () => {
             </div>
           )}
           <div className="flex flex-row flex-wrap gap-4">
-            <div className="w-[30%]">
+            <div className={shopList.length === 0 ? "w-[30%]" : "hidden"}>
               <h2 className="font-medium text-dark text-xl mb-4">
                 Ajouter une boutique
               </h2>
@@ -249,21 +254,23 @@ export const ShopList = () => {
                     </select>
                   </div>
                 )}
-                <div className="mb-5">
-                  <label htmlFor="email" className="block mb-2.5">
-                    Nom de la boutique
-                  </label>
+                {
+                  <div className="mb-5">
+                    <label htmlFor="email" className="block mb-2.5">
+                      Nom de la boutique
+                    </label>
 
-                  <input
-                    type="text"
-                    name="label"
-                    id="label"
-                    placeholder="Entrez le nom de votre boutique"
-                    onChange={handleInputChange}
-                    value={formData?.label}
-                    className="rounded-lg border border-gray-3 bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                  />
-                </div>
+                    <input
+                      type="text"
+                      name="label"
+                      id="label"
+                      placeholder="Entrez le nom de votre boutique"
+                      onChange={handleInputChange}
+                      value={formData?.label}
+                      className="rounded-lg border border-gray-3 bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    />
+                  </div>
+                }
 
                 <div className="mb-5">
                   <label htmlFor="phoneNumber" className="block mb-2.5">
@@ -323,13 +330,13 @@ export const ShopList = () => {
                 </button>
               </form>
             </div>
-            <div className="w-[68%]">
+            <div className={shopList.length === 0 ? "w-[68%]" : "w-full"}>
               <div className="mb-4 flex flex-row">
                 {userInfo?.role?.code === "ADMIN" && (
                   <select
                     name="role"
                     onChange={(e) => handleChangeMerchant(e)}
-                    className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+                    className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
                   >
                     <option value="all">Toutes les marchants</option>
                     {merchantList?.map((item: any, index: number) => (
@@ -339,28 +346,31 @@ export const ShopList = () => {
                     ))}
                   </select>
                 )}
-                <select
-                  name="role"
-                  onChange={(e) => handleChangeStatus(e)}
-                  className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
-                >
-                  <option value="all">Toutes les status</option>
-                  <option value="1">Actif</option>
-                  <option value="0">Désactivé</option>
-                </select>
+                {userInfo?.role?.code === "ADMIN" && (
+                  <select
+                    name="role"
+                    onChange={(e) => handleChangeStatus(e)}
+                    className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+                  >
+                    <option value="all">Toutes les status</option>
+                    <option value="1">Actif</option>
+                    <option value="0">Désactivé</option>
+                  </select>
+                )}
 
-                <div className="w-3/4">
-                  <div className="relative">
-                    <input
-                      type="search"
-                      // value={searchValue}
-                      onChange={handleChangeText}
-                      className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Rechercher..."
-                      required
-                    />
+                {userInfo?.role?.code === "ADMIN" && (
+                  <div className="w-3/4">
+                    <div className="relative">
+                      <input
+                        type="search"
+                        onChange={handleChangeText}
+                        className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Rechercher..."
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
               <div className="w-full overflow-x-auto bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden">
                 <div className="min-w-full">

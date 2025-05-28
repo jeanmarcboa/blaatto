@@ -7,24 +7,28 @@ const headersConfig = (token) => {
 };
 
 export default {
-  createOrder: (data) => {
+  createOrder: (data, token) => {
     // console.log(data);
-    return axios.post(`/api/orders`, data);
+    return axios.post(`/api/orders`, data, headersConfig(token));
   },
-  updateOrder: (uuid, data) => {
+  updateOrder: (uuid, data, token) => {
     // console.log(data);
-    return axios.put(`/api/orders/${uuid}`, data);
+    return axios.put(`/api/orders/${uuid}`, data, headersConfig(token));
   },
-  buyOrder: (uuid, data) => {
+  buyOrder: (uuid, data, token) => {
     // console.log(data);
-    return axios.post(`/api/orders/${uuid}/purchase`, data);
+    return axios.post(
+      `/api/orders/${uuid}/purchase`,
+      data,
+      headersConfig(token)
+    );
   },
-  orderList: (queryParams) => {
+  orderList: (queryParams, token) => {
     // console.log(data);
-    return axios.get(`/api/orders${queryParams ?? ""}`);
+    return axios.get(`/api/orders${queryParams ?? ""}`, headersConfig(token));
   },
-  orderDetail: (uuid) => {
+  orderDetail: (uuid, token) => {
     // console.log(data);
-    return axios.get(`/api/orders/${uuid}`);
+    return axios.get(`/api/orders/${uuid}`, headersConfig(token));
   },
 };

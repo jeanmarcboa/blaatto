@@ -15,6 +15,7 @@ import {
   FiLayers,
   FiCreditCard,
   FiLogOut,
+  FiImage,
 } from "react-icons/fi";
 import { Metadata } from "next";
 
@@ -41,6 +42,12 @@ export default function SideBar() {
       path: "/admin",
     },
     {
+      title: "Médias",
+      icon: <FiImage />,
+      link: "/admin/medias",
+      path: "/admin/medias",
+    },
+    {
       title: "Boutiques",
       icon: <FiBriefcase />,
       link: "/admin/boutiques",
@@ -55,6 +62,8 @@ export default function SideBar() {
           title: "Ajouter un nouveau produit",
           link: "/admin/product/add-product",
         },
+        { title: "Désignations", link: "/admin/product/labels" },
+        { title: "Catégories", link: "/admin/product/categories" },
       ],
       path: "/admin/product",
     },

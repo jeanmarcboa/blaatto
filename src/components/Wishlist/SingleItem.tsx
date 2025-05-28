@@ -63,7 +63,7 @@ const SingleItem = ({ item }) => {
               <Image
                 src={
                   item?.Photo?.length > 0
-                    ? item?.Photo[0]?.url
+                    ? item?.Product_Photo?.[0]?.photo?.url
                     : "/images/products/default-placeholder.png"
                 }
                 alt="product"

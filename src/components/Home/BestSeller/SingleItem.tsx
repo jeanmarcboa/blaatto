@@ -82,7 +82,10 @@ const SingleItem = ({ item }: { item: any }) => {
           </div>
 
           <h3 className="font-medium text-dark ease-out duration-200 hover:text-green mb-1.5">
-            <Link href={"/shop-details/" + item?.id}> {item.label} </Link>
+            <Link href={"/shop-details/" + item?.id}>
+              {item?.designation?.label} (Vendu par{" "}
+              <strong>{item.unitOfMesure}</strong>)
+            </Link>
           </h3>
 
           <span className="flex items-center justify-center gap-2 font-medium text-lg">
@@ -109,14 +112,17 @@ const SingleItem = ({ item }: { item: any }) => {
         </div>
 
         <div className="flex justify-center items-center">
-          <Image
-            src={
-              item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
-            }
-            alt=""
-            width={280}
-            height={280}
-          />
+          <Link href={"/shop-details/" + item?.id}>
+            <Image
+              src={
+                item?.Product_Photo?.[0]?.photo?.url ??
+                "/images/products/default-placeholder.png"
+              }
+              alt=""
+              width={280}
+              height={280}
+            />
+          </Link>
         </div>
 
         <div className="absolute right-0 bottom-0 translate-x-full u-w-full flex flex-col gap-2 p-5.5 ease-linear duration-300 group-hover:translate-x-0">

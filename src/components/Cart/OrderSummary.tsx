@@ -10,7 +10,7 @@ const OrderSummary = ({ cartItems, shopId }) => {
   // const totalPrice = useSelector(selectTotalPrice);
 
   const selectTotalPrice = (items) => {
-    return items.reduce((total, item) => {
+    return items?.reduce((total, item) => {
       return total + item.price * item.quantity;
     }, 0);
   };

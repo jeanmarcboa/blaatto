@@ -19,6 +19,7 @@ import shopAPI from "@/app/api/shopServices";
 
 export const Productlist = () => {
   const { userInfo } = useUser();
+
   const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);
   const [products, setProducts] = useState([]);
   const [tmpProducts, setTmpProducts] = useState([]);
@@ -85,9 +86,9 @@ export const Productlist = () => {
 
   const checkStockForAllProducts = (products) => {
     products.forEach((product) => {
-      if (product.stock <= 700) {
+      if (product.stock <= product?.limit ?? 5) {
         // Make sure that only one alert is triggered for each condition
-        let tmpAlert = `Il ne reste plus que ${product.stock} article(s) en stock pour ${product.label}.`;
+        let tmpAlert = `Il ne reste plus que ${product.stock} article(s) en stock pour ${product?.designation?.label}.`;
         //check is tmpAlert message is already in the messageAlert array before pushing
         const results = messageAlert.filter(
           (item) => item?.message == tmpAlert
@@ -156,7 +157,7 @@ export const Productlist = () => {
 
   const fetchShopList = () => {
     shopAPI
-      .shopListByBusinessId(userInfo?.id)
+      .shopListByBusinessId(userInfo?.id, userInfo?.access_token)
       .then((response) => {
         setShopList(response.data);
       })
@@ -208,7 +209,7 @@ export const Productlist = () => {
             <select
               name="branche"
               onChange={handleChangeShop}
-              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
             >
               <option value="all">Toutes les boutiques</option>
               {shopList.map((shop: any) => (
@@ -220,7 +221,7 @@ export const Productlist = () => {
             <select
               name="status"
               onChange={handleChangeStatus}
-              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
             >
               <option value="all">Toutes les status</option>
               {ProductsStatus.map((item: any) => (
@@ -236,7 +237,7 @@ export const Productlist = () => {
                   type="search"
                   // value={searchValue}
                   onChange={handleChangeText}
-                  className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Rechercher une commande..."
                   required
                 />

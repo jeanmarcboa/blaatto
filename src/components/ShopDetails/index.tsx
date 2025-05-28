@@ -36,9 +36,9 @@ const ShopDetails = () => {
         setProductList(response.data);
         let result = response.data.filter((item: any) => item.id === id);
         setProduct(result[0]);
-        setPreviewMainImg(result[0].Photo[0]);
+        setPreviewMainImg(result[0].Product_Photo?.[0].photo);
         //save photo to use in preview slider
-        setUpdateproductImages(result[0].Photo);
+        setUpdateproductImages(result[0].Product_Photo);
         setTimeout(() => {
           setLoading(false);
         }, 1000);
@@ -119,7 +119,7 @@ const ShopDetails = () => {
 
                       <Image
                         src={
-                          product?.Photo?.length > 0
+                          product?.Product_Photo?.length > 0
                             ? previewMainImg?.url
                             : "/images/products/default-placeholder.png"
                         }
@@ -132,11 +132,11 @@ const ShopDetails = () => {
 
                   {/* ?  &apos;border-blue &apos; :  &apos;border-transparent&apos; */}
                   <div className="flex flex-wrap sm:flex-nowrap gap-4.5 mt-6">
-                    {product?.Photo?.map((item, key) => (
+                    {product?.Product_Photo?.map((item, key) => (
                       <button
                         onClick={() => {
                           setPreviewImg(key);
-                          setPreviewMainImg(item);
+                          setPreviewMainImg(item?.photo);
                         }}
                         key={key}
                         className={`flex items-center justify-center w-15 sm:w-25 h-15 sm:h-25 overflow-hidden rounded-lg bg-gray-2 shadow-1 ease-out duration-200 border-2 hover:border-blue ${
@@ -148,7 +148,7 @@ const ShopDetails = () => {
                         <Image
                           width={50}
                           height={50}
-                          src={item?.url}
+                          src={item?.photo?.url}
                           alt="thumbnail"
                         />
                       </button>
@@ -160,7 +160,7 @@ const ShopDetails = () => {
                 <div className="max-w-[539px] w-full">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="font-semibold text-xl sm:text-2xl xl:text-custom-3 text-dark">
-                      {product?.label}
+                      {product?.designation?.label}
                     </h2>
 
                     {/* <div className="inline-flex font-medium text-custom-sm text-white bg-green rounded py-0.5 px-2.5">
@@ -305,7 +305,6 @@ const ShopDetails = () => {
                           </clipPath>
                         </defs>
                       </svg>
-
                       <span
                         className={
                           product?.stock === 0 ? "text-red" : "text-green"
@@ -316,6 +315,12 @@ const ShopDetails = () => {
                     </div>
                   </div>
 
+                  <h3 className="font-medium text-custom-1 mb-4.5">
+                    <span className="text-2xl sm:text-2xl text-dark">
+                      Disponibilité: {sepMillier(product?.stock)}{" "}
+                      {product.unitOfMesure}
+                    </span>
+                  </h3>
                   <h3 className="font-medium text-custom-1 mb-4.5">
                     <span className="text-2xl sm:text-2xl text-dark">
                       Prix: {sepMillier(product?.price)} FCFA

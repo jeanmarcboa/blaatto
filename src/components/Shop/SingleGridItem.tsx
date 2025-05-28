@@ -44,14 +44,17 @@ const SingleGridItem = ({ item }: { item: any }) => {
   return (
     <div className="group">
       <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-white shadow-1 min-h-[270px] mb-4">
-        <Image
-          src={
-            item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
-          }
-          alt=""
-          width={250}
-          height={250}
-        />
+        <Link href={"/shop-details/" + item?.id}>
+          <Image
+            src={
+              item?.Product_Photo?.[0]?.photo?.url ??
+              "/images/products/default-placeholder.png"
+            }
+            alt=""
+            width={250}
+            height={250}
+          />
+        </Link>
 
         <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
           <button
@@ -156,7 +159,11 @@ const SingleGridItem = ({ item }: { item: any }) => {
       </div> */}
 
       <h3 className="font-medium text-dark ease-out duration-200 hover:text-green mb-1.5">
-        <Link href={"/shop-details/" + item?.id}> {item.label} </Link>
+        <Link href={"/shop-details/" + item?.id}>
+          {" "}
+          {item?.designation?.label} (Vendu par{" "}
+          <strong>{item.unitOfMesure}</strong>)
+        </Link>
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-lg">

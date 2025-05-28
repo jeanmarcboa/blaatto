@@ -7,23 +7,23 @@ const headersConfig = (token) => {
 };
 
 export default {
-  createShop: (data) => {
+  createShop: (data, token) => {
     // console.log(data);
-    return axios.post(`/api/shops`, data);
+    return axios.post(`/api/shops`, data, headersConfig(token));
   },
   shopList: (params) => {
     // console.log(data);
     return axios.get(`/api/shops${params ?? ""}`);
   },
-  shopListByBusinessId: (id) => {
+  shopListByBusinessId: (id, token) => {
     // console.log(data);
-    return axios.get(`/api/shops/merchant/${id}`);
+    return axios.get(`/api/shops/merchant/${id}`, headersConfig(token));
   },
   shopDetail: (uuid) => {
     // console.log(data);
     return axios.get(`/api/shops/${uuid}`);
   },
-  shopEdited: (id, data) => {
-    return axios.put(`/api/shops/${id}`, data);
+  shopEdited: (id, data, token) => {
+    return axios.put(`/api/shops/${id}`, data, headersConfig(token));
   },
 };
