@@ -39,7 +39,7 @@ export default function AddProduct() {
     const formData = new FormData();
     formData.append("label", productName);
     formData.append("description", description);
-    formData.append("currency", "XOF");
+    formData.append("currency", "FCFA");
     formData.append("price", price);
     formData.append("stock", stock);
     formData.append("categoryId", category);
@@ -91,7 +91,7 @@ export default function AddProduct() {
                     </label>
                     <select
                       onChange={(e) => setCategory(e.target.value)}
-                      className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                      className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       <option value="">Choisir un état</option>
                       {categories.map((category) => (

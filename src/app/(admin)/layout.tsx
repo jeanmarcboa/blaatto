@@ -43,7 +43,7 @@ export default function RootLayout({
                   <PreviewSliderProvider>
                     <Header />
                     <SideBar />
-                    <div className="p-4 pt-[80px] sm:ml-50 bg-gray-2">
+                    <div className="p-4 pt-[80px] sm:ml-50 bg-gray-2 min-h-screen">
                       {children}
                     </div>
 

@@ -3,7 +3,7 @@ import { Orderstlist } from "@/components/TransactionsList";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Liste des produits | Blaatto",
+  title: "Liste des transactions | Blaatto",
   description: "This is Wishlist Page for NextCommerce Template",
   // other metadata
 };

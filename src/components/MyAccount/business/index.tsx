@@ -6,10 +6,11 @@ import Image from "next/image";
 import useUser from "@/hooks/useUser";
 
 //import accounts restAPI
-import accountAPI from "@/app/api/account";
+import accountAPI from "@/app/api/accountServices";
 
 const MyAccount = () => {
   const { userInfo, isLoggedIn, setLoginData, deleteLoginData } = useUser();
+
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [addressModal, setAddressModal] = useState(false);
@@ -64,7 +65,7 @@ const MyAccount = () => {
     }
 
     accountAPI
-      .updateUserAccount(item, userInfo?.id)
+      .updateUserAccount(item, userInfo?.id, userInfo?.access_token)
       .then((response) => {
         console.log(response);
         setLoading(false);
@@ -113,7 +114,8 @@ const MyAccount = () => {
           oldPassword: passwordItem?.oldPassword,
           newPassword: passwordItem?.newPassword,
         },
-        userInfo?.id
+        userInfo?.id,
+        userInfo?.access_token
       )
       .then((response) => {
         console.log(response);

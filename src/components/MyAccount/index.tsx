@@ -10,7 +10,7 @@ import Orders from "../Orders";
 import useUser from "@/hooks/useUser";
 
 //import accounts restAPI
-import accountAPI from "@/app/api/account";
+import accountAPI from "@/app/api/accountServices";
 
 const MyAccount = () => {
   const { userInfo, isLoggedIn, setLoginData, deleteLoginData } = useUser();

@@ -45,14 +45,17 @@ const SingleListItem = ({ item }: { item: any }) => {
     <div className="group rounded-lg bg-white shadow-1">
       <div className="flex">
         <div className="shadow-list relative overflow-hidden flex items-center justify-center max-w-[270px] w-full sm:min-h-[270px] p-4">
-          <Image
-            src={
-              item?.Photo[0]?.url ?? "/images/products/default-placeholder.png"
-            }
-            alt=""
-            width={250}
-            height={250}
-          />
+          <Link href={"/shop-details/" + item?.id}>
+            <Image
+              src={
+                item?.Product_Photo?.[0]?.photo?.url ??
+                "/images/products/default-placeholder.png"
+              }
+              alt=""
+              width={250}
+              height={250}
+            />
+          </Link>
 
           <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
             <button
@@ -120,7 +123,10 @@ const SingleListItem = ({ item }: { item: any }) => {
         <div className="w-full flex flex-col gap-5 sm:flex-row sm:items-center justify-center sm:justify-between py-5 px-4 sm:px-7.5 lg:pl-11 lg:pr-12">
           <div>
             <h3 className="font-medium text-dark ease-out duration-200 hover:text-green mb-1.5">
-              <Link href={"/shop-details/" + item?.id}> {item.label} </Link>
+              <Link href={"/shop-details/" + item?.id}>
+                {item?.designation?.label} (Vendu par{" "}
+                <strong>{item.unitOfMesure}</strong>)
+              </Link>
             </h3>
 
             <span className="flex items-center gap-2 font-medium text-lg">

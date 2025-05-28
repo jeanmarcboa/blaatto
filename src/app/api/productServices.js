@@ -7,21 +7,25 @@ const headersConfig = (token) => {
 };
 
 export default {
-  createProduct: (data) => {
+  createProduct: (data, token) => {
     // console.log(data);
-    return axios.post(`/api/products`, data);
+    return axios.post(`/api/products`, data, headersConfig(token));
   },
   importProduct: (data) => {
     // console.log(data);
     return axios.post(`/api/products/upload`, data);
   },
-  updateProduct: (id, data) => {
+  updateProduct: (id, data, token) => {
     // console.log(data);
-    return axios.put(`/api/products/${id}`, data);
+    return axios.put(`/api/products/${id}`, data, headersConfig(token));
   },
-  addProductImages: (data, id) => {
+  addProductImages: (data, id, token) => {
     // console.log(data);
-    return axios.post(`/api/products/${id}/images`, data);
+    return axios.post(`/api/products/${id}/images`, data, headersConfig(token));
+  },
+  addProductImagesBySelection: (data, token) => {
+    // console.log(data);
+    return axios.post(`/api/product-photo/images`, data, headersConfig(token));
   },
   buyProduct: (uuid, data) => {
     // console.log(data);
@@ -29,7 +33,15 @@ export default {
   },
   productList: (query) => {
     // console.log(data);
-    return axios.get(`/api/products${query ? "?" + query : ""}`);
+    return axios.get(`/api/products?${query ? "?" + query : ""}`);
+  },
+  productListTopSelling: (uuid, query) => {
+    // console.log(data);
+    return axios.get(
+      `/api/shops/${uuid}/products/statistics/top-selling${
+        query ? "?" + query : ""
+      }`
+    );
   },
   searchProductList: (searchQuery) => {
     // console.log(data);

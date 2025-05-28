@@ -135,7 +135,7 @@ const ShopDetails = () => {
 
                       <Image
                         src={
-                          product?.Photo[0]?.url ??
+                          product?.Product_Photo?.[0]?.photo?.url ??
                           "/images/products/default-placeholder.png"
                         }
                         alt="products-details"

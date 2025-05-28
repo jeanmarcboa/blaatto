@@ -59,13 +59,12 @@ const SingleItem = ({ item }) => {
         </p>
       </div>
 
-      <div className="min-w-[150px]">
+      <div
+        className={
+          userInfo.role.code === "ADMIN" ? "min-w-[355px]" : "min-w-[150px]"
+        }
+      >
         <div className="flex items-center gap-1.5">
-          {/* {item.deliver ? (
-            <span className="text-green"> Livré </span>
-          ) : (
-            <span className="text-red"> En attente </span>
-          )} */}
           <p
             className={`inline-block text-custom-sm  py-0.5 px-2.5 rounded-[30px] capitalize ${
               item.deliver
@@ -82,11 +81,13 @@ const SingleItem = ({ item }) => {
         </div>
       </div>
 
-      <div className="min-w-[205px]">
-        <p className="text-dark">
-          {item.totalPrice} {item.currency}
-        </p>
-      </div>
+      {userInfo.role.code !== "ADMIN" && (
+        <div className="min-w-[205px]">
+          <p className="text-dark">
+            {item.totalPrice} {item.currency}
+          </p>
+        </div>
+      )}
 
       <div className="min-w-[150px] flex justify-end">
         <button

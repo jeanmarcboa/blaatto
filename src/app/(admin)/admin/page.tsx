@@ -22,6 +22,7 @@ import accountAPI from "@/app/api/accountServices";
 import productAPI from "@/app/api/productServices";
 import orderAPI from "@/app/api/orderServices";
 import shopAPI from "@/app/api/shopServices";
+import { sortBy } from "lodash";
 
 // export const metadata: Metadata = {
 //   title: "Blaatto | Accueil",
@@ -32,75 +33,87 @@ import shopAPI from "@/app/api/shopServices";
 export default function HomePage() {
   const router = useRouter();
   const { userInfo, isLoggedIn } = useUser();
+
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [shops, setShops] = useState([]);
+  const [tmpOrders, setTmpOrders] = useState([]);
   const [merchants, setMerchants] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [productsMostAsked, setProductsMostAsked] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const data = {
-    boutiques: 5,
-    produits: 120,
-    commandes: 245,
-    dernierCommande: "Client123 - 2025-04-15",
-    produitsLesPlusVendus: [
-      { nom: "Produit A", ventes: 50 },
-      { nom: "Produit B", ventes: 45 },
-      { nom: "Produit C", ventes: 40 },
-    ],
+  const [fetchingStat, setFetchingStat] = useState(true);
+  const [sortBy, setSortBy] = useState("price");
+  const [selectedShop, setSelectedShop] = useState("");
+
+  const handleProductsMostAsked = (uuid: string, sortBy: string) => {
+    setTimeout(() => {
+      setFetchingStat(true);
+    }, 1000);
+    setSortBy(sortBy);
+    setSelectedShop(uuid);
+    let query = "limit=5&sortBy=" + { sortBy } + "&enabledOnly=true";
+    productAPI.productListTopSelling(uuid, query).then((response) => {
+      const data = [];
+      const labels = [];
+      for (let i = 0; i < response.data.length; i++) {
+        sortBy === "price" && data.push(response.data[i].total_revenue);
+        sortBy === "quantity" && data.push(response.data[i].quantity_sold);
+        labels.push(
+          response.data[i].product_details?.designation?.label ?? "produit-" + i
+        );
+      }
+      let tmpMetierMostAsked = {
+        labels: labels,
+        datasets: [
+          {
+            label: "# of Votes",
+            data: data,
+            backgroundColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      };
+      setProductsMostAsked(tmpMetierMostAsked);
+      setTimeout(() => {
+        setFetchingStat(false);
+      }, 2000);
+    });
   };
 
-  const handleProductsMostAsked = (data: any) => {
+  const handleChangeShop = (e: any) => {
+    const value = e.target.value;
+    setLoading(true);
+    let results = tmpOrders.filter((item: any) => item.shopId == value);
+    setProducts(results);
     setTimeout(() => {
-      setFetching(false);
+      setLoading(false);
     }, 1000);
-    // const recruitMostAsked = data.filter(
-    //   (item: any) =>
-    //     item.title === "Les compétences les plus demandées au recrutement"
-    // );
-    // const tmpMetiers = recruitMostAsked[0].classement.map((item: any) => ({
-    //   title: item.metier,
-    //   value: item.value,
-    // }));
-    // let tmpMetierName: string[] = [];
-    // tmpMetiers.map((item: any) => tmpMetierName.push(item.title));
-    // let tmpMetierValue: number[] = [];
-    // tmpMetiers.map((item: any) => tmpMetierValue.push(item.value));
-    let tmpMetierMostAsked = {
-      labels: ["A", "B", "C", "D", "E"],
-      datasets: [
-        {
-          label: "# of Votes",
-          data: [12, 19, 3, 5, 2],
-          backgroundColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
-    setProductsMostAsked(tmpMetierMostAsked);
-    setTimeout(() => {
-      setFetching(false);
-    }, 2000);
+    if (value == "all") {
+      setProducts(tmpOrders);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
   };
 
   const fetchMerchants = async () => {
     accountAPI
-      .userAccountList("?role=MERCHANT")
+      .userAccountList("?role=MERCHANT", userInfo?.access_token)
       .then((response) => {
         setMerchants(response.data);
       })
@@ -111,7 +124,7 @@ export default function HomePage() {
 
   const fetchCustomers = async () => {
     accountAPI
-      .userAccountList("?role=CUSTOMER")
+      .userAccountList("?role=CUSTOMER", userInfo?.access_token)
       .then((response) => {
         setCustomers(response.data);
       })
@@ -133,9 +146,10 @@ export default function HomePage() {
 
   const fetchOrders = async () => {
     orderAPI
-      .orderList()
+      .orderList("", userInfo?.access_token)
       .then((response) => {
         setOrders(response.data);
+        setTmpOrders(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -147,6 +161,11 @@ export default function HomePage() {
       .shopList()
       .then((response) => {
         setShops(response.data);
+        if (response.data.length > 0) {
+          setTimeout(() => {
+            handleProductsMostAsked(response.data?.[0]?.id, "price");
+          }, 1000);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -154,12 +173,16 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchProducts();
-    fetchOrders();
-    fetchShopList();
-    fetchMerchants();
-    fetchCustomers();
-    handleProductsMostAsked("");
+    if (!isLoggedIn) {
+      router.push("/signin");
+      return;
+    } else {
+      fetchProducts();
+      fetchOrders();
+      fetchShopList();
+      fetchMerchants();
+      fetchCustomers();
+    }
   }, []);
 
   return (
@@ -235,9 +258,23 @@ export default function HomePage() {
           <div className="grid grid-cols-12 gap-6 md:gap-6 mt-10">
             {/* Dernière Commande */}
             <div className="col-span-12 xl:col-span-7 bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden transition duration-300">
-              <h3 className="text-lg font-semibold text-dark p-6">
-                Dernière Commande
-              </h3>
+              <div className="flex flex-row justify-between items-center p-6 w-full">
+                <h3 className="text-lg font-semibold text-dark">
+                  Dernière Commande
+                </h3>
+                <select
+                  name="branche"
+                  onChange={handleChangeShop}
+                  className="block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="all">Toutes les boutiques</option>
+                  {shops.map((shop: any) => (
+                    <option key={shop?.id} value={shop?.id}>
+                      {shop?.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               <div className="w-full overflow-x-auto">
                 <div className="w-full">
@@ -286,10 +323,42 @@ export default function HomePage() {
 
             {/* Produits les Plus Vendus */}
             <div className="col-span-12 xl:col-span-5 p-6 bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden transition duration-300">
-              <h3 className="text-lg font-semibold text-dark">
+              <h3 className="text-lg font-semibold text-dark mb-4">
                 Produits les Plus Vendus
               </h3>
-              {!fetching && <Pie data={productsMostAsked} />}
+              <div className="mb-4 flex flex-row justify-start gap-4 items-center w-full">
+                <select
+                  name="branche"
+                  value={selectedShop}
+                  onChange={(e) =>
+                    handleProductsMostAsked(e.target.value, sortBy)
+                  }
+                  className="block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="all">Toutes les boutiques</option>
+                  {shops?.map((shop: any) => (
+                    <option key={shop?.id} value={shop?.id}>
+                      {shop?.label}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  name="branche"
+                  onChange={(e) =>
+                    handleProductsMostAsked(selectedShop, e.target.value)
+                  }
+                  className="block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="price">Par prix</option>
+                  <option value="quantity">Par quantité</option>
+                </select>
+              </div>
+              {!fetchingStat && <Pie data={productsMostAsked} />}
+              {fetchingStat && (
+                <div className="flex justify-center items-center m-4">
+                  <PreLoader color="green" />
+                </div>
+              )}
               {/* <ul className="space-y-3 text-white">
                 {data.produitsLesPlusVendus.map((produit, index) => (
                   <li key={index} className="flex justify-between items-center">

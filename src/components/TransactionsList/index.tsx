@@ -12,6 +12,7 @@ import shopAPI from "@/app/api/shopServices";
 
 export const Orderstlist = () => {
   const { userInfo } = useUser();
+
   const [orders, setOrders] = useState([]);
   const [tmpOrders, setTmpOrders] = useState([]);
   const [shopList, setShopList] = useState([]);
@@ -86,7 +87,7 @@ export const Orderstlist = () => {
         });
     } else {
       shopAPI
-        .shopListByBusinessId(userInfo?.id)
+        .shopListByBusinessId(userInfo?.id, userInfo?.access_token)
         .then((response) => {
           setShopList(response.data);
         })
@@ -99,7 +100,10 @@ export const Orderstlist = () => {
   const fetchOrders = () => {
     let paramsData = "?accountId=" + userInfo?.id;
     orderAPI
-      .orderList(userInfo.role.code === "ADMIN" ? "" : paramsData)
+      .orderList(
+        userInfo.role.code === "ADMIN" ? "" : paramsData,
+        userInfo?.access_token
+      )
       .then((response) => {
         setOrders(response.data);
         setTmpOrders(response.data);
@@ -131,7 +135,7 @@ export const Orderstlist = () => {
             <select
               name="branche"
               onChange={handleChangeShop}
-              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
             >
               <option value="all">Toutes les boutiques</option>
               {shopList.map((shop: any) => (
@@ -143,7 +147,7 @@ export const Orderstlist = () => {
             <select
               name="branche"
               onChange={handleChangeStatus}
-              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+              className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
             >
               <option value="all">Toutes les status</option>
               {OrderStatus.map((item: any) => (
@@ -159,7 +163,7 @@ export const Orderstlist = () => {
                   type="search"
                   // value={searchValue}
                   onChange={handleChangeText}
-                  className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Rechercher une transaction..."
                   required
                 />
@@ -183,10 +187,18 @@ export const Orderstlist = () => {
                   <div className="min-w-[125px]">
                     <p className="text-dark">État</p>
                   </div>
-                  <div className="min-w-[180px]">
-                    <p className="text-dark">Total</p>
-                  </div>
-                  <div className="min-w-[250px]">
+                  {userInfo.role.code !== "ADMIN" && (
+                    <div className="min-w-[180px]">
+                      <p className="text-dark">Total</p>
+                    </div>
+                  )}
+                  <div
+                    className={
+                      userInfo.role.code === "ADMIN"
+                        ? "min-w-[375px]"
+                        : "min-w-[250px]"
+                    }
+                  >
                     <p className="text-dark">Commande</p>
                   </div>
 

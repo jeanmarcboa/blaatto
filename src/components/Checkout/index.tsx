@@ -63,7 +63,7 @@ const Checkout = () => {
   };
 
   const selectTotalPrice = (items) => {
-    return items.reduce((total, item) => {
+    return items?.reduce((total, item) => {
       return total + item.price * item.quantity;
     }, 0);
   };
@@ -106,7 +106,7 @@ const Checkout = () => {
 
   const setOrder = (id: string) => {
     //extract cart items from selectedCartItems to order.products
-    const orderProducts = selectedCartItems.map((item) => ({
+    const orderProducts = selectedCartItems?.map((item) => ({
       id: item.id,
       quantity: item.quantity,
     }));
@@ -124,8 +124,9 @@ const Checkout = () => {
       lastname: billingInfo?.lastname,
       firstname: billingInfo?.firstname,
     };
+    console.log("userInfo?.access_token:", userInfo);
     orderAPI
-      .createOrder(isLoggedIn ? orderLogged : orderNologged)
+      .createOrder(orderLogged, userInfo?.access_token)
       .then((response) => {
         console.log("Order created successfully", response);
         // pay order and redirect to order confirmation page
@@ -135,7 +136,7 @@ const Checkout = () => {
         };
 
         orderAPI
-          .buyOrder(response.data.id, payData)
+          .buyOrder(response.data.id, payData, userInfo?.access_token)
           .then((req) => {
             console.log("Order paid successfully", req);
             // router.push("/order/confirmation");
@@ -193,7 +194,7 @@ const Checkout = () => {
       <Breadcrumb title={"Checkout"} pages={["checkout"]} />
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-          <form>
+          <div>
             <div className="flex flex-col lg:flex-row gap-7.5 xl:gap-11">
               {/* <!-- checkout left --> */}
               <div className="lg:max-w-[670px] w-full">
@@ -201,11 +202,13 @@ const Checkout = () => {
                 {!isLoggedIn && <Login />}
 
                 {/* <!-- billing details --> */}
-                <Billing
-                  handleChangeBillingInfo={handleChangeBillingInfo}
-                  billingInfo={billingInfo}
-                  isLoggedIn={isLoggedIn}
-                />
+                {isLoggedIn && (
+                  <Billing
+                    handleChangeBillingInfo={handleChangeBillingInfo}
+                    billingInfo={billingInfo}
+                    isLoggedIn={isLoggedIn}
+                  />
+                )}
               </div>
 
               {/* // <!-- checkout right --> */}
@@ -232,7 +235,7 @@ const Checkout = () => {
                     </div>
 
                     {/* <!-- product item --> */}
-                    {selectedCartItems.map((item, key) => (
+                    {selectedCartItems?.map((item, key) => (
                       <div
                         className="flex items-center justify-between py-5 border-b border-gray-3"
                         key={key}
@@ -280,17 +283,28 @@ const Checkout = () => {
                 {/* <PaymentMethod /> */}
 
                 {/* <!-- checkout button --> */}
-                <button
-                  type="submit"
-                  onClick={submitOrder}
-                  className="w-full flex justify-center font-medium text-white bg-green py-3 px-6 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"
-                >
-                  {!loading && "Commander maintenant"}
-                  {loading && <PreLoader />}
-                </button>
+                {isLoggedIn && (
+                  <button
+                    type="submit"
+                    onClick={submitOrder}
+                    className="w-full flex justify-center font-medium text-white bg-green py-3 px-6 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"
+                  >
+                    {!loading && "Commander maintenant"}
+                    {loading && <PreLoader />}
+                  </button>
+                )}
+                {!isLoggedIn && (
+                  <button
+                    type="submit"
+                    disabled
+                    className="w-full flex justify-center font-medium text-white bg-green opacity-50 py-3 px-6 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"
+                  >
+                    Commander maintenant
+                  </button>
+                )}
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </section>
     </>

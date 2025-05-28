@@ -19,7 +19,7 @@ export default function AddProduct() {
   const [stock, setStock] = useState("");
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
-  const [currency, setCurrency] = useState("XOF");
+  const [currency, setCurrency] = useState("FCFA");
   const [shopId, setShopId] = useState("");
   const [uploadedfiles, setUploadedfiles] = useState<any>([]);
   const [images, setImages] = useState<any>([]);
@@ -32,7 +32,7 @@ export default function AddProduct() {
     // Do something with the files
     setUploadedfiles(acceptedFiles);
   }, []);
-  
+
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
       onDrop,
@@ -53,10 +53,11 @@ export default function AddProduct() {
 
   const fetchShopList = () => {
     shop
-      .shopListByBusinessId(userInfo.id)
+      .shopListByBusinessId(userInfo.id, userInfo?.access_token)
       .then((response) => {
         console.log("Liste des boutiques:", response.data);
         setShopList(response.data);
+        setShopId(response.data[0].id);
       })
       .catch((error) => {
         console.error("Erreur lors de récupération des boutiques:", error);
@@ -215,7 +216,7 @@ export default function AddProduct() {
                   <select
                     onChange={(e) => setShopId(e.target.value)}
                     value={shopId}
-                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option value="">Choisir une boutique</option>
                     {shopList.map((shop) => (
@@ -253,7 +254,7 @@ export default function AddProduct() {
                   </label>
                   <select
                     onChange={(e) => setCategory(e.target.value)}
-                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option value="">Choisir une catégorie</option>
                     {categories.map((category) => (

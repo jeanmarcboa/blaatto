@@ -3,7 +3,7 @@ import useUser from "@/hooks/useUser";
 import SingleOrder from "./SingleOrder";
 import ordersData from "./ordersData";
 
-import ordersAPI from "@/app/api/order";
+import ordersAPI from "@/app/api/orderServices";
 
 const Orders = () => {
   const { userInfo } = useUser();

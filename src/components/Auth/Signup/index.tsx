@@ -1,12 +1,15 @@
 "use client";
 
-import Breadcrumb from "@/components/Common/Breadcrumb";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { FiBriefcase, FiUser } from "react-icons/fi";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import fr from "react-phone-number-input/locale/fr";
+import Breadcrumb from "@/components/Common/Breadcrumb";
 import { useParams, useRouter } from "next/navigation";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import useUser from "@/hooks/useUser";
-import React, { useState, useEffect } from "react";
-import { FiBriefcase, FiUser } from "react-icons/fi";
 
 //import accounts restAPI
 import Account from "../../../app/api/accountServices";
@@ -22,6 +25,11 @@ const Signup = () => {
     password: "",
     username: "",
   });
+  const [document, setDocument] = useState({
+    cni: null,
+    cert: null,
+  });
+  const [docType, setDocType] = useState([]);
   const [profilType, setProfilTypes] = useState(0);
   const [loading, setLoading] = useState(false);
   const [successFull, setSuccessfull] = useState(false);
@@ -32,6 +40,11 @@ const Signup = () => {
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e: any) => {
+    const { name, files } = e.target;
+    setDocument({ ...document, [name]: files[0] });
   };
 
   const handleSubmit = async (e: any) => {
@@ -90,9 +103,58 @@ const Signup = () => {
       Account.signUpMerchant(tmpformdata)
         .then((response) => {
           console.log(response);
-          setLoading(false);
-          setLoginData(response.data);
-          router.push("/shops-settings");
+
+          // connect user after sign up
+          let data = {
+            username: username,
+            password: password,
+          };
+
+          Account.signIn(data)
+            .then((res) => {
+              const CNI_ID = docType.find((item) => item.code === "CNI");
+              const CERT_ID = docType.find((item) => item.code === "CERT");
+
+              if (document.cni) {
+                const formData = new FormData();
+                formData.append("file", document?.cni);
+                formData.append("documentTypeId", CNI_ID.id);
+
+                Account.uploadDocument(formData)
+                  .then((response) => {
+                    console.log(response);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }
+
+              if (document.cert) {
+                const formData = new FormData();
+                formData.append("file", document?.cert);
+                formData.append("documentTypeId", CERT_ID.id);
+
+                Account.uploadDocument(formData)
+                  .then((response) => {
+                    console.log(response);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }
+
+              setTimeout(() => {
+                setLoading(false);
+                setLoginData(res.data);
+                router.push("/shops-settings");
+              }, 1000);
+            })
+            .catch((error) => {
+              console.log(error);
+              setLoading(false);
+              setError(true);
+              setErrorMessage("Une erreur s'est produite");
+            });
         })
         .catch((error) => {
           console.log(error);
@@ -107,6 +169,17 @@ const Signup = () => {
     console.log(value);
     setProfilTypes(value);
   };
+
+  useEffect(() => {
+    Account.documentsTypes()
+      .then((response) => {
+        console.log(response);
+        setDocType(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
@@ -293,13 +366,15 @@ const Signup = () => {
                       Téléphone <span className="text-red">*</span>
                     </label>
 
-                    <input
-                      type="text"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      onChange={handleInputChange}
+                    <PhoneInput
+                      defaultCountry="CI"
+                      labels={fr}
                       placeholder="Entrez votre numéro de téléphone"
+                      value={formData.phoneNumber}
                       className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      onChange={(value: any) => {
+                        setFormData({ ...formData, ["phoneNumber"]: value });
+                      }}
                     />
                   </div>
 
@@ -319,22 +394,43 @@ const Signup = () => {
                     />
                   </div>
 
-                  {/* <div className="mb-5.5">
-                    <label htmlFor="re-type-password" className="block mb-2.5">
-                      Retaper le mot de passe{" "}
-                      <span className="text-red">*</span>
-                    </label>
+                  {profilType === 2 && (
+                    <>
+                      <div className="mb-5">
+                        <p className="block mb-2.5">
+                          Documents justcificatifs d&#39;identité et
+                          d&#39;activité
+                        </p>
+                      </div>
 
-                    <input
-                      type="password"
-                      name="re-type-password"
-                      id="re-type-password"
-                      placeholder="Re-type your password"
-                      onChange={handleInputChange}
-                      autoComplete="on"
-                      className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                    />
-                  </div> */}
+                      <div className="mb-5">
+                        <label htmlFor="cni" className="block mb-2.5">
+                          Carte d&#39;identité
+                        </label>
+
+                        <input
+                          type="file"
+                          name="cni"
+                          id="cni"
+                          onChange={handleFileChange}
+                          required
+                        />
+                      </div>
+
+                      <div className="mb-5">
+                        <label htmlFor="cert" className="block mb-2.5">
+                          Justificatif d&#39;activité
+                        </label>
+                        <input
+                          type="file"
+                          name="cert"
+                          id="cert"
+                          onChange={handleFileChange}
+                          required
+                        />
+                      </div>
+                    </>
+                  )}
 
                   <button
                     type="submit"
