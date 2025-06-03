@@ -15,6 +15,7 @@ import {
   FiLayers,
   FiCreditCard,
   FiLogOut,
+  FiChevronRight,
 } from "react-icons/fi";
 import { Metadata } from "next";
 
@@ -34,12 +35,6 @@ export default function SideBar() {
   // const toggleSubMenu = () => setIsSubMenuOpen(!isSubMenuOpen);
 
   const menuItems = [
-    {
-      title: "Tableau de bord",
-      icon: <FiHome />,
-      link: "/business",
-      path: "/business",
-    },
     {
       title: "Boutiques",
       icon: <FiBriefcase />,
@@ -84,227 +79,173 @@ export default function SideBar() {
   }
 
   return (
-    <>
-      {/* <Home /> */}
+    <div
+      id="hs-sidebar-content-push"
+      className="w-[20%] hs-overlay [--auto-close:lg] lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
+hs-overlay-open:translate-x-0
+-translate-x-full transition-all duration-300 transform
+h-full
+hidden
+fixed top-0 start-0 bottom-0 z-60
+bg-white border-e border-gray-4 pt-[100px]"
+      role="dialog"
+      aria-label="Sidebar"
+    >
+      <div className="relative flex flex-col h-full max-h-full ">
+        {/* Header */}
+        <header className="p-4 flex justify-between items-center gap-x-2">
+          <a
+            className="flex-none font-semibold text-xl text-black focus:outline-hidden focus:opacity-80"
+            href="#"
+            aria-label="Brand"
+          >
+            Menu
+          </a>
 
-      <button
-        data-drawer-target="sidebar-multi-level-sidebar"
-        data-drawer-toggle="sidebar-multi-level-sidebar"
-        aria-controls="sidebar-multi-level-sidebar"
-        type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-      >
-        <span className="sr-only">Open sidebar</span>
-        <svg
-          className="w-6 h-6"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            fill-rule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-          ></path>
-        </svg>
-      </button>
+          <div className="lg:hidden -me-2">
+            {/* Close Button */}
+            <button
+              type="button"
+              className="flex justify-center items-center gap-x-3 size-6 bg-white border border-gray-200 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
+              data-hs-overlay="#hs-sidebar-content-push"
+            >
+              <svg
+                className="shrink-0 size-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+              <span className="sr-only">Close</span>
+            </button>
+            {/* End Close Button */}
+          </div>
+        </header>
+        {/* End Header */}
 
-      <div className={`relative ${isSidebarOpen ? "" : "hidden"}`}>
-        <div
-          className="absolute text-white text-4xl top-5 left-4 cursor-pointer"
-          onClick={toggleSidebar}
-        >
-          <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
-        </div>
-        <div className="sidebar fixed top-[62px] bottom-0 lg:left-0 p-2 w-[200px] overflow-y-auto text-center bg-dark">
-          {/* <div className="text-gray-100 text-xl">
-            <div className="p-2.5 mt-1 flex items-center">
-              <i className="bi bi-app-indicator px-2 py-1 rounded-md bg-blue-600"></i>
-              <h1 className="font-bold text-gray-200 text-[15px] ml-3">
-                TailwindCSS
-              </h1>
-              <i
-                className="bi bi-x cursor-pointer ml-28 lg:hidden"
-                onClick={toggleSidebar}
-              ></i>
-            </div>
-            <div className="my-2 bg-gray-600 h-[1px]"></div>
-          </div> */}
-
-          {menuItems.map((item, index) => (
-            <div key={index}>
-              {item.subMenu ? (
-                <>
-                  <div
-                    className={`p-2.5 mt-3 flex items-center rounded-md cursor-pointer hover:bg-green text-white ${
-                      pathname.includes(item.path)
-                        ? "bg-green"
-                        : "hover:bg-green"
-                    }`}
-                    onClick={() => toggleSubMenu(index)}
-                  >
-                    {item.icon}
-                    <div className="flex justify-between w-full items-center">
-                      <span className="text-[15px] ml-4 text-gray-200">
-                        {item.title}
-                      </span>
-                      <span
-                        className="text-sm transform duration-300"
-                        style={{
-                          transform:
-                            openSubMenu === index
-                              ? "rotate(180deg)"
-                              : "rotate(0)",
-                        }}
-                      >
-                        <i className="bi bi-chevron-down"></i>
-                      </span>
-                    </div>
-                  </div>
-                  {openSubMenu === index && (
-                    <div
-                      className="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200"
-                      id="submenu"
-                    >
-                      {item.subMenu.map((subItem, subIndex) => (
-                        <Link
-                          key={subIndex}
-                          href={subItem.link}
-                          className={`block cursor-pointer p-2 hover:text-green rounded-md mt-1 ease-out duration-200 ${
-                            pathname === subItem.link
-                              ? "text-green"
-                              : "hover:text-green"
-                          }`}
-                        >
-                          {subItem.title}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
+        {/* Body */}
+        <nav className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+          <div className="hs-accordion-group pb-0 px-2 w-full flex flex-col justify-between align-center h-full">
+            <ul className="space-y-1">
+              <li>
                 <Link
-                  href={item.link}
-                  className={`p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-green text-white ease-out duration-200 hover:text-white pl-2 ${
-                    pathname.includes(item.path) ? "bg-green" : "hover:bg-green"
+                  href="/business"
+                  className={`p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-gray-3 ease-out duration-200 hover:text-dark pl-2 ${
+                    pathname === "/business"
+                      ? "bg-green text-white"
+                      : "hover:bg-gray-3"
                   }`}
                 >
-                  {item.icon}
-                  <span className="text-[15px] ml-4 text-gray-200">
-                    {item.title}
-                  </span>
+                  <FiHome />
+                  <span className="text-[15px] ml-4">Tableau de bord</span>
                 </Link>
-              )}
-            </div>
-          ))}
-          {/* <>
-          <Link
-            href="/business"
-            className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white ease-out hover:text-green pl-2"
-          >
-            <FiHome />
-            <span className="text-[15px] ml-4 text-gray-200">
-              Tableau de bord
-            </span>
-          </Link>
-          <Link
-            href="/signup"
-            className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white ease-out hover:text-green pl-2"
-          >
-            <FiBriefcase />
-            <span className="text-[15px] ml-4 text-gray-200">Boutiques</span>
-          </Link>
-          <div
-            className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white pl-2"
-            onClick={toggleSubMenu}
-          >
-            <FiArchive />
-            <div className="flex justify-between w-full items-center">
-              <span className="text-[15px] ml-4 text-gray-200">Produits</span>
-              <span
-                className="text-sm transform duration-300"
-                style={{
-                  transform: isSubMenuOpen ? "rotate(180deg)" : "rotate(0)",
-                }}
-              >
-                <i className="bi bi-chevron-down"></i>
-              </span>
-            </div>
+              </li>
+              {menuItems.map((item, index) => (
+                <li key={index}>
+                  {item.subMenu ? (
+                    <>
+                      <div
+                        className={`p-2.5 mt-3 flex items-center rounded-md cursor-pointer hover:bg-gray-3 hover:text-dark ${
+                          pathname.includes(item.path)
+                            ? "bg-green text-white"
+                            : "hover:bg-gray-3"
+                        }`}
+                        onClick={() => toggleSubMenu(index)}
+                      >
+                        {item.icon}
+                        <div className="flex justify-between w-full items-center">
+                          <span className="text-[15px] ml-4 text-gray-200">
+                            {item.title}
+                          </span>
+                          <span
+                            className="text-sm transform duration-300"
+                            style={{
+                              transform:
+                                openSubMenu === index
+                                  ? "rotate(90deg)"
+                                  : "rotate(0)",
+                            }}
+                          >
+                            <FiChevronRight />
+                          </span>
+                        </div>
+                      </div>
+                      {openSubMenu === index && (
+                        <div
+                          className="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200"
+                          id="submenu"
+                        >
+                          {item.subMenu.map((subItem, subIndex) => (
+                            <Link
+                              key={subIndex}
+                              href={subItem.link}
+                              className={`block cursor-pointer p-2 hover:text-green rounded-md mt-1 ease-out duration-200 ${
+                                pathname === subItem.link
+                                  ? "text-green"
+                                  : "hover:text-green"
+                              }`}
+                            >
+                              {subItem.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      href={item.link}
+                      className={`p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-gray-3 ease-out duration-200 hover:text-dark pl-2 ${
+                        pathname.includes(item.path)
+                          ? "bg-green text-white"
+                          : "hover:bg-gray-3"
+                      }`}
+                    >
+                      {item.icon}
+                      <span className="text-[15px] ml-4">{item.title}</span>
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <ul className="space-y-1">
+              <li>
+                <Link
+                  href="/business/account"
+                  className={`p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-green ease-out duration-200 hover:text-white pl-2 ${
+                    pathname.includes("/business/account")
+                      ? "bg-green text-white"
+                      : "hover:bg-green"
+                  }`}
+                >
+                  <FiUser />
+                  <span className="text-[15px] ml-4 text-gray-200">Profil</span>
+                </Link>
+              </li>
+
+              <li>
+                <button
+                  onClick={() => deleteLoginData()}
+                  className="p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer ease-out duration-200 hover:text-red pl-2"
+                >
+                  <FiLogOut />
+                  <span className="text-[15px] ml-4 text-gray-200">
+                    Se déconnecter
+                  </span>
+                </button>
+              </li>
+            </ul>
           </div>
-          {isSubMenuOpen && (
-            <div
-              className="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200"
-              id="submenu"
-            >
-              <Link
-                href="/business/product/product-list"
-                className="block cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1 ease-out duration-200 hover:text-green"
-              >
-                Tous les produits
-              </Link>
-              <Link
-                href="/business/product/add-product"
-                className="block cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1 ease-out duration-200 hover:text-green"
-              >
-                Ajouter un nouveau produit
-              </Link>
-            </div>
-          )}
-          <Link
-            href="/business/commandes/list"
-            className="p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-blue-600 text-white ease-out duration-200 hover:text-green pl-2"
-          >
-            <FiFileText />
-            <span className="text-[15px] ml-4 text-gray-200">Commandes</span>
-          </Link>
-          <Link
-            href="/signup"
-            className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white ease-out duration-200 hover:text-green pl-2"
-          >
-            <FiUsers />
-            <span className="text-[15px] ml-4 text-gray-200">Clients</span>
-          </Link>
-          <Link
-            href="/signup"
-            className="p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-blue-600 text-white ease-out duration-200 hover:text-green pl-2"
-          >
-            <FiLayers />
-            <span className="text-[15px] ml-4 text-gray-200">Transactions</span>
-          </Link>
-          <div className="">
-            <Link
-              href="/signup"
-              className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white ease-out hover:text-green pl-2"
-            >
-              <FiCreditCard />
-              <span className="text-[15px] ml-4 text-gray-200">Paiement</span>
-            </Link>
-          </div>
-          </> */}
-          <div className="my-4 bg-dark-2 h-[1px]"></div>
-          <Link
-            href="/business/account"
-            className={`p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer hover:bg-green text-white ease-out duration-200 hover:text-white pl-2 ${
-              pathname.includes("/business/account")
-                ? "bg-green"
-                : "hover:bg-green"
-            }`}
-          >
-            <FiUser />
-            <span className="text-[15px] ml-4 text-gray-200">Profil</span>
-          </Link>
-          <button
-            onClick={() => deleteLoginData()}
-            className="p-2.5 mt-3 flex items-center rounded-md px-4 cursor-pointer text-white ease-out duration-200 hover:text-red pl-2"
-          >
-            <FiLogOut />
-            <span className="text-[15px] ml-4 text-gray-200">
-              Se déconnecter
-            </span>
-          </button>
-        </div>
+        </nav>
+        {/* End Body */}
       </div>
-    </>
+    </div>
   );
 }

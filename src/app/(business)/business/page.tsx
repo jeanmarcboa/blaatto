@@ -181,11 +181,8 @@ export default function HomePage() {
   return (
     <>
       {/* <Home /> */}
-      <div className="bg-gradient-to-br from-indigo-300 via-purple-200 to-pink-300 min-h-screen py-12">
-        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-8">
-            Tableau de Bord
-          </h2>
+      <div className="bg-gradient-to-br from-indigo-300 via-purple-200 to-pink-300 min-h-screen">
+        <div className="max-w-7xl">
           <div className="mb-4">
             {messageAlert.map((mgs: any, index: number) => (
               <Message showIcon type="warning" closable key={index}>

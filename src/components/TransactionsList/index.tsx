@@ -123,7 +123,7 @@ export const Orderstlist = () => {
   return (
     <>
       {/* <Breadcrumb title={"Favoris"} pages={["Orderstlist"]} /> */}
-      <section className="overflow-hidden py-20 bg-gray-2">
+      <section className="overflow-hidden">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
             <h2 className="font-medium text-dark text-2xl">

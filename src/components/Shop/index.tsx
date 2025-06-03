@@ -207,7 +207,7 @@ export const ShopList = () => {
   return (
     <>
       {/* <Breadcrumb title={"Favoris"} pages={["ShopList"]} /> */}
-      <section className="overflow-hidden pb-20 bg-gray-2">
+      <section className="overflow-hidden pb-20">
         <div className="w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
             <h2 className="font-medium text-dark text-2xl">
@@ -229,7 +229,15 @@ export const ShopList = () => {
             </div>
           )}
           <div className="flex flex-row flex-wrap gap-4">
-            <div className={shopList.length === 0 ? "w-[30%]" : "hidden"}>
+            <div
+              className={
+                userInfo?.role?.code === "ADMIN"
+                  ? "w-[30%]"
+                  : shopList.length === 0
+                  ? "w-[30%]"
+                  : "hidden"
+              }
+            >
               <h2 className="font-medium text-dark text-xl mb-4">
                 Ajouter une boutique
               </h2>
@@ -330,7 +338,15 @@ export const ShopList = () => {
                 </button>
               </form>
             </div>
-            <div className={shopList.length === 0 ? "w-[68%]" : "w-full"}>
+            <div
+              className={
+                userInfo?.role?.code === "ADMIN"
+                  ? "w-[68%]"
+                  : shopList.length === 0
+                  ? "w-[68%]"
+                  : "w-full"
+              }
+            >
               <div className="mb-4 flex flex-row">
                 {userInfo?.role?.code === "ADMIN" && (
                   <select

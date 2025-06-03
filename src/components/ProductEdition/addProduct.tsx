@@ -222,8 +222,8 @@ export const AddProduct = () => {
 
   return (
     <>
-      <div className="p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
+      <div className="">
+        <h1 className="font-medium text-dark text-2xl text-gray-900 mb-6">
           Ajouter un Nouveau Produit
         </h1>
         <div className="flex items-center justify-center space-x-3">

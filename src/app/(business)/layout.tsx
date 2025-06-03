@@ -42,9 +42,11 @@ export default function RootLayout({
                 <ModalProvider>
                   <PreviewSliderProvider>
                     <Header />
-                    <SideBar />
-                    <div className="p-4 pt-[80px] sm:ml-50 bg-gray-2 min-h-screen">
-                      {children}
+                    <div className="flex flex-row justify-end">
+                      <SideBar />
+                      <div className="w-[80%] px-6 sm:px-6 lg:px-8 pt-[150px] bg-gray-1 min-h-screen">
+                        {children}
+                      </div>
                     </div>
 
                     <QuickViewModal />
