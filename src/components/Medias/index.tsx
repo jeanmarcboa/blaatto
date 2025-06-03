@@ -193,7 +193,7 @@ const Medias = () => {
 
   return (
     <>
-      <section className="overflow-hidden py-20 bg-gray-2 min-h-screen">
+      <section className="overflow-hidden min-h-screen">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
             <h2 className="font-medium text-dark text-2xl">Mediathèques</h2>

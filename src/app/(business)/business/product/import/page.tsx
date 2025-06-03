@@ -113,7 +113,7 @@ export default function AddProduct() {
   }, []);
 
   return (
-    <div className="p-8">
+    <div className="">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
         Importation de produits
       </h1>
