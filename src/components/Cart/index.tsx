@@ -40,14 +40,14 @@ const Cart = () => {
     groupItemsByShop(cartItems);
     const filterCart: any = groupItemsByShop(cartItems);
     setGroupedCart(filterCart);
+  }, [cartItems]);
+  useEffect(() => {
+    groupItemsByShop(cartItems);
+    const filterCart: any = groupItemsByShop(cartItems);
+    setGroupedCart(filterCart);
     setActiveTab(filterCart[0]?.shop?.id);
     setSelectedCart(filterCart[0]?.items);
-    // setGroupedCart(
-    //   filterCart.filter(
-    //     (line: any) => line?.business?.id === Number(params?.businessId)
-    //   )
-    // );
-  }, [cartItems]);
+  }, []);
 
   return (
     <>
@@ -60,7 +60,9 @@ const Cart = () => {
         <section className="overflow-hidden py-20 bg-gray-2">
           <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
             <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
-              <h2 className="font-medium text-dark text-2xl">Votre panier</h2>
+              <h2 className="font-medium text-dark text-2xl">
+                Panier par marchant
+              </h2>
               <button className="text-green">Vider le panier</button>
             </div>
 
@@ -112,7 +114,7 @@ const Cart = () => {
                   {/* <!-- cart item --> */}
                   {selectedCart.length > 0 &&
                     selectedCart.map((item, key) => (
-                      <SingleItem item={item} key={key} />
+                      <SingleItem item={item} activeTab={activeTab} key={key} />
                     ))}
                 </div>
               </div>

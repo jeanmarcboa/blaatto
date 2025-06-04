@@ -10,7 +10,7 @@ const Orders = () => {
   const [orders, setOrders] = useState<any>([]);
   const fetchOrders = () => {
     ordersAPI
-      .orderList("?customerId=" + userInfo?.id)
+      .orderList("?customerId=" + userInfo?.id, userInfo?.access_token)
       .then((response) => {
         console.log(response.data.length);
         setOrders(response.data);

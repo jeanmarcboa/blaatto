@@ -153,14 +153,14 @@ const Signup = () => {
               console.log(error);
               setLoading(false);
               setError(true);
-              setErrorMessage("Une erreur s'est produite");
+              setErrorMessage(error.response.data.message);
             });
         })
         .catch((error) => {
           console.log(error);
           setLoading(false);
           setError(true);
-          setErrorMessage("Une erreur s'est produite");
+          setErrorMessage(error.response.data.message);
         });
     }
   };
