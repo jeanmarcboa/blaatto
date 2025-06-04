@@ -301,7 +301,7 @@ const Header = () => {
                         <li>
                           <Link
                             className="flex text-custom-sm hover:text-green hover:bg-gray-1 py-[7px] px-4.5 false "
-                            href="my-account"
+                            href="/my-account"
                           >
                             Mon compte
                           </Link>

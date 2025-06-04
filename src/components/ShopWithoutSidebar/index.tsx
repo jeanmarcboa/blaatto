@@ -53,18 +53,6 @@ const ShopWithoutSidebar = () => {
   };
 
   useEffect(() => {
-    // fetchShopList();
-    // let result = shopData.filter((shop: any) => shop.shopId == id);
-    // console.log("result", result);
-    // setTimeout(() => {
-    //   setLoading(false);
-    // }, 2000);
-    // if (id) {
-    //   setShopList(result);
-    //   setCurrentShop(result[0]?.shop);
-    // } else {
-    //   setShopList(shopData);
-    // }
     if (id) {
       fetchShopList();
       fetchShopProductsList();
@@ -79,8 +67,14 @@ const ShopWithoutSidebar = () => {
         title={
           `Boutique : ${currentShop?.label}` ?? "Explorer tous les produits"
         }
-        pages={["shop", "/"]}
+        pages={["boutique/", "Explorer tous les produits"]}
       />
+      <div className="lg:max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+        <div className="w-full p-4 h-20">
+          <h3 className="font-medium text-lg text-dark"> À propos </h3>
+          <p> {currentShop?.description} </p>
+        </div>
+      </div>
       {loading ? (
         <PreLoader />
       ) : (

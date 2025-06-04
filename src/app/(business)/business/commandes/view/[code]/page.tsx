@@ -132,8 +132,11 @@ export default function AddProduct() {
                       </span>
                       <span>
                         {details?.customFields?.address ??
-                          details?.account?.address ??
-                          "--"}
+                          details?.account?.address}
+                      </span>
+                      <span>
+                        {details?.deliverAddress ??
+                          details?.account?.deliverAddress}
                       </span>
                     </div>
                     <div>
@@ -170,8 +173,11 @@ export default function AddProduct() {
                       </span>
                       <span>
                         {details?.customFields?.address ??
-                          details?.account?.address ??
-                          "--"}
+                          details?.account?.address}
+                      </span>
+                      <span>
+                        {details?.deliverAddress ??
+                          details?.account?.deliverAddress}
                       </span>
                     </div>
                     <div>

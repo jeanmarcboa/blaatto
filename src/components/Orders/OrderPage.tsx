@@ -131,6 +131,10 @@ export const DetailPage = () => {
                         {details?.customFields?.address ??
                           details?.account?.address}
                       </span>
+                      <span>
+                        {details?.deliverAddress ??
+                          details?.account?.deliverAddress}
+                      </span>
                     </div>
                     <div>
                       <h3 className="font-bold mt-4">Email</h3>
@@ -166,8 +170,11 @@ export const DetailPage = () => {
                       </span>
                       <span>
                         {details?.customFields?.address ??
-                          details?.account?.address ??
-                          "--"}
+                          details?.account?.address}
+                      </span>
+                      <span>
+                        {details?.deliverAddress ??
+                          details?.account?.deliverAddress}
                       </span>
                     </div>
                     <div>

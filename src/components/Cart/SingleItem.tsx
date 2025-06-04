@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AppDispatch } from "@/redux/store";
+import React, { useState, useEffect } from "react";
+import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import {
   removeItemFromCart,
@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import sepMillier from "../Common/numberSeparator";
 
-const SingleItem = ({ item }) => {
+const SingleItem = ({ item, activeTab }) => {
   const [quantity, setQuantity] = useState(item.quantity);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -19,8 +19,10 @@ const SingleItem = ({ item }) => {
   };
 
   const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1);
-    dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity + 1 }));
+    if (item.quantity < item.stock) {
+      setQuantity(quantity + 1);
+      dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity + 1 }));
+    }
   };
 
   const handleDecreaseQuantity = () => {
@@ -31,6 +33,11 @@ const SingleItem = ({ item }) => {
       return;
     }
   };
+
+  useEffect(() => {
+    setQuantity(1);
+    dispatch(updateCartItemQuantity({ id: item.id, quantity: 1 }));
+  }, [activeTab]);
 
   return (
     <div className="flex items-center border-t border-gray-3 py-5 px-7.5">
@@ -51,8 +58,11 @@ const SingleItem = ({ item }) => {
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-green">
-                <a href="#"> {item?.designation?.label} </a>
+                <a href="#">{item?.designation?.label}</a>
               </h3>
+              {item.stock === quantity && (
+                <span className="text-red">Stock disponible atteint</span>
+              )}
             </div>
           </div>
         </div>

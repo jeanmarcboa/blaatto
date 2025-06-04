@@ -4,9 +4,12 @@ import PreLoader from "@/components/Common/BtnPreLoader";
 import Breadcrumb from "../Common/Breadcrumb";
 import { useParams, useRouter } from "next/navigation";
 import useUser from "@/hooks/useUser";
-import { selectTotalPrice } from "@/redux/features/cart-slice";
-import { useAppSelector } from "@/redux/store";
-import { useSelector } from "react-redux";
+import {
+  removeItemFromCart,
+  selectTotalPrice,
+} from "@/redux/features/cart-slice";
+import { useAppSelector, AppDispatch } from "@/redux/store";
+import { useSelector, useDispatch } from "react-redux";
 import Login from "./Login";
 import Shipping from "./Shipping";
 import ShippingMethod from "./ShippingMethod";
@@ -19,6 +22,7 @@ import accountAPI from "../../app/api/accountServices";
 import sepMillier from "../Common/numberSeparator";
 
 const Checkout = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { id } = useParams();
   const cartItems = useAppSelector((state) => state.cartReducer.items);
@@ -117,6 +121,8 @@ const Checkout = () => {
       email: billingInfo?.email,
       lastname: billingInfo?.lastname,
       firstname: billingInfo?.firstname,
+      deliveryAddress: billingInfo?.deliveryAddress,
+      status: "En traiment",
     };
     const orderNologged = {
       products: orderProducts,
@@ -139,9 +145,18 @@ const Checkout = () => {
           .buyOrder(response.data.id, payData, userInfo?.access_token)
           .then((req) => {
             console.log("Order paid successfully", req);
-            // router.push("/order/confirmation");
-            window.location.href = req.data?.data?.gateway_payment_url;
-            setLoading(false);
+
+            for (let i = 0; i < selectedCartItems.length; i++) {
+              const element = selectedCartItems[i];
+              dispatch(removeItemFromCart(element.id));
+
+              if (i == selectedCartItems.length - 1) {
+                setTimeout(() => {
+                  router.push("/order/confirmation");
+                  setLoading(false);
+                }, 2000);
+              }
+            }
           })
           .catch((error) => {
             console.error("Error paying order", error);
@@ -242,7 +257,7 @@ const Checkout = () => {
                       >
                         <div>
                           <p className="text-dark">
-                            {item.title} x {item.quantity}
+                            {item?.designation?.label} x {item.quantity}
                           </p>
                         </div>
                         <div>

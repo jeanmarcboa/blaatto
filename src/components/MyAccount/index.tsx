@@ -68,7 +68,7 @@ const MyAccount = () => {
     }
 
     accountAPI
-      .updateUserAccount(item, userInfo?.id)
+      .updateUserAccount(item, userInfo?.id, userInfo?.access_token)
       .then((response) => {
         // console.log(response);
         setLoading(false);
@@ -110,7 +110,7 @@ const MyAccount = () => {
     }
 
     accountAPI
-      .updateUserAccount(item, userInfo?.id)
+      .updateUserAccount(item, userInfo?.id, userInfo?.access_token)
       .then((response) => {
         console.log(response);
         setLoading(false);
@@ -153,7 +153,8 @@ const MyAccount = () => {
           oldPassword: passwordItem?.oldPassword,
           newPassword: passwordItem?.newPassword,
         },
-        userInfo?.id
+        userInfo?.id,
+        userInfo?.access_token
       )
       .then((response) => {
         console.log(response);
@@ -585,7 +586,7 @@ const MyAccount = () => {
                       Téléphone: {userInfo?.phoneNumber}
                     </p>
 
-                    <p className="flex gap-2.5 text-custom-sm">
+                    {/* <p className="flex gap-2.5 text-custom-sm">
                       <svg
                         className="fill-current mt-0.5"
                         width="18"
@@ -609,7 +610,7 @@ const MyAccount = () => {
                         </defs>
                       </svg>
                       Address: 7398 Smoke Ranch RoadLas Vegas, Nevada 89128
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>
@@ -718,7 +719,7 @@ const MyAccount = () => {
                       Téléphone: {userInfo?.phoneNumber}
                     </p>
 
-                    <p className="flex gap-2.5 text-custom-sm">
+                    {/* <p className="flex gap-2.5 text-custom-sm">
                       <svg
                         className="fill-current mt-0.5"
                         width="18"
@@ -742,7 +743,7 @@ const MyAccount = () => {
                         </defs>
                       </svg>
                       Adresse: 7398 Smoke Ranch RoadLas Vegas, Nevada 89128
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>

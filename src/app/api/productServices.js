@@ -33,7 +33,7 @@ export default {
   },
   productList: (query) => {
     // console.log(data);
-    return axios.get(`/api/products?${query ? "?" + query : ""}`);
+    return axios.get(`/api/products${query ? "?" + query : ""}`);
   },
   productListTopSelling: (uuid, query) => {
     // console.log(data);
