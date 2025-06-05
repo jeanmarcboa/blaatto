@@ -39,7 +39,7 @@ const OrderSummary = ({ cartItems, shopId }) => {
           </div>
 
           {/* <!-- product item --> */}
-          {cartItems?.map((item, key) => (
+          {cartItems?.map((item: any, key: number) => (
             <div
               key={key}
               className="flex items-center justify-between py-5 border-b border-gray-3"

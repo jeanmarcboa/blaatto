@@ -30,7 +30,7 @@ const ShopCreation = () => {
     e.preventDefault();
     setLoading(true);
 
-    Shop.createShop(formData)
+    Shop.createShop(formData, userInfo?.access_token)
       .then((response) => {
         console.log(response);
         setLoading(false);
