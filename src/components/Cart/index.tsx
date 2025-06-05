@@ -10,7 +10,7 @@ import Link from "next/link";
 const Cart = () => {
   const cartItems = useAppSelector((state) => state.cartReducer.items);
   const [groupedCart, setGroupedCart] = useState<any>([]);
-  const [activeTab, setActiveTab] = useState<any>("");
+  const [activeTab, setActiveTab] = useState<any>(0);
   const [selectedCart, setSelectedCart] = useState([]);
 
   const groupItemsByShop = (items: any) => {
@@ -36,18 +36,21 @@ const Cart = () => {
     return groupedItems;
   };
 
+  // useEffect(() => {
+  //   groupItemsByShop(cartItems);
+  //   const filterCart: any = groupItemsByShop(cartItems);
+  //   setGroupedCart(filterCart);
+  // }, [cartItems]);
   useEffect(() => {
     groupItemsByShop(cartItems);
     const filterCart: any = groupItemsByShop(cartItems);
     setGroupedCart(filterCart);
+    setSelectedCart(filterCart[activeTab]?.items);
   }, [cartItems]);
-  useEffect(() => {
-    groupItemsByShop(cartItems);
-    const filterCart: any = groupItemsByShop(cartItems);
-    setGroupedCart(filterCart);
-    setActiveTab(filterCart[0]?.shop?.id);
-    setSelectedCart(filterCart[0]?.items);
-  }, []);
+
+  // useEffect(() => {
+  //   setActiveTab(activeTab);
+  // }, []);
 
   return (
     <>
@@ -67,15 +70,15 @@ const Cart = () => {
             </div>
 
             <div className="flex flex-wrap items-center bg-white mb-4 rounded-[10px] shadow-1 gap-5 xl:gap-12.5 py-4.5 px-4 sm:px-6">
-              {groupedCart?.map((item, key) => (
+              {groupedCart?.map((item: any, key: number) => (
                 <button
                   key={key}
                   onClick={() => {
-                    setActiveTab(item?.shop?.id);
+                    setActiveTab(key);
                     setSelectedCart(item?.items);
                   }}
                   className={`font-medium lg:text-lg ease-out duration-200 hover:text-green relative before:h-0.5 before:bg-green before:absolute before:left-0 before:bottom-0 before:ease-out before:duration-200 hover:before:w-full ${
-                    activeTab === item?.shop?.id
+                    activeTab == key
                       ? "text-green before:w-full"
                       : "text-dark before:w-0"
                   }`}

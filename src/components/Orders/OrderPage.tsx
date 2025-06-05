@@ -241,14 +241,14 @@ export const DetailPage = () => {
                           </div>
 
                           <div className="min-w-[25%]">
-                            <p className="text-dark text-right">
+                            <p className="text-dark">
                               {sepMillier(item?.product?.price)}{" "}
                               {item?.product?.currency}
                             </p>
                           </div>
 
                           <div className="min-w-[10%]">
-                            <p className="text-dark text-right">
+                            <p className="text-dark text-center">
                               {item?.quantity}
                             </p>
                           </div>

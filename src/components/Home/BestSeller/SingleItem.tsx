@@ -90,9 +90,9 @@ const SingleItem = ({ item }: { item: any }) => {
 
           <span className="flex items-center justify-center gap-2 font-medium text-lg">
             <span className="text-dark">{sepMillier(item.price)} F</span>
-            <span className="text-dark-4 line-through">
+            {/* <span className="text-dark-4 line-through">
               {sepMillier(item.price)} F
-            </span>
+            </span> */}
           </span>
           <div className="flex flex-row justify-center gap-2 mt-2">
             <Link href={"/boutique/" + item?.shop?.id}>

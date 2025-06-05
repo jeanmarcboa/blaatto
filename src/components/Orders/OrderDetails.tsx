@@ -7,7 +7,7 @@ const OrderDetails = ({ orderItem }: any) => {
   return (
     <>
       <div className="px-7.5 w-full mt-4">
-        <p className="font-bold">Détails de la transaction:</p>
+        <p className="font-bold">Détails de la transaction :</p>
       </div>
       <div className="items-center justify-between py-4.5 px-7.5 hidden md:flex w-full">
         <div className="min-w-[113px]">
@@ -124,11 +124,11 @@ const OrderDetails = ({ orderItem }: any) => {
                 </div>
 
                 <div className="min-w-[25%]">
-                  <p className="text-dark text-right">Coût</p>
+                  <p className="text-dark">Coût</p>
                 </div>
 
                 <div className="min-w-[10%]">
-                  <p className="text-dark text-right">Qté</p>
+                  <p className="text-dark text-center">Qté</p>
                 </div>
                 <div className="min-w-[20%]">
                   <p className="text-dark text-right">Total</p>
@@ -137,18 +137,20 @@ const OrderDetails = ({ orderItem }: any) => {
               {orderItem?.OrderItem?.map((item: any, key: number) => (
                 <div className="flex items-center py-5.5 px-10" key={key}>
                   <div className="min-w-[45%]">
-                    <p className="text-dark">{item?.product?.label}</p>
+                    <p className="text-dark">
+                      {item?.product?.designation?.label ?? "--"}
+                    </p>
                   </div>
 
                   <div className="min-w-[25%]">
-                    <p className="text-dark text-right">
+                    <p className="text-dark">
                       {sepMillier(item?.product?.price)}{" "}
                       {item?.product?.currency}
                     </p>
                   </div>
 
                   <div className="min-w-[10%]">
-                    <p className="text-dark text-right">{item?.quantity}</p>
+                    <p className="text-dark text-center">{item?.quantity}</p>
                   </div>
                   <div className="min-w-[20%]">
                     <p className="text-dark text-right">
