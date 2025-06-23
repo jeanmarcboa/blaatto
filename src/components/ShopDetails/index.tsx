@@ -58,6 +58,13 @@ const ShopDetails = () => {
     );
   };
 
+  const handleChangeQuantity = (e: any) => {
+    const value = Number(e.target.value);
+    if (value <= product.stock) {
+      setQuantity(value);
+    }
+  };
+
   const handleAddToCart = () => {
     dispatch(
       addItemToCart({
@@ -81,11 +88,11 @@ const ShopDetails = () => {
   return (
     <>
       <Breadcrumb
-        title={product?.label ?? "Details de produit"}
+        title={product?.designation?.label ?? "Details de produit"}
         pages={["details de produit"]}
       />
       {loading && <PreLoader />}
-      {product?.title === "" ? (
+      {product?.designation?.label === "" ? (
         "Please add product"
       ) : (
         <>
@@ -339,6 +346,13 @@ const ShopDetails = () => {
                       </div>
                     </div>
 
+                    <div className="mb-4">
+                      {product.stock === quantity && (
+                        <span className="text-red">
+                          Stock disponible atteint
+                        </span>
+                      )}
+                    </div>
                     <div className="flex flex-wrap items-center gap-4.5">
                       <div className="flex items-center rounded-md border border-gray-3">
                         <button
@@ -363,9 +377,12 @@ const ShopDetails = () => {
                           </svg>
                         </button>
 
-                        <span className="flex items-center justify-center w-16 h-12 border-x border-gray-4">
-                          {quantity}
-                        </span>
+                        <input
+                          type="number"
+                          value={quantity}
+                          onChange={(e) => handleChangeQuantity(e)}
+                          className="flex items-center justify-center text-center w-25 h-11.5 p-4 border-x border-gray-4"
+                        />
 
                         <button
                           onClick={() => setQuantity(quantity + 1)}
