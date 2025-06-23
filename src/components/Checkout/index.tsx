@@ -73,6 +73,7 @@ const Checkout = () => {
   };
 
   useEffect(() => {
+    console.log("cartItems", cartItems);
     const filterCart: any = groupItemsByShop(cartItems);
     const results = filterCart.filter((line: any) => line?.shop?.id == id);
     // setGroupedCart(

@@ -11,6 +11,7 @@ const Cart = () => {
   const cartItems = useAppSelector((state) => state.cartReducer.items);
   const [groupedCart, setGroupedCart] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<any>(0);
+  const [shopId, setShopId] = useState<any>("");
   const [selectedCart, setSelectedCart] = useState([]);
 
   const groupItemsByShop = (items: any) => {
@@ -46,6 +47,7 @@ const Cart = () => {
     const filterCart: any = groupItemsByShop(cartItems);
     setGroupedCart(filterCart);
     setSelectedCart(filterCart[activeTab]?.items);
+    setShopId(filterCart[activeTab]?.shop?.id);
   }, [cartItems]);
 
   // useEffect(() => {
@@ -76,6 +78,7 @@ const Cart = () => {
                   onClick={() => {
                     setActiveTab(key);
                     setSelectedCart(item?.items);
+                    setShopId(item?.shop?.id);
                   }}
                   className={`font-medium lg:text-lg ease-out duration-200 hover:text-green relative before:h-0.5 before:bg-green before:absolute before:left-0 before:bottom-0 before:ease-out before:duration-200 hover:before:w-full ${
                     activeTab == key
@@ -125,7 +128,7 @@ const Cart = () => {
 
             <div className="flex flex-col lg:flex-row gap-7.5 xl:gap-11 mt-9">
               <Discount />
-              <OrderSummary cartItems={selectedCart} shopId={activeTab} />
+              <OrderSummary cartItems={selectedCart} shopId={shopId} />
             </div>
           </div>
         </section>

@@ -34,9 +34,18 @@ const SingleItem = ({ item, activeTab }) => {
     }
   };
 
+  const handleChangeQuantity = (e: any) => {
+    const value = Number(e.target.value);
+    if (value <= item.stock) {
+      setQuantity(value);
+      dispatch(updateCartItemQuantity({ id: item.id, quantity: value }));
+    }
+  };
+
   useEffect(() => {
-    setQuantity(1);
-    dispatch(updateCartItemQuantity({ id: item.id, quantity: 1 }));
+    // setQuantity(1);
+    // dispatch(updateCartItemQuantity({ id: item.id, quantity: 1 }));
+    setQuantity(item.quantity);
   }, [activeTab]);
 
   return (
@@ -94,9 +103,12 @@ const SingleItem = ({ item, activeTab }) => {
             </svg>
           </button>
 
-          <span className="flex items-center justify-center w-16 h-11.5 border-x border-gray-4">
-            {quantity}
-          </span>
+          <input
+            type="number"
+            value={quantity}
+            onChange={(e) => handleChangeQuantity(e)}
+            className="flex items-center justify-center text-center w-25 h-11.5 p-4 border-x border-gray-4"
+          />
 
           <button
             onClick={() => handleIncreaseQuantity()}

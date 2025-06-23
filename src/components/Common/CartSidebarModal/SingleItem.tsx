@@ -31,6 +31,9 @@ const SingleItem = ({ item, removeItemFromCart }) => {
             <a href="#"> {item?.designation?.label} </a>
           </h3>
           <p className="text-custom-sm">Prix: {sepMillier(item.price)} FCFA</p>
+          <p className="text-custom-sm">
+            Quantité: <strong>{item.quantity}</strong>
+          </p>
         </div>
       </div>
 
