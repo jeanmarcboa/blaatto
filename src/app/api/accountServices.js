@@ -42,6 +42,9 @@ export default {
   userAccountList: (param, token) => {
     return axios.get(`/api/accounts${param ?? ""}`, headersConfig(token));
   },
+  userAccountDetail: (uuid, token) => {
+    return axios.get(`/api/accounts/${uuid}`, headersConfig(token));
+  },
   uploadDocument: (data, token) => {
     return axios.post(`/api/accounts/documents`, data, headersConfig(token));
   },

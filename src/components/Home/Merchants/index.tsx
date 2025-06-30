@@ -85,7 +85,7 @@ const Categories = () => {
                 Boutiques
               </span>
               <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-                Découvrez nos marchands
+                Découvrez nos commerçants
               </h2>
             </div>
 

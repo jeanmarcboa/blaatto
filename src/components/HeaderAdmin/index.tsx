@@ -55,7 +55,9 @@ const Header = () => {
               className="flex-shrink-0 text-white font-bold text-heading text-2xl"
               href="/"
             >
-              ADMINISTRATION
+              {userInfo?.role?.code.toLowerCase() === "admin"
+                ? "ADMINISTRATION"
+                : "ESPACE COMMERÇANT"}
             </Link>
           </div>
 

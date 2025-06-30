@@ -15,8 +15,10 @@ export default function AddProduct() {
   const { userInfo } = useUser();
   const { code } = useParams();
   const [details, setDetails] = useState<any>([]);
+  const [deliveryFees, setDeliveryFees] = useState(0);
   const [status, setStatus] = useState("");
   const [pageLoading, setPageLoading] = useState(true);
+  const [fees, setFees] = useState(false);
   const [loading, setLoading] = useState(false);
   const [successFull, setSuccessfull] = useState(false);
   const [error, setError] = useState(false);
@@ -43,6 +45,11 @@ export default function AddProduct() {
       });
   };
 
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setDeliveryFees(Number(value));
+  };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -50,6 +57,8 @@ export default function AddProduct() {
     setSuccessfull(false);
     let data = {
       status: status,
+      merchantSupportedDelivery: fees,
+      deliveryFees: fees ? deliveryFees : 0,
     };
 
     // Envoi des données au backend
@@ -106,7 +115,7 @@ export default function AddProduct() {
                   </h2>
                 </div>
                 <div className="p-6 flex flex-row flex-wrap gap-4">
-                  <div className="md:w-[36%]">
+                  <div className="md:w-[30%]">
                     <h3 className="font-bold">Général</h3>
                     <div>
                       <p>Status actuel :</p>
@@ -119,7 +128,7 @@ export default function AddProduct() {
                       </span>
                     </div>
                   </div>
-                  <div className="md:w-[30%]">
+                  <div className="md:w-[32%]">
                     <h3 className="font-bold">Facturation</h3>
                     <div className="flex flex-col">
                       <span>
@@ -160,7 +169,7 @@ export default function AddProduct() {
                       </div>
                     </div>
                   </div>
-                  <div className="md:w-[30%]">
+                  <div className="md:w-[32%]">
                     <h3 className="font-bold">Expédition</h3>
                     <div className="flex flex-col">
                       <span>
@@ -199,6 +208,74 @@ export default function AddProduct() {
                             "--"}
                         </span>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Détails du Produit */}
+              <div className="rounded-xl bg-white shadow-1 border-[1px] border-solid border-gray-4 mt-4">
+                <div className="border-b-[1px] border-solid border-gray-4 pl-6 pr-6 pt-2 pb-2">
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Livraison
+                  </h2>
+                </div>
+                <div className="p-6">
+                  <div className="w-full overflow-x-auto">
+                    <div>
+                      <label
+                        htmlFor="feesInput"
+                        className="flex cursor-pointer select-none items-center gap-4"
+                      >
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            name="feesInput"
+                            id="feesInput"
+                            className="sr-only"
+                            onChange={() => setFees(!fees)}
+                          />
+                          <div
+                            className={`flex h-4 w-4 items-center justify-center rounded-md ${
+                              fees
+                                ? "border-4 border-green"
+                                : "border border-gray-4"
+                            }`}
+                          ></div>
+                        </div>
+                        <div
+                          className={`rounded-md border-[0.5px] py-3.5 px-5 ease-out duration-200 hover:bg-gray-2 hover:border-transparent hover:shadow-none ${
+                            fees
+                              ? "border-transparent bg-gray-2"
+                              : " border-gray-4 shadow-1"
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <div>
+                              <p>
+                                Le commerçant supporte les frais de livraison
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </label>
+                      {fees && (
+                        <div className="mt-5 mb-5">
+                          <label htmlFor="phoneNumber" className="block mb-2.5">
+                            Frais de transport
+                          </label>
+
+                          <input
+                            type="number"
+                            name="deliveryFees"
+                            id="deliveryFees"
+                            placeholder=""
+                            autoComplete="on"
+                            onChange={handleInputChange}
+                            className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

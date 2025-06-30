@@ -286,6 +286,12 @@ const Checkout = () => {
                         </p>
                       </div>
                     </div>
+                    <div className="mt-4">
+                      <p className="font-medium text-lg text-red">
+                        NB: Les frais de livraison ne sont pas inclus.
+                        Rapprochez vous du commerçant pour en accorder
+                      </p>
+                    </div>
                   </div>
                 </div>
 

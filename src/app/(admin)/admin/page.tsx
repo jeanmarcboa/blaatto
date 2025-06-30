@@ -98,14 +98,18 @@ export default function HomePage() {
   const handleChangeShop = (e: any) => {
     const value = e.target.value;
     setLoading(true);
-    let results = tmpOrders.filter((item: any) => item.shopId == value);
-    setProducts(results);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+
     if (value == "all") {
-      setProducts(tmpOrders);
+      setOrders(tmpOrders);
       setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    } else {
+      let results = tmpOrders.filter(
+        (item: any) => item.OrderItem[0].product.shopId == value
+      );
+      setTimeout(() => {
+        setOrders(results);
         setLoading(false);
       }, 1000);
     }
@@ -191,6 +195,29 @@ export default function HomePage() {
       <div className="bg-gradient-to-br from-indigo-300 via-purple-200 to-pink-300 min-h-screen">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Nombre de Boutiques */}
+            <div className="bg-[#800080] p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
+              <div className="flex items-center">
+                <FiHome className="w-12 h-12 text-white" />
+                <div className="ml-4 text-white">
+                  <h3 className="text-lg font-semibold">
+                    Boutiques en attente de validation
+                  </h3>
+                  <p className="text-2xl">{shops.length}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Nombre de Boutiques */}
+            <div className="bg-red p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
+              <div className="flex items-center">
+                <FiHome className="w-12 h-12 text-white" />
+                <div className="ml-4 text-white">
+                  <h3 className="text-lg font-semibold">Nombre de Boutiques</h3>
+                  <p className="text-2xl">{shops.length}</p>
+                </div>
+              </div>
+            </div>
             {/* Nombre de clients */}
             <div className="bg-teal p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
               <div className="flex items-center">
@@ -208,17 +235,6 @@ export default function HomePage() {
                 <div className="ml-4 text-white">
                   <h3 className="text-lg font-semibold">Nombre de marchants</h3>
                   <p className="text-2xl">{merchants.length}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Nombre de Boutiques */}
-            <div className="bg-red p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
-              <div className="flex items-center">
-                <FiHome className="w-12 h-12 text-white" />
-                <div className="ml-4 text-white">
-                  <h3 className="text-lg font-semibold">Nombre de Boutiques</h3>
-                  <p className="text-2xl">{shops.length}</p>
                 </div>
               </div>
             </div>
@@ -251,7 +267,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-12 gap-6 md:gap-6 mt-10">
+          <div className="grid grid-cols-12 gap-6 md:gap-6 mt-10 mb-10">
             {/* Dernière Commande */}
             <div className="col-span-12 xl:col-span-7 bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden transition duration-300">
               <div className="flex flex-row justify-between items-center p-6 w-full">
@@ -296,9 +312,9 @@ export default function HomePage() {
 
                   {/* <!-- wish item --> */}
                   {!loading &&
-                    orders.map((item, key) => (
-                      <SingleItem item={item} key={key} />
-                    ))}
+                    orders
+                      .slice(0, 6)
+                      .map((item, key) => <SingleItem item={item} key={key} />)}
                   {!loading && orders.length === 0 && (
                     <div className="flex items-center justify-center py-5.5 px-5">
                       <div className="min-w-[350px]">

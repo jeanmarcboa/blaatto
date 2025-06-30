@@ -70,19 +70,26 @@ const SingleItem = ({ item, openEditModal }) => {
 
       <div className="min-w-[20%] flex justify-end">
         <button
+          onClick={() => router.push("/admin/utilisateurs/view/" + item.id)}
+          aria-label="button for remove product from wishlist"
+          className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 mr-4 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-blue-light-5 hover:border-blue-light-4 hover:text-blue"
+        >
+          <FiEye />
+        </button>
+        <button
           onClick={() => openEditModal(item)}
           aria-label="button for remove product from wishlist"
           className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 mr-4 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-blue-light-5 hover:border-blue-light-4 hover:text-blue"
         >
           <FiEdit2 />
         </button>
-        <button
+        {/* <button
           onClick={() => handleRemoveFromWishlist()}
           aria-label="button for remove product from wishlist"
           className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-red-light-6 hover:border-red-light-4 hover:text-red"
         >
           <FiTrash />
-        </button>
+        </button> */}
       </div>
     </div>
   );

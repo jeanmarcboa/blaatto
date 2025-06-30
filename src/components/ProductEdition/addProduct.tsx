@@ -181,11 +181,9 @@ export const AddProduct = () => {
 
   const fetchUniteList = () => {
     const tmpUniteList = [
-      { label: "kg", id: "Kg" },
+      { label: "kilogramme (kg)", id: "Kg" },
+      { label: "Tonne (T)", id: "T" },
       { label: "litre (l)", id: "L" },
-      { label: "gramme (g)", id: "g" },
-      { label: "cl", id: "cl" },
-      { label: "ml", id: "ml" },
     ];
 
     setUniteList(tmpUniteList);
@@ -307,7 +305,7 @@ export const AddProduct = () => {
                   </div>
                   <div className="md:w-[48%]">
                     <label className="block text-sm font-medium text-gray-700">
-                      Devise <span className="text-red">*</span>
+                      Monnaie de paiement <span className="text-red">*</span>
                     </label>
                     <input
                       type="text"
@@ -332,7 +330,7 @@ export const AddProduct = () => {
                   </div>
                   <div className="md:w-[25%]">
                     <label className="block text-sm font-medium text-gray-700">
-                      Stock de sécurité <span className="text-red">*</span>
+                      Stock de sécurité
                     </label>
                     <input
                       type="number"

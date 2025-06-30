@@ -190,9 +190,9 @@ export default function HomePage() {
               </Message>
             ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             {/* Nombre de Boutiques */}
-            <div className="bg-green p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
+            {/* <div className="bg-green p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
               <div className="flex items-center">
                 <FiHome className="w-12 h-12 text-white" />
                 <div className="ml-4 text-white">
@@ -200,7 +200,7 @@ export default function HomePage() {
                   <p className="text-2xl">{shops.length}</p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Nombre de Produits */}
             <div className="bg-blue p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
@@ -230,25 +230,13 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-12 gap-6 md:gap-6 mt-10">
+          <div className="grid grid-cols-12 gap-6 md:gap-6 mt-10 mb-10">
             {/* Dernière Commande */}
             <div className="col-span-12 xl:col-span-7 bg-white rounded-[10px] border border-gray-4 dark:border-gray-800 overflow-hidden transition duration-300">
               <div className="flex flex-row justify-between items-center p-6 w-full">
                 <h3 className="text-lg font-semibold text-dark">
                   Dernière Commande
                 </h3>
-                <select
-                  name="branche"
-                  onChange={handleChangeShop}
-                  className="block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option value="all">Toutes les boutiques</option>
-                  {shops.map((shop: any) => (
-                    <option key={shop?.id} value={shop?.id}>
-                      {shop?.label}
-                    </option>
-                  ))}
-                </select>
               </div>
 
               <div className="w-full overflow-x-auto">
@@ -275,9 +263,9 @@ export default function HomePage() {
 
                   {/* <!-- wish item --> */}
                   {!loading &&
-                    orders.map((item, key) => (
-                      <SingleItem item={item} key={key} />
-                    ))}
+                    orders
+                      .slice(0, 6)
+                      .map((item, key) => <SingleItem item={item} key={key} />)}
                   {!loading && orders.length === 0 && (
                     <div className="flex items-center justify-center py-5.5 px-5">
                       <div className="min-w-[350px]">

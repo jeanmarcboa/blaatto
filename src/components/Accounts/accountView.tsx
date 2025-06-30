@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { FiBriefcase, FiUser, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiBriefcase, FiUser, FiEye, FiEyeOff, FiFile } from "react-icons/fi";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import Image from "next/image";
 import useUser from "@/hooks/useUser";
@@ -10,12 +10,13 @@ import useUser from "@/hooks/useUser";
 import accountAPI from "@/app/api/accountServices";
 
 const MyAccount = () => {
+  const { code } = useParams();
   const { userInfo, isLoggedIn, setLoginData, deleteLoginData } = useUser();
 
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [addressModal, setAddressModal] = useState(false);
-  const [item, setItem] = useState(userInfo);
+  const [item, setItem] = useState<any>([]);
   const [passwordItem, setpasswordItem] = useState({
     oldPassword: "",
     newPassword: "",
@@ -169,10 +170,20 @@ const MyAccount = () => {
       });
   };
 
+  const accountInfo = () => {
+    accountAPI
+      .userAccountDetail(code, userInfo?.access_token)
+      .then((response) => {
+        setItem(response.data);
+      });
+  };
+
   useEffect(() => {
     if (!isLoggedIn) {
       router.push("/signin");
       return;
+    } else {
+      accountInfo();
     }
   }, [isLoggedIn]);
 
@@ -187,7 +198,7 @@ const MyAccount = () => {
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-col xl:flex-row gap-7.5">
             {/* <!-- details tab content start --> */}
-            <div className="xl:max-w-[770px] w-full block ">
+            <div className="xl:max-w-[60%] w-full block ">
               <p className="font-medium text-xl sm:text-2xl text-dark mb-7">
                 Informations générales
               </p>
@@ -208,6 +219,24 @@ const MyAccount = () => {
                         {errorMessage}
                       </div>
                     )}
+                  </div>
+                  <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
+                    <div className="w-full">
+                      <label htmlFor="email" className="block mb-2.5">
+                        Status
+                      </label>
+
+                      <select
+                        name="enabled"
+                        defaultValue={item?.enabled ? "1" : "0"}
+                        onChange={handleInputChange}
+                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      >
+                        <option>---</option>
+                        <option value="1">Actif</option>
+                        <option value="0">Désactivé</option>
+                      </select>
+                    </div>
                   </div>
                   <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                     <div className="w-full">
@@ -299,155 +328,38 @@ const MyAccount = () => {
                   Votre nom sera affiché ainsi dans la section Compte et dans
                   les avis.
                 </p>
-
-                <p className="font-medium text-xl sm:text-2xl text-dark mb-7">
-                  Changement de mot de passe
-                </p>
-
+              </form>
+            </div>
+            <div className="xl:max-w-[40%] w-full block ">
+              <p className="font-medium text-xl sm:text-2xl text-dark mb-7">
+                Pièces justificatives
+              </p>
+              <form>
                 <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
-                  <div className="flex items-center justify-center space-x-3">
-                    {/* //Display message */}
-                    {type === "password" && successFull && (
-                      <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
-                        <span className="font-medium">Bravo !</span> Mot de
-                        passe modifié avec succès.
-                      </div>
-                    )}
-
-                    {type === "password" && error && (
-                      <div className="p-4 mb-4 text-sm text-red rounded-lg bg-red-light-5 dark:bg-gray-800 dark:text-red-400 w-full">
-                        <span className="font-medium">Oops !</span>{" "}
-                        {errorMessage}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-5">
-                    <label htmlFor="oldPassword" className="block mb-2.5">
-                      Ancien mot de passe
-                    </label>
-
-                    <input
-                      type="password"
-                      name="oldPassword"
-                      id="oldPassword"
-                      autoComplete="on"
-                      onChange={handlePasswordInputChange}
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                    />
-                  </div>
-
-                  <div className="mb-5">
-                    <label htmlFor="newPassword" className="block mb-2.5">
-                      Nouveau mot de passe
-                    </label>
-
-                    <div className="relative">
-                      <input
-                        type={isVisible ? "text" : "password"}
-                        name="newPassword"
-                        id="newPassword"
-                        onChange={handlePasswordInputChange}
-                        placeholder="Entrez votre mot de passe"
-                        autoComplete="on"
-                        className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                      />
-                      <button
-                        className="absolute inset-y-0 end-0 flex items-center z-20 px-2.5 cursor-pointer text-gray-400 rounded-e-md focus:outline-none focus-visible:text-indigo-500 hover:text-indigo-500 transition-colors"
-                        type="button"
-                        onClick={toggleVisibility}
-                      >
-                        {isVisible ? (
-                          <FiEyeOff size={20} aria-hidden="true" />
-                        ) : (
-                          <FiEye size={20} aria-hidden="true" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="mb-5">
-                    <label htmlFor="confirmPassword" className="block mb-2.5">
-                      Confirmer le nouveau mot de passe
-                    </label>
-
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      id="confirmPassword"
-                      autoComplete="on"
-                      onChange={handlePasswordInputChange}
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                    />
-                  </div>
-
-                  <div className="mb-5">
-                    <div className="mt-2 text-sm">
-                      <p
-                        className={`font-medium ${
-                          strength ? "text-green" : "text-red"
-                        }`}
-                      >
-                        Mot de passe : {strength ? "Fort" : "Faible"}
-                      </p>
-                      <ul className="mt-2 space-y-1 text-gray-700">
-                        <li
-                          className={
-                            criteria.minLength ? "text-green" : "text-red"
-                          }
+                  <div className="flex flex-col gap-4">
+                    {/* //Display attachment */}
+                    {item?.Document?.length > 0 &&
+                      item?.Document.map((item: any, key: number) => (
+                        <div
+                          className="flex flex-row justify-between bg-gray-2 p-4 rounded-md"
+                          key={key}
                         >
-                          {criteria.minLength ? "✓" : "✗"} Minimum 8 caractères
-                        </li>
-                        <li
-                          className={
-                            criteria.hasUppercase ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasUppercase ? "✓" : "✗"} Une majuscule
-                          (A-Z)
-                        </li>
-                        <li
-                          className={
-                            criteria.hasLowercase ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasLowercase ? "✓" : "✗"} Une minuscule
-                          (a-z)
-                        </li>
-                        <li
-                          className={
-                            criteria.hasNumber ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasNumber ? "✓" : "✗"} Un chiffre (0-9)
-                        </li>
-                        <li
-                          className={
-                            criteria.hasSpecialChar ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasSpecialChar ? "✓" : "✗"} Un caractère
-                          spécial (@$!%*?&)
-                        </li>
-                      </ul>
-                    </div>
+                          <div className="flex flex-row space-x-3">
+                            <FiFile className="text-3xl" />
+                            <p>{item.key}</p>
+                          </div>
+                          <div>
+                            <a
+                              href={item.url}
+                              className="flex flex-row space-x-2 items-center gap-2 text-sm bg-green-light-6 py-2 px-4 rounded-md text-green cursor-pointer"
+                              target="_blank"
+                            >
+                              <FiEye /> Voir
+                            </a>
+                          </div>
+                        </div>
+                      ))}
                   </div>
-
-                  <button
-                    type="submit"
-                    onClick={handlePasswordSubmit}
-                    disabled={strength ? false : true}
-                    className={`inline-flex font-medium text-white ${
-                      strength ? "bg-green" : "bg-dark-5"
-                    } py-3 px-7 rounded-md ease-out duration-200   ${
-                      strength && "hover:bg-green-dark"
-                    }`}
-                  >
-                    {type == "password" && loading ? (
-                      <PreLoader />
-                    ) : (
-                      "Changer le mot de passe"
-                    )}
-                  </button>
                 </div>
               </form>
             </div>

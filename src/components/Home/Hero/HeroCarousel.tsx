@@ -26,7 +26,7 @@ const HeroCarousal = () => {
       modules={[Autoplay, Pagination]}
       className="hero-carousel"
     >
-      <SwiperSlide>
+      {/* <SwiperSlide>
         <div className="flex items-center pt-6 sm:pt-0 flex-col-reverse sm:flex-row">
           <div>
             <img
@@ -36,21 +36,20 @@ const HeroCarousal = () => {
             />
           </div>
         </div>
+      </SwiperSlide> */}
+      <SwiperSlide>
+        <div
+          className={
+            "bg-[url('/images/hero/femme-1.jpg')] bg-top bg-no-repeat h-[640px] bg-cover"
+          }
+        />
       </SwiperSlide>
       <SwiperSlide>
         <div
           className={
-            "bg-[url('/images/hero/file-20210607-80132-1nnptvo.jpg')] bg-center bg-no-repeat h-[570px] bg-cover"
+            "bg-[url('/images/hero/file-20210607-80132-1nnptvo.jpg')] bg-center bg-no-repeat h-[640px] bg-cover"
           }
-        >
-          {/* <div>
-            <img
-              src="/images/hero/file-20210607-80132-1nnptvo.jpg"
-              alt="headphone"
-              style={{ width: "auto", height: "100%" }}
-            />
-          </div> */}
-        </div>
+        />
       </SwiperSlide>
     </Swiper>
   );

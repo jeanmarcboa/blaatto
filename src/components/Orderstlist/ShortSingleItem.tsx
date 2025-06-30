@@ -53,12 +53,12 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center gap-1.5">
           <p
             className={`inline-block text-custom-sm  py-0.5 px-2.5 rounded-[30px] capitalize ${
-              item.deliver
+              item?.status?.toLowerCase() === "livré"
                 ? "text-green bg-green-light-6"
+                : item?.status?.toLowerCase() === "en cours"
+                ? "text-yellow bg-yellow-light-4"
                 : !item.deliver
                 ? "text-red bg-red-light-6"
-                : item.status === "processing"
-                ? "text-yellow bg-yellow-light-4"
                 : "Unknown Status"
             }`}
           >

@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import PreLoader from "@/components/Common/PreLoader";
 import Breadcrumb from "../Common/Breadcrumb";
 import { useParams, usePathname } from "next/navigation";
+import { FiPhone } from "react-icons/fi";
+import Image from "next/image";
 
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
@@ -60,20 +63,76 @@ const ShopWithoutSidebar = () => {
     }
   }, []);
 
-  return (
-    <>
-      <Breadcrumb
-        title={
-          `Boutique : ${currentShop?.label}` ?? "Explorer tous les produits"
-        }
-        pages={["boutique/", "Explorer tous les produits"]}
-      />
-      <div className="lg:max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        <div className="w-full p-4 h-20">
-          <h3 className="font-medium text-lg text-dark"> À propos </h3>
-          <p> {currentShop?.description} </p>
+  const InternalBreadcrumb = ({ title, pages }) => {
+    return (
+      <div className="overflow-hidden shadow-breadcrumb pt-[209px] sm:pt-[155px] lg:pt-[95px] xl:pt-[165px]">
+        <div className="border-t border-gray-3">
+          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 py-5 xl:py-10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <h1 className="font-semibold text-dark text-xl sm:text-2xl xl:text-custom-2">
+                Boutique
+              </h1>
+
+              <ul className="flex items-center gap-2">
+                <li className="text-custom-sm hover:text-green">
+                  <Link href="/">Home /</Link>
+                </li>
+
+                {pages.length > 0 &&
+                  pages.map((page, key) => (
+                    <li
+                      className="text-custom-sm last:text-green capitalize"
+                      key={key}
+                    >
+                      {page}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-gray-3">
+          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 py-5 xl:py-10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="w-[40%]">
+                <div className="max-w-[130px] w-full bg-[#F2F3F8] h-32.5 rounded-full flex items-center justify-center mb-4">
+                  <Image
+                    src={"/images/sellers/marketplace.png"}
+                    alt="Category"
+                    width={82}
+                    height={62}
+                  />
+                </div>
+                <h1 className="font-semibold text-dark text-xl sm:text-2xl xl:text-custom-2">
+                  {title}
+                </h1>
+              </div>
+
+              <div className="w-full p-4 m-h-20">
+                <h3 className="font-medium text-lg text-dark"> À propos </h3>
+                <p> {currentShop?.description} </p>
+                <a
+                  className="inline-flex items-center gap-3 my-5 py-[9px] pl-4 pr-8.5 text-white rounded-md bg-green ease-out duration-200 hover:bg-opacity-95"
+                  href={`Tel:${currentShop?.phoneNumber}`}
+                >
+                  <FiPhone />
+                  Appeler le commerçant
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    );
+  };
+
+  return (
+    <>
+      <InternalBreadcrumb
+        title={`${currentShop?.label}` ?? "Explorer tous les produits"}
+        pages={["boutique/", "Explorer tous les produits"]}
+      />
+
       {loading ? (
         <PreLoader />
       ) : (

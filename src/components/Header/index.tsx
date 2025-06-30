@@ -1,6 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import {
+  useParams,
+  useRouter,
+  useSearchParams,
+  redirect,
+} from "next/navigation";
 import CustomSelect from "./CustomSelect";
 import { menuData } from "./menuData";
 import Dropdown from "./Dropdown";
@@ -14,6 +20,7 @@ import Image from "next/image";
 import categoriesAPI from "@/app/api/categoriesServices";
 
 const Header = () => {
+  const router = useRouter();
   const { isLoggedIn, userInfo, deleteLoginData } = useUser();
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,6 +35,15 @@ const Header = () => {
     openCartModal();
   };
 
+  const handleSearchClick = (e) => {
+    e.preventDefault();
+    if (searchQuery.length >= 2) {
+      setTimeout(() => {
+        router.push("/shop?title=" + searchQuery);
+      }, 600);
+    }
+  };
+
   // Sticky menu
   const handleStickyMenu = () => {
     if (window.scrollY >= 80) {
@@ -40,16 +56,6 @@ const Header = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
   });
-
-  const options = [
-    { label: "Catégories", value: "0" },
-    { label: "Fruits", value: "1" },
-    { label: "Legumes", value: "2" },
-    { label: "Graines", value: "3" },
-    { label: "Fleurs", value: "4" },
-    { label: "Plantes", value: "5" },
-    { label: "Autres", value: "6" },
-  ];
 
   const fetchedCategories = () => {
     categoriesAPI
@@ -119,7 +125,7 @@ const Header = () => {
 
                     <button
                       id="search-btn"
-                      aria-label="Search"
+                      onClick={handleSearchClick}
                       className="flex items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 ease-in duration-200 hover:text-green"
                     >
                       <svg

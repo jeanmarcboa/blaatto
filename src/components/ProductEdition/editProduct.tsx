@@ -207,11 +207,9 @@ export const EditProduct = () => {
 
   const fetchUniteList = () => {
     const tmpUniteList = [
-      { label: "kg", id: "Kg" },
+      { label: "kilogramme (kg)", id: "Kg" },
+      { label: "Tonne (T)", id: "T" },
       { label: "litre (l)", id: "L" },
-      { label: "gramme (g)", id: "g" },
-      { label: "cl", id: "cl" },
-      { label: "ml", id: "ml" },
     ];
 
     setUniteList(tmpUniteList);
@@ -328,7 +326,7 @@ export const EditProduct = () => {
                   </div>
                   <div className="md:w-[48%]">
                     <label className="block text-sm font-medium text-gray-700">
-                      Devise
+                      Monnaie de paiement
                     </label>
                     <input
                       type="text"

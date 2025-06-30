@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
@@ -14,6 +14,7 @@ import sepMillier from "./numberSeparator";
 
 const ProductItem = ({ item }: { item: any }) => {
   const { openModal } = useModalContext();
+  const [img, setImg] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -46,9 +47,19 @@ const ProductItem = ({ item }: { item: any }) => {
     dispatch(updateproductDetails({ ...item }));
   };
 
+  useEffect(() => {
+    const initImg = item?.Product_Photo?.[0]?.photo?.url;
+    if (initImg) {
+      const imgTmp = initImg.split("?");
+      console.log(imgTmp[0]);
+      console.log(imgTmp[1]);
+      setImg(imgTmp[0]);
+    }
+  }, []);
+
   return (
     <div className="group">
-      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] min-h-[270px] mb-4">
+      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] h-[200px] p-5 mb-4">
         <Link href={"/shop-details/" + item?.id}>
           <Image
             src={
@@ -56,9 +67,26 @@ const ProductItem = ({ item }: { item: any }) => {
               "/images/products/default-placeholder.png"
             }
             alt=""
-            width={250}
-            height={250}
+            width={230}
+            height={187}
+            style={{
+              objectFit: "cover",
+            }}
           />
+          {/* <div
+            className={`
+              bg-[url('${
+                item?.Product_Photo?.[0]?.photo?.url
+                  ? img
+                  : "/images/products/default-placeholder.png"
+              }')] bg-center bg-no-repeat w-[250px] h-[187px] bg-cover
+            `}
+          /> */}
+          {/* <div
+            className={
+              "bg-[url('/images/products/default-placeholder.png')] bg-center bg-no-repeat h-[187px] bg-cover"
+            }
+          /> */}
         </Link>
 
         <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
