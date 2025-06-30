@@ -17,6 +17,7 @@ import {
   FiLogOut,
   FiImage,
   FiChevronRight,
+  FiActivity,
 } from "react-icons/fi";
 import { Metadata } from "next";
 
@@ -52,11 +53,11 @@ export default function SideBar() {
       title: "Produits",
       icon: <FiArchive />,
       subMenu: [
-        { title: "Tous les produits", link: "/admin/product/product-list" },
-        {
-          title: "Ajouter un nouveau produit",
-          link: "/admin/product/add-product",
-        },
+        // { title: "Tous les produits", link: "/admin/product/product-list" },
+        // {
+        //   title: "Ajouter un nouveau produit",
+        //   link: "/admin/product/add-product",
+        // },
         { title: "Désignations", link: "/admin/product/labels" },
         { title: "Catégories", link: "/admin/product/categories" },
       ],
@@ -74,6 +75,12 @@ export default function SideBar() {
       icon: <FiLayers />,
       link: "/admin/transactions/list",
       path: "/admin/transactions",
+    },
+    {
+      title: "Activités",
+      icon: <FiActivity />,
+      link: "/admin/activites",
+      path: "/admin/activites",
     },
     // { title: "Paiement", icon: <FiCreditCard />, link: "/signup" },
   ];

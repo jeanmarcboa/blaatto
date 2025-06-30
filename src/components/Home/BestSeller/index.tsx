@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import PreLoader from "@/components/Common/BtnPreLoader";
-import SingleItem from "./SingleItem";
+// import SingleItem from "./SingleItem";
+import SingleItem from "@/components/Common/ProductItem";
 import Image from "next/image";
 import Link from "next/link";
 import shopData from "@/components/Shop/shopData";
@@ -47,7 +48,7 @@ const BestSeller = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7.5">
           {/* <!-- Best Sellers item --> */}
           {products.slice(0, 7).map((item, key) => (
             <SingleItem item={item} key={key} />

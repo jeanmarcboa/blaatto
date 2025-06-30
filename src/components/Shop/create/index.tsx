@@ -17,6 +17,7 @@ const ShopCreation = () => {
   const [formData, setFormData] = useState({
     label: "",
     phoneNumber: "",
+    commercialRegister: "",
     accountId: userInfo.id,
   });
   const [loading, setLoading] = useState(false);
@@ -44,7 +45,7 @@ const ShopCreation = () => {
 
   return (
     <>
-      <section className="overflow-hidden py-40 px-20">
+      <section className="overflow-hidden py-10 px-20">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7.5 xl:p-11">
             <div className="text-center mb-11">
@@ -69,6 +70,21 @@ const ShopCreation = () => {
                     name="label"
                     id="label"
                     placeholder="Entrez le nom de votre boutique"
+                    onChange={handleInputChange}
+                    className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <label htmlFor="email" className="block mb-2.5">
+                    Numéro de registre de commerce
+                  </label>
+
+                  <input
+                    type="text"
+                    name="commercialRegister"
+                    id="commercialRegister"
+                    placeholder="Entrez le numéro de registre de commerce"
                     onChange={handleInputChange}
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />

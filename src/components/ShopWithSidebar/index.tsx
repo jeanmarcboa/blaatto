@@ -26,7 +26,9 @@ import shopAPI from "@/app/api/shopServices";
 const ShopWithSidebar = () => {
   const searchParams = useSearchParams();
   const cat = searchParams.get("cat");
+  const title = searchParams.get("title");
   const [products, setProducts] = useState([]);
+  const [tmpProducts, setTmpProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [shopList, setShopList] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -152,6 +154,7 @@ const ShopWithSidebar = () => {
       .searchProductList(data)
       .then((response) => {
         setProducts(response.data);
+        setTmpProducts(response.data);
         setTimeout(() => {
           setLoading(false);
         }, 1000);
@@ -199,8 +202,28 @@ const ShopWithSidebar = () => {
     productAPI
       .productList(params)
       .then((response) => {
-        setProducts(response.data);
-        setLoading(false);
+        console.log("title:", title);
+        if (title) {
+          let results = [];
+          for (let i = 0; i < response.data.length; i++) {
+            const element = response.data[i];
+            const CONDITION = element?.designation?.label
+              .toLowerCase()
+              .includes(title.toLowerCase());
+            if (CONDITION) {
+              results.push(element);
+            }
+            if (i === response.data.length - 1) {
+              setProducts(results);
+              setTmpProducts(results);
+              setLoading(false);
+            }
+          }
+        } else {
+          setProducts(response.data);
+          setTmpProducts(response.data);
+          setLoading(false);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -217,7 +240,7 @@ const ShopWithSidebar = () => {
     } else {
       fetchedProducts();
     }
-  }, [cat]);
+  }, [cat, title]);
 
   useEffect(() => {
     fetchedCategories();

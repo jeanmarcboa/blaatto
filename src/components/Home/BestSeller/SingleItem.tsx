@@ -111,7 +111,7 @@ const SingleItem = ({ item }: { item: any }) => {
           </div>
         </div>
 
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center relative overflow-hidden h-[180px]">
           <Link href={"/shop-details/" + item?.id}>
             <Image
               src={
@@ -121,6 +121,9 @@ const SingleItem = ({ item }: { item: any }) => {
               alt=""
               width={280}
               height={280}
+              style={{
+                objectFit: "cover",
+              }}
             />
           </Link>
         </div>

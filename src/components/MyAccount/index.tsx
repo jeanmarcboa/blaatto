@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useParams, useRouter } from "next/navigation";
+import { FiBriefcase, FiUser, FiEye, FiEyeOff } from "react-icons/fi";
 import Breadcrumb from "../Common/Breadcrumb";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import Image from "next/image";
@@ -28,6 +29,15 @@ const MyAccount = () => {
   const [successFull, setSuccessfull] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const [strength, setStrength] = useState(false);
+  const [criteria, setCriteria] = useState({
+    minLength: false,
+    hasUppercase: false,
+    hasLowercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  });
 
   const openAddressModal = () => {
     setAddressModal(true);
@@ -44,6 +54,29 @@ const MyAccount = () => {
   const handlePasswordInputChange = (e: any) => {
     const { name, value } = e.target;
     setpasswordItem({ ...passwordItem, [name]: value });
+    if (name === "newPassword") {
+      checkPasswordStrength(value);
+    }
+  };
+
+  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+
+  const checkPasswordStrength = (password) => {
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (strongPasswordRegex.test(password)) {
+      setStrength(true);
+    } else {
+      setStrength(false);
+    }
+
+    setCriteria({
+      minLength: password.length >= 8,
+      hasUppercase: /[A-Z]/.test(password),
+      hasLowercase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[@$!%*?&]/.test(password),
+    });
   };
 
   const handleInfoSubmit = async (e: any) => {
@@ -905,15 +938,28 @@ const MyAccount = () => {
                     <label htmlFor="newPassword" className="block mb-2.5">
                       Nouveau mot de passe
                     </label>
-
-                    <input
-                      type="password"
-                      name="newPassword"
-                      id="newPassword"
-                      autoComplete="on"
-                      onChange={handlePasswordInputChange}
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                    />
+                    <div className="relative">
+                      <input
+                        type={isVisible ? "text" : "password"}
+                        name="newPassword"
+                        id="newPassword"
+                        onChange={handlePasswordInputChange}
+                        placeholder="Entrez votre mot de passe"
+                        autoComplete="on"
+                        className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      />
+                      <button
+                        className="absolute inset-y-0 end-0 flex items-center z-20 px-2.5 cursor-pointer text-gray-400 rounded-e-md focus:outline-none focus-visible:text-indigo-500 hover:text-indigo-500 transition-colors"
+                        type="button"
+                        onClick={toggleVisibility}
+                      >
+                        {isVisible ? (
+                          <FiEyeOff size={20} aria-hidden="true" />
+                        ) : (
+                          <FiEye size={20} aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="mb-5">
@@ -930,11 +976,67 @@ const MyAccount = () => {
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
                   </div>
+                  <div className="mb-5">
+                    <div className="mt-2 text-sm">
+                      <p
+                        className={`font-medium ${
+                          strength ? "text-green" : "text-red"
+                        }`}
+                      >
+                        Mot de passe : {strength ? "Fort" : "Faible"}
+                      </p>
+                      <ul className="mt-2 space-y-1 text-gray-700">
+                        <li
+                          className={
+                            criteria.minLength ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.minLength ? "✓" : "✗"} Minimum 8 caractères
+                        </li>
+                        <li
+                          className={
+                            criteria.hasUppercase ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasUppercase ? "✓" : "✗"} Une majuscule
+                          (A-Z)
+                        </li>
+                        <li
+                          className={
+                            criteria.hasLowercase ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasLowercase ? "✓" : "✗"} Une minuscule
+                          (a-z)
+                        </li>
+                        <li
+                          className={
+                            criteria.hasNumber ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasNumber ? "✓" : "✗"} Un chiffre (0-9)
+                        </li>
+                        <li
+                          className={
+                            criteria.hasSpecialChar ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasSpecialChar ? "✓" : "✗"} Un caractère
+                          spécial (@$!%*?&)
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
 
                   <button
                     type="submit"
                     onClick={handlePasswordSubmit}
-                    className="inline-flex font-medium text-white bg-green py-3 px-7 rounded-md ease-out duration-200 hover:bg-green-dark"
+                    disabled={strength ? false : true}
+                    className={`inline-flex font-medium text-white ${
+                      strength ? "bg-green" : "bg-dark-5"
+                    } py-3 px-7 rounded-md ease-out duration-200  ${
+                      strength && "hover:bg-green-dark"
+                    }`}
                   >
                     {type == "password" && loading ? (
                       <PreLoader />

@@ -1,17 +1,17 @@
 import React from "react";
-import AccountView from "@/components/Accounts/accountView";
+import { Orderstlist } from "@/components/ActivitiesList";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mon compte | Blaatto",
-  description: "Mon compte",
+  title: "Liste des transactions | Blaatto",
+  description: "This is Wishlist Page for NextCommerce Template",
   // other metadata
 };
 
 const WishlistPage = () => {
   return (
     <main>
-      <AccountView />
+      <Orderstlist />
     </main>
   );
 };

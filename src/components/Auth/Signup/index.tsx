@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { FiBriefcase, FiUser } from "react-icons/fi";
+import { FiBriefcase, FiUser, FiEye, FiEyeOff } from "react-icons/fi";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import fr from "react-phone-number-input/locale/fr";
@@ -34,12 +34,24 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [successFull, setSuccessfull] = useState(false);
   const [error, setError] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [strength, setStrength] = useState(false);
+  const [criteria, setCriteria] = useState({
+    minLength: false,
+    hasUppercase: false,
+    hasLowercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  });
   const [errorMessage, setErrorMessage] = useState("");
   const { firstname, lastname, email, phoneNumber, password, username } =
     formData;
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (name === "password") {
+      checkPasswordStrength(value);
+    }
   };
 
   const handleFileChange = (e: any) => {
@@ -106,7 +118,7 @@ const Signup = () => {
 
           // connect user after sign up
           let data = {
-            username: username,
+            username: username.toLocaleLowerCase(),
             password: password,
           };
 
@@ -120,7 +132,7 @@ const Signup = () => {
                 formData.append("file", document?.cni);
                 formData.append("documentTypeId", CNI_ID.id);
 
-                Account.uploadDocument(formData)
+                Account.uploadDocument(formData, res.data.access_token)
                   .then((response) => {
                     console.log(response);
                   })
@@ -134,7 +146,7 @@ const Signup = () => {
                 formData.append("file", document?.cert);
                 formData.append("documentTypeId", CERT_ID.id);
 
-                Account.uploadDocument(formData)
+                Account.uploadDocument(formData, res.data.access_token)
                   .then((response) => {
                     console.log(response);
                   })
@@ -168,6 +180,26 @@ const Signup = () => {
   const handleProfilTypeChange = (value: number) => {
     console.log(value);
     setProfilTypes(value);
+  };
+
+  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+
+  const checkPasswordStrength = (password) => {
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (strongPasswordRegex.test(password)) {
+      setStrength(true);
+    } else {
+      setStrength(false);
+    }
+
+    setCriteria({
+      minLength: password.length >= 8,
+      hasUppercase: /[A-Z]/.test(password),
+      hasLowercase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[@$!%*?&]/.test(password),
+    });
   };
 
   useEffect(() => {
@@ -369,6 +401,9 @@ const Signup = () => {
                     <PhoneInput
                       defaultCountry="CI"
                       labels={fr}
+                      international
+                      countryCallingCodeEditable={false}
+                      // withCountryCallingCode
                       placeholder="Entrez votre numéro de téléphone"
                       value={formData.phoneNumber}
                       className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
@@ -382,16 +417,77 @@ const Signup = () => {
                     <label htmlFor="password" className="block mb-2.5">
                       Mot de passe <span className="text-red">*</span>
                     </label>
-
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      onChange={handleInputChange}
-                      placeholder="Entrez votre mot de passe"
-                      autoComplete="on"
-                      className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                    />
+                    <div className="relative">
+                      <input
+                        type={isVisible ? "text" : "password"}
+                        name="password"
+                        id="password"
+                        onChange={handleInputChange}
+                        placeholder="Entrez votre mot de passe"
+                        autoComplete="on"
+                        className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      />
+                      <button
+                        className="absolute inset-y-0 end-0 flex items-center z-20 px-2.5 cursor-pointer text-gray-400 rounded-e-md focus:outline-none focus-visible:text-indigo-500 hover:text-indigo-500 transition-colors"
+                        type="button"
+                        onClick={toggleVisibility}
+                      >
+                        {isVisible ? (
+                          <FiEyeOff size={20} aria-hidden="true" />
+                        ) : (
+                          <FiEye size={20} aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
+                    <div className="mt-2 text-sm">
+                      <p
+                        className={`font-medium ${
+                          strength ? "text-green" : "text-red"
+                        }`}
+                      >
+                        Mot de passe : {strength ? "Fort" : "Faible"}
+                      </p>
+                      <ul className="mt-2 space-y-1 text-gray-700">
+                        <li
+                          className={
+                            criteria.minLength ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.minLength ? "✓" : "✗"} Minimum 8 caractères
+                        </li>
+                        <li
+                          className={
+                            criteria.hasUppercase ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasUppercase ? "✓" : "✗"} Une majuscule
+                          (A-Z)
+                        </li>
+                        <li
+                          className={
+                            criteria.hasLowercase ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasLowercase ? "✓" : "✗"} Une minuscule
+                          (a-z)
+                        </li>
+                        <li
+                          className={
+                            criteria.hasNumber ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasNumber ? "✓" : "✗"} Un chiffre (0-9)
+                        </li>
+                        <li
+                          className={
+                            criteria.hasSpecialChar ? "text-green" : "text-red"
+                          }
+                        >
+                          {criteria.hasSpecialChar ? "✓" : "✗"} Un caractère
+                          spécial (@$!%*?&)
+                        </li>
+                      </ul>
+                    </div>
                   </div>
 
                   {profilType === 2 && (
@@ -435,9 +531,14 @@ const Signup = () => {
                   <button
                     type="submit"
                     onClick={handleSubmit}
-                    className="w-full flex justify-center font-medium text-white bg-green py-3 px-6 rounded-lg ease-out duration-200 hover:bg-green-dark mt-7.5"
+                    disabled={strength ? false : true}
+                    className={`w-full flex justify-center font-medium text-white ${
+                      strength ? "bg-green" : "bg-dark-5"
+                    } py-3 px-6 rounded-lg ease-out duration-200   ${
+                      strength && "hover:bg-green-dark"
+                    } mt-7.5`}
                   >
-                    {loading ? <PreLoader /> : "Créer un compte"}
+                    {loading ? <PreLoader /> : "Créers un compte"}
                   </button>
 
                   <p className="text-center mt-6">

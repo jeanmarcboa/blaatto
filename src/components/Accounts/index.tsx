@@ -33,7 +33,7 @@ export const AccountList = () => {
   const [reqParams, setReqParams] = useState("");
   const [pageLoading, setPageLoading] = useState(true);
   const [successFull, setSuccessfull] = useState(false);
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("admin");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [addAction, setAddAction] = useState(false);
@@ -240,11 +240,11 @@ export const AccountList = () => {
           <div className="flex flex-row flex-wrap gap-4">
             <div className="w-[100%] lg:w-[30%]">
               <h2 className="font-medium text-dark text-xl mb-4">
-                Ajouter un utilisateur
+                Ajouter un administrateur
               </h2>
 
               <form>
-                <div className="mb-5">
+                {/* <div className="mb-5">
                   <label htmlFor="lastname" className="block mb-2.5">
                     Role
                   </label>
@@ -260,7 +260,7 @@ export const AccountList = () => {
                     <option value="merchant">Marchand</option>
                     <option value="admin">Administrateur</option>
                   </select>
-                </div>
+                </div> */}
                 <div className="mb-5">
                   <label htmlFor="lastname" className="block mb-2.5">
                     Nom
@@ -364,7 +364,7 @@ export const AccountList = () => {
                   >
                     <option value="all">Toutes les roles</option>
                     <option value="CUSTOMER">Client</option>
-                    <option value="MERCHANT">Marchand</option>
+                    <option value="MERCHANT">Commerçant</option>
                     <option value="ADMIN">Administrateur</option>
                   </select>
 

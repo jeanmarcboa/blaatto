@@ -138,6 +138,23 @@ const ShopEditModal = ({
                 </div>
                 <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                   <div className="w-full">
+                    <label htmlFor="email" className="block mb-2.5">
+                      Numéro de registre de commerce
+                    </label>
+
+                    <input
+                      type="text"
+                      name="commercialRegister"
+                      id="commercialRegister"
+                      placeholder="Entrez le numéro de registre de commerce"
+                      value={item?.commercialRegister}
+                      onChange={handleInputChange}
+                      className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
+                  <div className="w-full">
                     <label htmlFor="phoneNumber" className="block mb-2.5">
                       Contact
                     </label>
