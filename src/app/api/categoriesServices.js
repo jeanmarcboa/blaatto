@@ -9,6 +9,10 @@ export default {
   createCategorie: (data, token) => {
     return axios.post(`/api/categories`, data, headersConfig(token));
   },
+  importCategories: (data, token) => {
+    // console.log(data);
+    return axios.post(`/api/categories/upload`, data);
+  },
   categorieList: () => {
     return axios.get(`/api/categories/`);
   },

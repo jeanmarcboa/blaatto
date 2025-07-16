@@ -340,11 +340,28 @@ export default function AddProduct() {
                           </div>
                         </div>
                       ))}
-                      {/* <!-- wish item --> */}
-                      {/* {orders.map((item, key) => (
-                  <SingleItem item={item} key={key} />
-                ))} */}
-                      {/* <SingleOrderItem/> */}
+                      {/* TotalPrice */}
+                      <div className="flex items-center py-5.5 px-10">
+                        {/* <div className="min-w-[83px]"></div> */}
+                        <div className="min-w-[25%]">
+                          <p className="text-dark font-bold">Total</p>
+                        </div>
+                        <div className="min-w-[45%]">
+                          <p className="text-dark text-right font-bold">
+                            Frais de livraison :{" "}
+                            {sepMillier(details?.deliveryFees)} FCFA
+                          </p>
+                        </div>
+
+                        <div className="min-w-[30%]">
+                          <p className="text-dark text-right font-bold">
+                            {sepMillier(
+                              details?.totalPrice + details?.deliveryFees
+                            )}{" "}
+                            FCFA
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

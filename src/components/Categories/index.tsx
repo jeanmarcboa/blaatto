@@ -7,8 +7,11 @@ import { useAppSelector } from "@/redux/store";
 import useUser from "@/hooks/useUser";
 import SingleItem from "./list/SingleItem";
 import CategoryEditModal from "./EditModal";
+import Pagination from "@/components/Pagination";
 
 import categoriesAPI from "@/app/api/categoriesServices";
+
+const ITEMS_PER_PAGE = 10;
 
 export const CategoriesList = () => {
   const { setLoginData, userInfo } = useUser();
@@ -30,6 +33,21 @@ export const CategoriesList = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [addAction, setAddAction] = useState(false);
   console.log(userInfo);
+
+  // Pager states
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Pager states handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    setLoading(false);
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const paginatedData = categoryTmpList.slice(
+      startIndex,
+      startIndex + ITEMS_PER_PAGE
+    );
+    setCategoryList(paginatedData);
+  };
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -162,7 +180,14 @@ export const CategoriesList = () => {
     categoriesAPI
       .categorieList()
       .then((response) => {
-        setCategoryList(response.data);
+        // Pager states settings
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const paginatedData = response.data.slice(
+          startIndex,
+          startIndex + ITEMS_PER_PAGE
+        );
+        // eof
+        setCategoryList(paginatedData);
         setCategoryTmpList(response.data);
         setPageLoading(false);
       })
@@ -218,7 +243,7 @@ export const CategoriesList = () => {
                   />
                 </div>
 
-                <div className="mb-5">
+                {/* <div className="mb-5">
                   <label htmlFor="description" className="block mb-2.5">
                     Description
                   </label>
@@ -232,7 +257,7 @@ export const CategoriesList = () => {
                     value={formData?.description}
                     className="rounded-lg border border-gray-3 bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />
-                </div>
+                </div> */}
 
                 <button
                   type="submit"
@@ -264,13 +289,13 @@ export const CategoriesList = () => {
                   {/* <!-- table header --> */}
                   <div className="flex items-center bg-gray-1 py-5.5 px-10">
                     {/* <div className="min-w-[83px]"></div> */}
-                    <div className="min-w-[40%]">
+                    <div className="min-w-[80%]">
                       <p className="text-dark">Libellé</p>
                     </div>
 
-                    <div className="min-w-[40%]">
+                    {/* <div className="min-w-[40%]">
                       <p className="text-dark">Description</p>
-                    </div>
+                    </div> */}
 
                     <div className="min-w-[20%]">
                       <p className="text-dark text-right">Action</p>
@@ -297,6 +322,11 @@ export const CategoriesList = () => {
                       <PreLoader color="green" />
                     </div>
                   )}
+                  <Pagination
+                    data={categoryTmpList}
+                    currentPage={currentPage}
+                    handlePageChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

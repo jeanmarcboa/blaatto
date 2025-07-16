@@ -1,4 +1,3 @@
-// pages/admin/add-product.js
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -10,7 +9,7 @@ import product from "@/app/api/productServices";
 import categ from "@/app/api/categoriesServices";
 import shop from "@/app/api/shopServices";
 
-export default function AddProduct() {
+export const PageComponent = () => {
   const { userInfo } = useUser();
   const [shopList, setShopList] = useState([]);
   const [productName, setProductName] = useState("");
@@ -46,35 +45,6 @@ export default function AddProduct() {
       },
     });
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setImages(files);
-  };
-
-  const fetchShopList = () => {
-    shop
-      .shopListByBusinessId(userInfo.id, userInfo?.access_token)
-      .then((response) => {
-        console.log("Liste des boutiques:", response.data);
-        setShopList(response.data);
-        setShopId(response.data[0].id);
-      })
-      .catch((error) => {
-        console.error("Erreur lors de récupération des boutiques:", error);
-      });
-  };
-
-  const fetchCategories = () => {
-    categ
-      .categorieList()
-      .then((response) => {
-        setCategories(response.data);
-      })
-      .catch((error) => {
-        console.log("Erreur lors de récupération des catégories:");
-      });
-  };
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -82,14 +52,12 @@ export default function AddProduct() {
     setSuccessfull(false);
     const formData = new FormData();
     formData.append("worksheet", uploadedfiles[0]);
-    formData.append("shopId", shopId);
-    formData.append("categoryId", category);
 
     // Envoi des données au backend
-    product
-      .importProduct(formData)
+    categ
+      .importCategories(formData, userInfo?.access_token)
       .then((response) => {
-        console.log("Produit ajouté avec succès:", response);
+        // console.log("Produit ajouté avec succès:", response);
         setTimeout(() => {
           setLoading(false);
           setSuccessfull(true);
@@ -107,15 +75,12 @@ export default function AddProduct() {
       });
   };
 
-  useEffect(() => {
-    fetchShopList();
-    fetchCategories();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
-        Importation de produits
+        Importation de catégories
       </h1>
       <div className="flex items-center justify-center space-x-3">
         {/* //Display message */}
@@ -146,7 +111,7 @@ export default function AddProduct() {
                 <div className="mb-4">
                   Téléchargez un modéle de fichier d&apos;importation{" "}
                   <a
-                    href="/template/product-template.xlsx"
+                    href="/template/category-template.xlsx"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
@@ -209,24 +174,23 @@ export default function AddProduct() {
               </div>
 
               <div className="p-6">
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   <label className="block text-sm font-medium text-gray-700">
-                    Boutique
+                    Ajouter une boutique
                   </label>
                   <select
                     onChange={(e) => setShopId(e.target.value)}
                     value={shopId}
-                    disabled
                     className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                   >
-                    <option value="">Boutique</option>
+                    <option value="">Choisir une boutique</option>
                     {shopList.map((shop) => (
                       <option key={shop?.id} value={shop?.id}>
                         {shop?.label}
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
                 <button
                   type="submit"
                   disabled={
@@ -236,35 +200,8 @@ export default function AddProduct() {
                   }
                   className="flex flex-row justify-center w-full text-center font-medium text-custom-sm text-white bg-green py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"
                 >
-                  {!loading ? "Importer les produits" : <PreLoader />}
+                  {!loading ? "Importer" : <PreLoader />}
                 </button>
-              </div>
-            </div>
-
-            {/* Ajout de Catégorie */}
-            <div className="rounded-xl bg-white shadow-1 border-[1px] border-solid border-gray-4 mt-4">
-              <div className="border-b-[1px] border-solid border-gray-4 pl-6 pr-6 pt-2 pb-2">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  Catégories
-                </h2>
-              </div>
-              <div className="p-6">
-                <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Ajouter une Catégorie
-                  </label>
-                  <select
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                  >
-                    <option value="">Choisir une catégorie</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category?.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
               </div>
             </div>
           </div>
@@ -272,4 +209,4 @@ export default function AddProduct() {
       </form>
     </div>
   );
-}
+};
