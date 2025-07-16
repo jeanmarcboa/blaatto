@@ -9,7 +9,6 @@ import SideBar from "@/components/SideBar/admin";
 import Footer from "../../components/Footer";
 
 import { ModalProvider } from "../context/QuickViewModalContext";
-import { NotificationModalProvider } from "../context/NotificationSidebarModalContext";
 import { CartModalProvider } from "../context/CartSidebarModalContext";
 import { ReduxProvider } from "@/redux/provider";
 import QuickViewModal from "@/components/Common/QuickViewModal";
@@ -39,25 +38,23 @@ export default function RootLayout({
         ) : (
           <>
             <ReduxProvider>
-              <NotificationModalProvider>
-                <CartModalProvider>
-                  <ModalProvider>
-                    <PreviewSliderProvider>
-                      <Header />
-                      <div className="flex flex-row justify-end">
-                        <SideBar />
-                        <div className="w-[80%] px-6 sm:px-6 lg:px-8 pt-[150px] bg-gray-1 min-h-screen">
-                          {children}
-                        </div>
+              <CartModalProvider>
+                <ModalProvider>
+                  <PreviewSliderProvider>
+                    <Header />
+                    <div className="flex flex-row justify-end">
+                      <SideBar />
+                      <div className="w-[80%] px-6 sm:px-6 lg:px-8 pt-[150px] bg-gray-1 min-h-screen">
+                        {children}
                       </div>
+                    </div>
 
-                      <QuickViewModal />
-                      <CartSidebarModal />
-                      <PreviewSliderModal />
-                    </PreviewSliderProvider>
-                  </ModalProvider>
-                </CartModalProvider>
-              </NotificationModalProvider>
+                    <QuickViewModal />
+                    <CartSidebarModal />
+                    <PreviewSliderModal />
+                  </PreviewSliderProvider>
+                </ModalProvider>
+              </CartModalProvider>
             </ReduxProvider>
             <ScrollToTop />
             {/* <Footer /> */}

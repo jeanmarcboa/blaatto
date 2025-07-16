@@ -11,7 +11,6 @@ import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
-import { useNotificationModalContext } from "@/app/context/NotificationSidebarModalContext";
 import Image from "next/image";
 import io from "socket.io-client";
 import dayjs from "dayjs";
@@ -31,15 +30,9 @@ const Header = () => {
   const [open, setOpen] = React.useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
   const { openCartModal } = useCartModalContext();
-  const { openNotificationModal } = useNotificationModalContext();
 
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
-
-  const handleOpenCartModal = () => {
-    openNotificationModal();
-    // openCartModal();
-  };
 
   // Sticky menu
   const handleStickyMenu = () => {
