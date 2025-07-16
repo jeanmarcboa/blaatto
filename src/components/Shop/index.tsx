@@ -237,7 +237,7 @@ export const ShopList = () => {
                     onChange={(e) => handleChangeMerchant(e)}
                     className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
                   >
-                    <option value="all">Toutes les marchants</option>
+                    <option value="all">Tous les commerçants</option>
                     {merchantList?.map((item: any, index: number) => (
                       <option value={item.id} key={index}>
                         {item.firstname + " " + item.lastname}
@@ -251,7 +251,7 @@ export const ShopList = () => {
                     onChange={(e) => handleChangeStatus(e)}
                     className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
                   >
-                    <option value="all">Toutes les status</option>
+                    <option value="all">Tous les status</option>
                     <option value="1">Actif</option>
                     <option value="0">Désactivé</option>
                   </select>
@@ -264,7 +264,7 @@ export const ShopList = () => {
                         type="search"
                         onChange={handleChangeText}
                         className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Rechercher..."
+                        placeholder="Recherche..."
                         required
                       />
                     </div>

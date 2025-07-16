@@ -5,24 +5,40 @@ import CustomSelect from "./CustomSelect";
 import useUser from "@/hooks/useUser";
 import { menuData } from "./menuData";
 import Dropdown from "./Dropdown";
+import { Drawer } from "rsuite";
+import { FiBell, FiMessageSquare } from "react-icons/fi";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
+import { useNotificationModalContext } from "@/app/context/NotificationSidebarModalContext";
 import Image from "next/image";
+import io from "socket.io-client";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+import notificationAPI from "@/app/api/notificationServices";
+
+dayjs.extend(relativeTime);
+
+const socket = io("http://132.145.62.112"); // URL du serveur
 
 const Header = () => {
   const { isLoggedIn, userInfo, deleteLoginData } = useUser();
+  const [notifications, setNotifications] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
   const { openCartModal } = useCartModalContext();
+  const { openNotificationModal } = useNotificationModalContext();
 
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
 
   const handleOpenCartModal = () => {
-    openCartModal();
+    openNotificationModal();
+    // openCartModal();
   };
 
   // Sticky menu
@@ -38,9 +54,47 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyMenu);
   });
 
+  const fetchNotifications = async () => {
+    notificationAPI
+      .notificationsList(userInfo?.access_token)
+      .then((res) => {
+        if (res.data) {
+          setNotifications(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  useEffect(() => {
+    // console.log("useNotificationModalContext", useNotificationModalContext);
+    // Connexion à Socket.IO
+    socket.on("connect", () => {
+      console.log("Connecté au serveur");
+    });
+
+    // Exemple de message reçu
+    socket.on("getServerNotifications", (data) => {
+      console.log("Message du serveur:", data);
+      if (data) {
+        setNotifications(data);
+      }
+    });
+
+    // Nettoyage de la connexion au démontage du composant
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <header
-      className={`fixed left-0 top-0 w-full z-9999 bg-green border-b border-gray-4 transition-all ease-in-out duration-300 ${
+      className={`fixed left-0 top-0 w-full z-999 bg-green border-b border-gray-4 transition-all ease-in-out duration-300 ${
         stickyMenu && "shadow"
       }`}
     >
@@ -73,6 +127,25 @@ const Header = () => {
                   </div>
                 </Link>
                 {/* <!-- divider --> */}
+                <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
+                <button
+                  onClick={() => setOpen(true)}
+                  className="flex items-center gap-2.5"
+                >
+                  <span className="inline-block relative">
+                    <FiBell className="w-5 h-5 text-white" />
+
+                    <span className="flex items-center justify-center font-medium text-2xs absolute -right-2 -top-2.5 bg-white w-4.5 h-4.5 rounded-full text-green">
+                      {notifications?.length}
+                    </span>
+                  </span>
+
+                  {/* <div>
+                    <span className="block text-2xs text-dark-4 uppercase">
+                      panier
+                    </span>
+                  </div> */}
+                </button>
                 <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
                 <ul className="flex xl:items-center flex-col xl:flex-row gap-5 xl:gap-6">
                   <li className="group relative text-white before:w-0 before:h-[3px] before:bg-green before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full false">
@@ -187,6 +260,61 @@ const Header = () => {
         </div>
         {/* <!-- header top end --> */}
       </div>
+      <Drawer open={open} onClose={() => setOpen(false)} className="z-999999">
+        <Drawer.Header>
+          <Drawer.Title>Notifications</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <div>
+            <div className="flex flex-col gap-3.5">
+              {notifications.map((notification, key) => (
+                <Link href={notification?.redirectUrl} key={key}>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gray-3 flex items-center justify-center">
+                        <img
+                          src={notification?.image}
+                          alt="notification"
+                          className="w-6 h-6"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-medium text-custom-sm">
+                          {notification?.title}
+                        </p>
+                        <p className="text-custom-xs text-gray-4">
+                          {notification?.content}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-custom-xs text-gray-4">
+                      {notification?.time}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex justify-start align-middle items-center gap-3">
+                      <div className="p-4 rounded-full bg-gray-3 flex items-center justify-center">
+                        <FiBell className="text-2xl text-gray-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-custom-sm">
+                          {notification?.title}
+                        </p>
+                        <p className="text-custom-xs text-gray-4">
+                          {notification?.content}
+                        </p>
+                        <p className="text-custom-xs font-bold text-green">
+                          {dayjs(notification?.createdAt).fromNow()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Drawer.Body>
+      </Drawer>
     </header>
   );
 };

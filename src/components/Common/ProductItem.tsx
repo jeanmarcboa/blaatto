@@ -59,7 +59,7 @@ const ProductItem = ({ item }: { item: any }) => {
 
   return (
     <div className="group">
-      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] h-[200px] p-5 mb-4">
+      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-green h-[200px] p-5 mb-4">
         <Link href={"/shop-details/" + item?.id}>
           <Image
             src={

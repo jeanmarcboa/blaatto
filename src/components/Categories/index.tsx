@@ -211,7 +211,7 @@ export const CategoriesList = () => {
                     type="text"
                     name="label"
                     id="label"
-                    placeholder="Entrez le nom de votre boutique"
+                    placeholder="Entrez le nom de la catégorie"
                     onChange={handleInputChange}
                     value={formData?.label}
                     className="rounded-lg border border-gray-3 bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
@@ -253,7 +253,7 @@ export const CategoriesList = () => {
                       // value={searchValue}
                       onChange={handleChangeText}
                       className="block w-full p-4 ps-10 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Rechercher..."
+                      placeholder="Recherche..."
                       required
                     />
                   </div>
