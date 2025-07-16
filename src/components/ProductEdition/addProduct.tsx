@@ -265,6 +265,10 @@ export const AddProduct = () => {
                         setProductName(value?.id);
                       }}
                     />
+                    <span className="text-red mt-2 block">
+                      <strong>NB:</strong> Sélection obligatoire, veuillez
+                      choisir l&#39;une des désignations indiquées.
+                    </span>
                   </div>
                   <div className="mt-4">
                     <label className="block text-sm font-medium text-gray-700">

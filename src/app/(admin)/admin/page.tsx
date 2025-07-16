@@ -37,6 +37,7 @@ export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [shops, setShops] = useState([]);
+  const [pendingShops, setPendingShops] = useState([]);
   const [tmpOrders, setTmpOrders] = useState([]);
   const [merchants, setMerchants] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -174,6 +175,14 @@ export default function HomePage() {
       .catch((error) => {
         console.log(error);
       });
+    shopAPI
+      .shopList("?enabled=false")
+      .then((response) => {
+        setPendingShops(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -203,7 +212,7 @@ export default function HomePage() {
                   <h3 className="text-lg font-semibold">
                     Boutiques en attente de validation
                   </h3>
-                  <p className="text-2xl">{shops.length}</p>
+                  <p className="text-2xl">{pendingShops.length}</p>
                 </div>
               </div>
             </div>

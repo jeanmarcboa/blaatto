@@ -112,6 +112,10 @@ const ShopWithoutSidebar = () => {
               <div className="w-full p-4 m-h-20">
                 <h3 className="font-medium text-lg text-dark"> À propos </h3>
                 <p> {currentShop?.description} </p>
+                <h3 className="font-medium text-lg text-dark mt-4">
+                  Localisation
+                </h3>
+                <p> {currentShop?.address ?? "non indiqué"} </p>
                 <a
                   className="inline-flex items-center gap-3 my-5 py-[9px] pl-4 pr-8.5 text-white rounded-md bg-green ease-out duration-200 hover:bg-opacity-95"
                   href={`Tel:${currentShop?.phoneNumber}`}

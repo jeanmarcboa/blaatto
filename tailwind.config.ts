@@ -70,7 +70,7 @@ const config: Config = {
         "light-6": "#FEF3F3",
       },
       green: {
-        DEFAULT: "#22AD5C",
+        DEFAULT: "#008c3c",
         dark: "#1A8245",
         light: "#2CD673",
         "light-2": "#57DE8F",

@@ -17,6 +17,7 @@ const ShopCreation = () => {
   const [formData, setFormData] = useState({
     label: "",
     phoneNumber: "",
+    address: "",
     commercialRegister: "",
     accountId: userInfo.id,
   });
@@ -85,6 +86,21 @@ const ShopCreation = () => {
                     name="commercialRegister"
                     id="commercialRegister"
                     placeholder="Entrez le numéro de registre de commerce"
+                    onChange={handleInputChange}
+                    className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <label htmlFor="address" className="block mb-2.5">
+                    Adresse
+                  </label>
+
+                  <input
+                    type="text"
+                    name="address"
+                    id="address"
+                    placeholder="Entrez l'adresse de votre boutique"
                     onChange={handleInputChange}
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />

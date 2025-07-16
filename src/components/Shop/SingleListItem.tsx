@@ -42,7 +42,7 @@ const SingleListItem = ({ item }: { item: any }) => {
   };
 
   return (
-    <div className="group rounded-lg bg-white shadow-1">
+    <div className="group rounded-lg bg-green shadow-1">
       <div className="flex">
         <div className="shadow-list relative overflow-hidden flex items-center justify-center max-w-[270px] w-full sm:min-h-[270px] p-4">
           <Link href={"/shop-details/" + item?.id}>
@@ -91,7 +91,7 @@ const SingleListItem = ({ item }: { item: any }) => {
 
             <button
               onClick={() => handleAddToCart()}
-              className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-green text-white ease-out duration-200 hover:bg-green-dark"
+              className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-white text-dark ease-out duration-200 hover:bg-green-dark"
             >
               Ajouter au panier
             </button>
@@ -122,7 +122,7 @@ const SingleListItem = ({ item }: { item: any }) => {
 
         <div className="w-full flex flex-col gap-5 sm:flex-row sm:items-center justify-center sm:justify-between py-5 px-4 sm:px-7.5 lg:pl-11 lg:pr-12">
           <div>
-            <h3 className="font-medium text-dark ease-out duration-200 hover:text-green mb-1.5">
+            <h3 className="font-medium text-white ease-out duration-200 hover:text-green mb-1.5">
               <Link href={"/shop-details/" + item?.id}>
                 {item?.designation?.label} (Vendu par{" "}
                 <strong>{item.unitOfMesure}</strong>)
@@ -130,7 +130,7 @@ const SingleListItem = ({ item }: { item: any }) => {
             </h3>
 
             <span className="flex items-center gap-2 font-medium text-lg">
-              <span className="text-dark">{sepMillier(item.price)} F</span>
+              <span className="text-white">{sepMillier(item.price)} F</span>
               {/* <span className="text-dark-4 line-through">
                 {sepMillier(item.price)} F
               </span> */}
@@ -143,10 +143,11 @@ const SingleListItem = ({ item }: { item: any }) => {
                     alt=""
                     width={20}
                     height={20}
+                    className="m-4"
                   />
                 </div>
               </Link>
-              <Link href={"/boutique/" + item?.shop?.id}>
+              <Link className="text-white" href={"/boutique/" + item?.shop?.id}>
                 <span> {item?.shop?.label} </span>
               </Link>
             </div>
