@@ -7,10 +7,13 @@ import { useAppSelector } from "@/redux/store";
 import useUser from "@/hooks/useUser";
 import SingleItem from "./shopList/SingleItem";
 import ShopEditModal from "./ShopEditModal";
+import Pagination from "@/components/Pagination";
 
 import productAPI from "@/app/api/productServices";
 import shopAPI from "@/app/api/shopServices";
 import accountAPI from "@/app/api/accountServices";
+
+const ITEMS_PER_PAGE = 10;
 
 export const ShopList = () => {
   const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);
@@ -34,7 +37,21 @@ export const ShopList = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [addAction, setAddAction] = useState(false);
-  console.log(userInfo);
+
+  // Pager states
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Pager states handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    setLoading(false);
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const paginatedData = shopTmpList.slice(
+      startIndex,
+      startIndex + ITEMS_PER_PAGE
+    );
+    setShopList(paginatedData);
+  };
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -166,7 +183,14 @@ export const ShopList = () => {
       shopAPI
         .shopList()
         .then((response) => {
-          setShopList(response.data);
+          // Pager states settings
+          const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+          const paginatedData = response.data.slice(
+            startIndex,
+            startIndex + ITEMS_PER_PAGE
+          );
+          // eof
+          setShopList(paginatedData);
           setShopTmpList(response.data);
           setPageLoading(false);
         })
@@ -251,7 +275,7 @@ export const ShopList = () => {
                     onChange={(e) => handleChangeStatus(e)}
                     className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
                   >
-                    <option value="all">Tous les status</option>
+                    <option value="all">Tous les statuts</option>
                     <option value="1">Actif</option>
                     <option value="0">Désactivé</option>
                   </select>
@@ -312,6 +336,11 @@ export const ShopList = () => {
                       <PreLoader color="green" />
                     </div>
                   )}
+                  <Pagination
+                    data={shopTmpList}
+                    currentPage={currentPage}
+                    handlePageChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

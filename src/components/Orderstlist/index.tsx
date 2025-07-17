@@ -4,11 +4,14 @@ import Link from "next/link";
 import Breadcrumb from "../Common/Breadcrumb";
 import useUser from "@/hooks/useUser";
 import PreLoader from "@/components/Common/BtnPreLoader";
+import Pagination from "@/components/Pagination";
 import SingleItem from "./SingleItem";
 
 import product from "@/app/api/productServices";
 import orderAPI from "@/app/api/orderServices";
 import shopAPI from "@/app/api/shopServices";
+
+const ITEMS_PER_PAGE = 10;
 
 export const Orderstlist = () => {
   const { userInfo } = useUser();
@@ -17,7 +20,6 @@ export const Orderstlist = () => {
   const [tmpOrders, setTmpOrders] = useState([]);
   const [shopList, setShopList] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const OrderStatus = [
     { label: "En Cours" },
     { label: "Payé" },
@@ -26,6 +28,20 @@ export const Orderstlist = () => {
     { label: "Livré" },
     { label: "Annulé" },
   ];
+  // Pager states
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Pager states handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    setLoading(false);
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const paginatedData = tmpOrders.slice(
+      startIndex,
+      startIndex + ITEMS_PER_PAGE
+    );
+    setOrders(paginatedData);
+  };
 
   const handleChangeText = async (event: any) => {
     const { value } = event.target;
@@ -107,7 +123,14 @@ export const Orderstlist = () => {
         userInfo?.access_token
       )
       .then((response) => {
-        setOrders(response.data);
+        // Pager states settings
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const paginatedData = response.data.slice(
+          startIndex,
+          startIndex + ITEMS_PER_PAGE
+        );
+        // eof
+        setOrders(paginatedData);
         setTmpOrders(response.data);
         setLoading(false);
       })
@@ -154,7 +177,7 @@ export const Orderstlist = () => {
               onChange={handleChangeStatus}
               className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
             >
-              <option value="all">Tous les status</option>
+              <option value="all">Tous les statuts</option>
               {OrderStatus.map((item: any) => (
                 <option key={item?.label} value={item?.label}>
                   {item?.label}
@@ -228,6 +251,11 @@ export const Orderstlist = () => {
                     <PreLoader color="green" />
                   </div>
                 )}
+                <Pagination
+                  data={tmpOrders}
+                  currentPage={currentPage}
+                  handlePageChange={handlePageChange}
+                />
               </div>
             </div>
           </div>

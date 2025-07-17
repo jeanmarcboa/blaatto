@@ -38,7 +38,7 @@ const SingleItem = ({ item, openEditModal, handleDeleteSubmit }) => {
         </button>
       </div> */}
 
-      <div className="min-w-[40%]">
+      <div className="min-w-[80%]">
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div>
@@ -50,9 +50,9 @@ const SingleItem = ({ item, openEditModal, handleDeleteSubmit }) => {
         </div>
       </div>
 
-      <div className="min-w-[40%]">
+      {/* <div className="min-w-[40%]">
         <p className="text-dark">{item.description ?? "--"}</p>
-      </div>
+      </div> */}
 
       <div className="min-w-[20%] flex justify-end">
         <button

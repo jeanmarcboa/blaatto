@@ -5,12 +5,15 @@ import Breadcrumb from "../Common/Breadcrumb";
 import PreLoader from "@/components/Common/BtnPreLoader";
 import { useAppSelector } from "@/redux/store";
 import useUser from "@/hooks/useUser";
+import Pagination from "@/components/Pagination";
 import SingleItem from "./accountList/SingleItem";
 import AccountEditModal from "./AccountEditModal";
 
 import productAPI from "@/app/api/productServices";
 import shopAPI from "@/app/api/shopServices";
 import accountAPI from "@/app/api/accountServices";
+
+const ITEMS_PER_PAGE = 10;
 
 export const AccountList = () => {
   // const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);
@@ -37,6 +40,21 @@ export const AccountList = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [addAction, setAddAction] = useState(false);
+
+  // Pager states
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Pager states handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    setLoading(false);
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const paginatedData = userTmpList.slice(
+      startIndex,
+      startIndex + ITEMS_PER_PAGE
+    );
+    setUserList(paginatedData);
+  };
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -203,7 +221,14 @@ export const AccountList = () => {
     accountAPI
       .userAccountList(param, userInfo?.access_token)
       .then((response) => {
-        setUserList(response.data);
+        // Pager states settings
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const paginatedData = response.data.slice(
+          startIndex,
+          startIndex + ITEMS_PER_PAGE
+        );
+        // eof
+        setUserList(paginatedData);
         setUserTmpList(response.data);
         setPageLoading(false);
       })
@@ -415,6 +440,11 @@ export const AccountList = () => {
                       <PreLoader color="green" />
                     </div>
                   )}
+                  <Pagination
+                    data={userTmpList}
+                    currentPage={currentPage}
+                    handlePageChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

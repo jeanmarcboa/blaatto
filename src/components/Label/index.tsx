@@ -7,13 +7,16 @@ import { useAppSelector } from "@/redux/store";
 import useUser from "@/hooks/useUser";
 import SingleItem from "./list/SingleItem";
 import CategoryEditModal from "./EditModal";
+import Pagination from "@/components/Pagination";
 
 import labelsAPI from "@/app/api/labelsServices";
 
+const ITEMS_PER_PAGE = 10;
+
 export const LabelsList = () => {
   const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);
-  const [labelList, setCategoryList] = useState([]);
-  const [labelTmpList, setCategoryTmpList] = useState([]);
+  const [labelList, setLabelList] = useState([]);
+  const [labelTmpList, setLabelTmpList] = useState([]);
   const { setLoginData, userInfo } = useUser();
 
   const [formData, setFormData] = useState({
@@ -30,6 +33,21 @@ export const LabelsList = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [addAction, setAddAction] = useState(false);
   console.log(userInfo);
+
+  // Pager states
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Pager states handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    setLoading(false);
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const paginatedData = labelTmpList.slice(
+      startIndex,
+      startIndex + ITEMS_PER_PAGE
+    );
+    setLabelList(paginatedData);
+  };
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -49,10 +67,10 @@ export const LabelsList = () => {
         return item?.label.toLowerCase().includes(value.toLowerCase());
       });
 
-      setCategoryList(results);
+      setLabelList(results);
     }
     if (value.length === 0) {
-      setCategoryList(labelTmpList);
+      setLabelList(labelTmpList);
     }
   };
 
@@ -60,12 +78,12 @@ export const LabelsList = () => {
     const value = e.target.value;
     setPageLoading(true);
     let results = labelTmpList.filter((item: any) => item.accountId == value);
-    setCategoryList(results);
+    setLabelList(results);
     setTimeout(() => {
       setPageLoading(false);
     }, 1000);
     if (value == "all") {
-      setCategoryList(labelTmpList);
+      setLabelList(labelTmpList);
       setTimeout(() => {
         setPageLoading(false);
       }, 1000);
@@ -84,7 +102,7 @@ export const LabelsList = () => {
       .then((response) => {
         console.log(response);
         setLoading(false);
-        fetchCategoryList();
+        fetchLabelList();
         setAddAction(false);
         setSuccessfull(true);
         setFormData({
@@ -116,7 +134,7 @@ export const LabelsList = () => {
         console.log(response);
         setLoading(false);
         setEditModal(false);
-        fetchCategoryList();
+        fetchLabelList();
         setSuccessfull(true);
       })
       .catch((error) => {
@@ -135,7 +153,7 @@ export const LabelsList = () => {
       .then((response) => {
         console.log(response);
         setEditModal(false);
-        fetchCategoryList();
+        fetchLabelList();
         setSuccessfull(true);
       })
       .catch((error) => {
@@ -154,12 +172,19 @@ export const LabelsList = () => {
     setEditModal(false);
   };
 
-  const fetchCategoryList = () => {
+  const fetchLabelList = () => {
     labelsAPI
       .labelsList(userInfo?.access_token)
       .then((response) => {
-        setCategoryList(response.data);
-        setCategoryTmpList(response.data);
+        // Pager states settings
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const paginatedData = response.data.slice(
+          startIndex,
+          startIndex + ITEMS_PER_PAGE
+        );
+        // eof
+        setLabelList(paginatedData);
+        setLabelTmpList(response.data);
         setPageLoading(false);
       })
       .catch((error) => {
@@ -169,7 +194,7 @@ export const LabelsList = () => {
   };
 
   useEffect(() => {
-    fetchCategoryList();
+    fetchLabelList();
   }, []);
 
   return (
@@ -216,7 +241,7 @@ export const LabelsList = () => {
                   />
                 </div>
 
-                <div className="mb-5">
+                {/* <div className="mb-5">
                   <label htmlFor="description" className="block mb-2.5">
                     Description
                   </label>
@@ -230,7 +255,7 @@ export const LabelsList = () => {
                     value={formData?.description}
                     className="rounded-lg border border-gray-3 bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                   />
-                </div>
+                </div> */}
 
                 <button
                   type="submit"
@@ -262,13 +287,13 @@ export const LabelsList = () => {
                   {/* <!-- table header --> */}
                   <div className="flex items-center bg-gray-1 py-5.5 px-10">
                     {/* <div className="min-w-[83px]"></div> */}
-                    <div className="min-w-[40%]">
+                    <div className="min-w-[80%]">
                       <p className="text-dark">Libellé</p>
                     </div>
 
-                    <div className="min-w-[40%]">
+                    {/* <div className="min-w-[40%]">
                       <p className="text-dark">Description</p>
-                    </div>
+                    </div> */}
 
                     <div className="min-w-[20%]">
                       <p className="text-dark text-right">Action</p>
@@ -295,6 +320,11 @@ export const LabelsList = () => {
                       <PreLoader color="green" />
                     </div>
                   )}
+                  <Pagination
+                    data={labelTmpList}
+                    currentPage={currentPage}
+                    handlePageChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

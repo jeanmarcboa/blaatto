@@ -60,6 +60,10 @@ export default function SideBar() {
         // },
         { title: "Désignations", link: "/admin/product/labels" },
         { title: "Catégories", link: "/admin/product/categories" },
+        {
+          title: "Importation de catégories",
+          link: "/admin/product/categories/import",
+        },
       ],
       path: "/admin/product",
     },
