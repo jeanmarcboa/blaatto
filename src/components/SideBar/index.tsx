@@ -50,10 +50,10 @@ export default function SideBar() {
           title: "Ajouter un nouveau produit",
           link: "/business/product/add-product",
         },
-        {
-          title: "Importer des produits",
-          link: "/business/product/import",
-        },
+        // {
+        //   title: "Importer des produits",
+        //   link: "/business/product/import",
+        // },
       ],
       path: "/business/product",
     },

@@ -165,7 +165,8 @@ const QuickViewModal = () => {
               </span> */}
 
               <h3 className="font-semibold text-xl xl:text-heading-5 text-dark mb-4">
-                {product?.designation?.label}
+                {product?.designation?.label} (Vendu par{" "}
+                <strong>{product?.unitOfMesure}</strong>)
               </h3>
 
               {/* <p>
@@ -173,11 +174,19 @@ const QuickViewModal = () => {
                 industry. Lorem Ipsum has.
               </p> */}
 
-              <div className="flex flex-wrap justify-between gap-5 mt-6 mb-7.5">
+              <div className="flex flex-col flex-wrap justify-between gap-5 mt-6 mb-7.5">
                 <div>
-                  <h4 className="font-semibold text-lg text-dark mb-3.5">
-                    Prix
+                  <h4 className="font-semibold text-lg text-dark mb-1">
+                    Disponibilité
                   </h4>
+                  <span className="flex items-center gap-2">
+                    <span className="font-semibold text-dark text-xl xl:text-heading-4">
+                      {sepMillier(product?.stock)} {product.unitOfMesure}
+                    </span>
+                  </span>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-dark mb-1">Prix</h4>
 
                   <span className="flex items-center gap-2">
                     <span className="font-semibold text-dark text-xl xl:text-heading-4">
@@ -185,7 +194,9 @@ const QuickViewModal = () => {
                     </span>
                   </span>
                 </div>
+              </div>
 
+              <div className="flex flex-wrap justify-between gap-5 mt-6 mb-7.5">
                 <div className="block w-full">
                   <h4 className="font-semibold text-lg text-dark mb-3.5">
                     Quantité
@@ -215,12 +226,6 @@ const QuickViewModal = () => {
                       </svg>
                     </button>
 
-                    <span
-                      className="flex items-center justify-center w-20 h-10 rounded-[5px] border border-gray-4 bg-white font-medium text-dark"
-                      x-text="quantity"
-                    >
-                      {quantity}
-                    </span>
                     <input
                       type="number"
                       value={quantity}
