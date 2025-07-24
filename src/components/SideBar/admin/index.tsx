@@ -58,6 +58,10 @@ export default function SideBar() {
         //   title: "Ajouter un nouveau produit",
         //   link: "/admin/product/add-product",
         // },
+        {
+          title: "Importer des produits",
+          link: "/admin/product/import",
+        },
         { title: "Désignations", link: "/admin/product/labels" },
         { title: "Catégories", link: "/admin/product/categories" },
         {

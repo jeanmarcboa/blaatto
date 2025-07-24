@@ -193,11 +193,7 @@ export const PageComponent = () => {
                 </div> */}
                 <button
                   type="submit"
-                  disabled={
-                    uploadedfiles.length === 0 ||
-                    shopId === "" ||
-                    category === ""
-                  }
+                  disabled={uploadedfiles.length === 0}
                   className="flex flex-row justify-center w-full text-center font-medium text-custom-sm text-white bg-green py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"
                 >
                   {!loading ? "Importer" : <PreLoader />}

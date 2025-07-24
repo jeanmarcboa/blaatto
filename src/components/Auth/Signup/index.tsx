@@ -124,37 +124,6 @@ const Signup = () => {
 
           Account.signIn(data)
             .then((res) => {
-              const CNI_ID = docType.find((item) => item.code === "CNI");
-              const CERT_ID = docType.find((item) => item.code === "CERT");
-
-              if (document.cni) {
-                const formData = new FormData();
-                formData.append("file", document?.cni);
-                formData.append("documentTypeId", CNI_ID.id);
-
-                Account.uploadDocument(formData, res.data.access_token)
-                  .then((response) => {
-                    console.log(response);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }
-
-              if (document.cert) {
-                const formData = new FormData();
-                formData.append("file", document?.cert);
-                formData.append("documentTypeId", CERT_ID.id);
-
-                Account.uploadDocument(formData, res.data.access_token)
-                  .then((response) => {
-                    console.log(response);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }
-
               setTimeout(() => {
                 setLoading(false);
                 setLoginData(res.data);
@@ -202,16 +171,36 @@ const Signup = () => {
     });
   };
 
-  useEffect(() => {
-    Account.documentsTypes()
-      .then((response) => {
-        console.log(response);
-        setDocType(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const submissionValidation = () => {
+    let isNotValid = false;
+    const { firstname, lastname, email, phoneNumber, password } = formData;
+
+    console.log("fields : ", firstname, lastname, email, phoneNumber, password);
+    if (profilType === 1) {
+      if (
+        !firstname ||
+        !lastname ||
+        !email ||
+        !phoneNumber ||
+        !password ||
+        strength
+      ) {
+        isNotValid = true;
+      } else {
+        isNotValid = false;
+      }
+    } else {
+      if (!firstname || !lastname || !email || !phoneNumber) {
+        isNotValid = true;
+      } else {
+        isNotValid = false;
+      }
+    }
+
+    console.log("isNotValid", isNotValid);
+
+    return isNotValid;
+  };
 
   return (
     <>
@@ -413,117 +402,90 @@ const Signup = () => {
                     />
                   </div>
 
-                  <div className="mb-5">
-                    <label htmlFor="password" className="block mb-2.5">
-                      Mot de passe <span className="text-red">*</span>
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={isVisible ? "text" : "password"}
-                        name="password"
-                        id="password"
-                        onChange={handleInputChange}
-                        placeholder="Entrez votre mot de passe"
-                        autoComplete="on"
-                        className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                      />
-                      <button
-                        className="absolute inset-y-0 end-0 flex items-center z-20 px-2.5 cursor-pointer text-gray-400 rounded-e-md focus:outline-none focus-visible:text-indigo-500 hover:text-indigo-500 transition-colors"
-                        type="button"
-                        onClick={toggleVisibility}
-                      >
-                        {isVisible ? (
-                          <FiEyeOff size={20} aria-hidden="true" />
-                        ) : (
-                          <FiEye size={20} aria-hidden="true" />
-                        )}
-                      </button>
-                    </div>
-                    <div className="mt-2 text-sm">
-                      <p
-                        className={`font-medium ${
-                          strength ? "text-green" : "text-red"
-                        }`}
-                      >
-                        Mot de passe : {strength ? "Fort" : "Faible"}
-                      </p>
-                      <ul className="mt-2 space-y-1 text-gray-700">
-                        <li
-                          className={
-                            criteria.minLength ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.minLength ? "✓" : "✗"} Minimum 8 caractères
-                        </li>
-                        <li
-                          className={
-                            criteria.hasUppercase ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasUppercase ? "✓" : "✗"} Une majuscule
-                          (A-Z)
-                        </li>
-                        <li
-                          className={
-                            criteria.hasLowercase ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasLowercase ? "✓" : "✗"} Une minuscule
-                          (a-z)
-                        </li>
-                        <li
-                          className={
-                            criteria.hasNumber ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasNumber ? "✓" : "✗"} Un chiffre (0-9)
-                        </li>
-                        <li
-                          className={
-                            criteria.hasSpecialChar ? "text-green" : "text-red"
-                          }
-                        >
-                          {criteria.hasSpecialChar ? "✓" : "✗"} Un caractère
-                          spécial (@$!%*?&)
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  {profilType === 2 && (
+                  {profilType !== 2 && (
                     <>
                       <div className="mb-5">
-                        <p className="block mb-2.5">
-                          Documents justcificatifs d&#39;identité et
-                          d&#39;activité
-                        </p>
-                      </div>
-
-                      <div className="mb-5">
-                        <label htmlFor="cni" className="block mb-2.5">
-                          Carte d&#39;identité
+                        <label htmlFor="password" className="block mb-2.5">
+                          Mot de passe <span className="text-red">*</span>
                         </label>
-
-                        <input
-                          type="file"
-                          name="cni"
-                          id="cni"
-                          onChange={handleFileChange}
-                          required
-                        />
-                      </div>
-
-                      <div className="mb-5">
-                        <label htmlFor="cert" className="block mb-2.5">
-                          Justificatif d&#39;activité
-                        </label>
-                        <input
-                          type="file"
-                          name="cert"
-                          id="cert"
-                          onChange={handleFileChange}
-                          required
-                        />
+                        <div className="relative">
+                          <input
+                            type={isVisible ? "text" : "password"}
+                            name="password"
+                            id="password"
+                            onChange={handleInputChange}
+                            placeholder="Entrez votre mot de passe"
+                            autoComplete="on"
+                            className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                          />
+                          <button
+                            className="absolute inset-y-0 end-0 flex items-center z-20 px-2.5 cursor-pointer text-gray-400 rounded-e-md focus:outline-none focus-visible:text-indigo-500 hover:text-indigo-500 transition-colors"
+                            type="button"
+                            onClick={toggleVisibility}
+                          >
+                            {isVisible ? (
+                              <FiEyeOff size={20} aria-hidden="true" />
+                            ) : (
+                              <FiEye size={20} aria-hidden="true" />
+                            )}
+                          </button>
+                        </div>
+                        <div className="mt-2 text-sm">
+                          <p
+                            className={`font-medium ${
+                              strength ? "text-green" : "text-red"
+                            }`}
+                          >
+                            Mot de passe : {strength ? "Fort" : "Faible"}
+                          </p>
+                          <ul className="mt-2 space-y-1 text-gray-700">
+                            <li
+                              className={
+                                criteria.minLength ? "text-green" : "text-red"
+                              }
+                            >
+                              {criteria.minLength ? "✓" : "✗"} Minimum 8
+                              caractères
+                            </li>
+                            <li
+                              className={
+                                criteria.hasUppercase
+                                  ? "text-green"
+                                  : "text-red"
+                              }
+                            >
+                              {criteria.hasUppercase ? "✓" : "✗"} Une majuscule
+                              (A-Z)
+                            </li>
+                            <li
+                              className={
+                                criteria.hasLowercase
+                                  ? "text-green"
+                                  : "text-red"
+                              }
+                            >
+                              {criteria.hasLowercase ? "✓" : "✗"} Une minuscule
+                              (a-z)
+                            </li>
+                            <li
+                              className={
+                                criteria.hasNumber ? "text-green" : "text-red"
+                              }
+                            >
+                              {criteria.hasNumber ? "✓" : "✗"} Un chiffre (0-9)
+                            </li>
+                            <li
+                              className={
+                                criteria.hasSpecialChar
+                                  ? "text-green"
+                                  : "text-red"
+                              }
+                            >
+                              {criteria.hasSpecialChar ? "✓" : "✗"} Un caractère
+                              spécial (@$!%*?&)
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </>
                   )}
@@ -531,11 +493,13 @@ const Signup = () => {
                   <button
                     type="submit"
                     onClick={handleSubmit}
-                    disabled={strength ? false : true}
+                    disabled={submissionValidation()}
                     className={`w-full flex justify-center font-medium text-white ${
-                      strength ? "bg-green" : "bg-dark-5"
+                      submissionValidation() === false
+                        ? "bg-green"
+                        : "bg-dark-5"
                     } py-3 px-6 rounded-lg ease-out duration-200   ${
-                      strength && "hover:bg-green-dark"
+                      submissionValidation() === false && "hover:bg-green-dark"
                     } mt-7.5`}
                   >
                     {loading ? <PreLoader /> : "Créers un compte"}

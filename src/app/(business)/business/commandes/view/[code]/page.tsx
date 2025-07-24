@@ -383,6 +383,8 @@ export default function AddProduct() {
                     </label>
                     <select
                       onChange={(e) => setStatus(e.target.value)}
+                      defaultValue={details?.status}
+                      disabled={details?.status == "livré"}
                       className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       <option value="">Choisir un état</option>

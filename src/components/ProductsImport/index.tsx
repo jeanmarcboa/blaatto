@@ -1,4 +1,3 @@
-// pages/admin/add-product.js
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -10,7 +9,7 @@ import product from "@/app/api/productServices";
 import categ from "@/app/api/categoriesServices";
 import shop from "@/app/api/shopServices";
 
-export default function AddProduct() {
+export const PageComponent = () => {
   const { userInfo } = useUser();
   const [shopList, setShopList] = useState([]);
   const [productName, setProductName] = useState("");
@@ -272,4 +271,4 @@ export default function AddProduct() {
       </form>
     </div>
   );
-}
+};
