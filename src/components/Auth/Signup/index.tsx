@@ -78,21 +78,6 @@ const Signup = () => {
       password: formData.password,
     };
 
-    if (
-      !firstname ||
-      !lastname ||
-      !email ||
-      !phoneNumber ||
-      !password ||
-      !username
-    ) {
-      // alert("Veuillez remplir tous les champs");
-      setLoading(false);
-      setError(true);
-      setErrorMessage("Veuillez remplir tous les champs");
-      return;
-    }
-
     if (loading) {
       return;
     }
@@ -183,7 +168,7 @@ const Signup = () => {
         !email ||
         !phoneNumber ||
         !password ||
-        strength
+        !strength
       ) {
         isNotValid = true;
       } else {
@@ -502,7 +487,7 @@ const Signup = () => {
                       submissionValidation() === false && "hover:bg-green-dark"
                     } mt-7.5`}
                   >
-                    {loading ? <PreLoader /> : "Créers un compte"}
+                    {loading ? <PreLoader /> : "Créer un compte"}
                   </button>
 
                   <p className="text-center mt-6">
