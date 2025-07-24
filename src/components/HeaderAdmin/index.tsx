@@ -47,23 +47,6 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyMenu);
   });
 
-  const fetchNotifications = async () => {
-    notificationAPI
-      .notificationsList(userInfo?.access_token)
-      .then((res) => {
-        if (res.data) {
-          setNotifications(res.data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
-
   useEffect(() => {
     // console.log("useNotificationModalContext", useNotificationModalContext);
     // Connexion à Socket.IO
@@ -83,6 +66,28 @@ const Header = () => {
     return () => {
       socket.disconnect();
     };
+  }, []);
+
+  const fetchNotifications = () => {
+    let receiverGroup = userInfo?.role?.code === "ADMIN" ? "ADMIN" : "MERCHANT";
+    let receiverId =
+      userInfo?.role?.code === "MERCHANT" ? "receiverId=" + userInfo?.id : "";
+    let paramsData = "?" + receiverId + "&receiverGroup=" + receiverGroup;
+
+    notificationAPI
+      .notificationsList(paramsData, userInfo?.access_token)
+      .then((res) => {
+        if (res.data) {
+          setNotifications(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchNotifications();
   }, []);
 
   return (

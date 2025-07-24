@@ -6,7 +6,7 @@ const headersConfig = (token) => {
 };
 
 export default {
-  notificationsList: (token) => {
-    return axios.get(`/api/notifications?read=false`, headersConfig(token));
+  notificationsList: (params, token) => {
+    return axios.get(`/api/notifications?read=false${params}`, headersConfig(token));
   },
 };

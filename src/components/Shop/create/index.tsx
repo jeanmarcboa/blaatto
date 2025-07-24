@@ -21,7 +21,17 @@ const ShopCreation = () => {
     commercialRegister: "",
     accountId: userInfo.id,
   });
+  const [document, setDocument] = useState({
+    cni: null,
+    cert: null,
+  });
+  const [docType, setDocType] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const handleFileChange = (e: any) => {
+    const { name, files } = e.target;
+    setDocument({ ...document, [name]: files[0] });
+  };
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -34,6 +44,36 @@ const ShopCreation = () => {
 
     Shop.createShop(formData, userInfo?.access_token)
       .then((response) => {
+        const CNI_ID = docType.find((item) => item.code === "CNI");
+        const CERT_ID = docType.find((item) => item.code === "CERT");
+
+        if (document.cni) {
+          const formData = new FormData();
+          formData.append("file", document?.cni);
+          formData.append("documentTypeId", CNI_ID.id);
+
+          Account.uploadDocument(formData, userInfo.access_token)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+
+        if (document.cert) {
+          const formData = new FormData();
+          formData.append("file", document?.cert);
+          formData.append("documentTypeId", CERT_ID.id);
+
+          Account.uploadDocument(formData, userInfo.access_token)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
         console.log(response);
         setLoading(false);
         router.push("/business/product/product-list");
@@ -43,6 +83,17 @@ const ShopCreation = () => {
         setLoading(false);
       });
   };
+
+  useEffect(() => {
+    Account.documentsTypes()
+      .then((response) => {
+        console.log(response);
+        setDocType(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
@@ -119,6 +170,39 @@ const ShopCreation = () => {
                     autoComplete="on"
                     onChange={handleInputChange}
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <p className="block mb-2.5">
+                    Documents justcificatifs d&#39;identité et d&#39;activité
+                  </p>
+                </div>
+
+                <div className="mb-5">
+                  <label htmlFor="cni" className="block mb-2.5">
+                    Carte d&#39;identité
+                  </label>
+
+                  <input
+                    type="file"
+                    name="cni"
+                    id="cni"
+                    onChange={handleFileChange}
+                    required
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <label htmlFor="cert" className="block mb-2.5">
+                    Justificatif d&#39;activité
+                  </label>
+                  <input
+                    type="file"
+                    name="cert"
+                    id="cert"
+                    onChange={handleFileChange}
+                    required
                   />
                 </div>
 
