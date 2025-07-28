@@ -137,36 +137,48 @@ const Checkout = () => {
       .then((response) => {
         console.log("Order created successfully", response);
         // pay order and redirect to order confirmation page
-        let payData = {
-          deliveryAddress: billingInfo?.deliveryAddress,
-          phoneNumber: billingInfo?.phoneNumber,
-        };
+        // let payData = {
+        //   deliveryAddress: billingInfo?.deliveryAddress,
+        //   phoneNumber: billingInfo?.phoneNumber,
+        // };
 
-        orderAPI
-          .buyOrder(response.data.id, payData, userInfo?.access_token)
-          .then((req) => {
-            console.log("Order paid successfully", req);
+        for (let i = 0; i < selectedCartItems.length; i++) {
+          const element = selectedCartItems[i];
+          dispatch(removeItemFromCart(element.id));
 
-            for (let i = 0; i < selectedCartItems.length; i++) {
-              const element = selectedCartItems[i];
-              dispatch(removeItemFromCart(element.id));
-
-              if (i == selectedCartItems.length - 1) {
-                setTimeout(() => {
-                  router.push("/order/confirmation");
-                  setLoading(false);
-                }, 2000);
-              }
-            }
-          })
-          .catch((error) => {
-            console.error("Error paying order", error);
+          if (i == selectedCartItems.length - 1) {
             setTimeout(() => {
-              // router.push("/order/confirmation");
-              router.push("/error");
+              router.push("/order/confirmation");
               setLoading(false);
             }, 2000);
-          });
+          }
+        }
+
+        // orderAPI
+        //   .buyOrder(response.data.id, payData, userInfo?.access_token)
+        //   .then((req) => {
+        //     console.log("Order paid successfully", req);
+
+        //     for (let i = 0; i < selectedCartItems.length; i++) {
+        //       const element = selectedCartItems[i];
+        //       dispatch(removeItemFromCart(element.id));
+
+        //       if (i == selectedCartItems.length - 1) {
+        //         setTimeout(() => {
+        //           router.push("/order/confirmation");
+        //           setLoading(false);
+        //         }, 2000);
+        //       }
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error paying order", error);
+        //     setTimeout(() => {
+        //       // router.push("/order/confirmation");
+        //       router.push("/error");
+        //       setLoading(false);
+        //     }, 2000);
+        //   });
       })
       .catch((error) => {
         console.error("Error creating order", error);
