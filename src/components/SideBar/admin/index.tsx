@@ -59,13 +59,13 @@ export default function SideBar() {
         //   link: "/admin/product/add-product",
         // },
         {
-          title: "Importer des produits",
+          title: "Importer des désignations",
           link: "/admin/product/import",
         },
         { title: "Désignations", link: "/admin/product/labels" },
         { title: "Catégories", link: "/admin/product/categories" },
         {
-          title: "Importation de catégories",
+          title: "Importer des catégories",
           link: "/admin/product/categories/import",
         },
       ],

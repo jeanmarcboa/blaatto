@@ -15,6 +15,14 @@ export default {
     // console.log(data);
     return axios.post(`/api/products/upload`, data, headersConfig(token));
   },
+  importProductDesignations: (data, token) => {
+    // console.log(data);
+    return axios.post(
+      `/api/products-designations/upload`,
+      data,
+      headersConfig(token)
+    );
+  },
   updateProduct: (id, data, token) => {
     // console.log(data);
     return axios.put(`/api/products/${id}`, data, headersConfig(token));

@@ -81,12 +81,12 @@ export const PageComponent = () => {
     setSuccessfull(false);
     const formData = new FormData();
     formData.append("worksheet", uploadedfiles[0]);
-    formData.append("shopId", shopId);
-    formData.append("categoryId", category);
+    // formData.append("shopId", shopId);
+    // formData.append("categoryId", category);
 
     // Envoi des données au backend
     product
-      .importProduct(formData, userInfo?.access_token)
+      .importProductDesignations(formData, userInfo?.access_token)
       .then((response) => {
         console.log("Produit ajouté avec succès:", response);
         setTimeout(() => {
@@ -107,14 +107,14 @@ export const PageComponent = () => {
   };
 
   useEffect(() => {
-    fetchShopList();
-    fetchCategories();
+    // fetchShopList();
+    // fetchCategories();
   }, []);
 
   return (
     <div className="">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
-        Importation de produits
+        Importation de designations de produits
       </h1>
       <div className="flex items-center justify-center space-x-3">
         {/* //Display message */}
@@ -145,7 +145,7 @@ export const PageComponent = () => {
                 <div className="mb-4">
                   Téléchargez un modéle de fichier d&apos;importation{" "}
                   <a
-                    href="/template/product-template.xlsx"
+                    href="/template/designation-template.xlsx"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
@@ -208,7 +208,7 @@ export const PageComponent = () => {
               </div>
 
               <div className="p-6">
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   <label className="block text-sm font-medium text-gray-700">
                     Boutique
                   </label>
@@ -225,23 +225,19 @@ export const PageComponent = () => {
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
                 <button
                   type="submit"
-                  disabled={
-                    uploadedfiles.length === 0 ||
-                    shopId === "" ||
-                    category === ""
-                  }
+                  disabled={uploadedfiles.length === 0}
                   className="flex flex-row justify-center w-full text-center font-medium text-custom-sm text-white bg-green py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-green-dark mt-7.5"
                 >
-                  {!loading ? "Importer les produits" : <PreLoader />}
+                  {!loading ? "Importer" : <PreLoader />}
                 </button>
               </div>
             </div>
 
             {/* Ajout de Catégorie */}
-            <div className="rounded-xl bg-white shadow-1 border-[1px] border-solid border-gray-4 mt-4">
+            {/* <div className="rounded-xl bg-white shadow-1 border-[1px] border-solid border-gray-4 mt-4">
               <div className="border-b-[1px] border-solid border-gray-4 pl-6 pr-6 pt-2 pb-2">
                 <h2 className="text-xl font-semibold text-gray-800">
                   Catégories
@@ -265,7 +261,7 @@ export const PageComponent = () => {
                   </select>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>
