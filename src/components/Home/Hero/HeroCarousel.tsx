@@ -40,14 +40,14 @@ const HeroCarousal = () => {
       <SwiperSlide>
         <div
           className={
-            "bg-[url('/images/hero/femme-1.jpg')] bg-top bg-no-repeat h-[640px] bg-cover"
+            "bg-[url('/images/hero/femme-1.jpg')] bg-top bg-no-repeat h-[350px] lg:h-[640px] bg-cover"
           }
         />
       </SwiperSlide>
       <SwiperSlide>
         <div
           className={
-            "bg-[url('/images/hero/file-20210607-80132-1nnptvo.jpg')] bg-center bg-no-repeat h-[640px] bg-cover"
+            "bg-[url('/images/hero/file-20210607-80132-1nnptvo.jpg')] bg-center bg-no-repeat h-[350px] lg:h-[640px] bg-cover"
           }
         />
       </SwiperSlide>

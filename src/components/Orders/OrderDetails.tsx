@@ -7,7 +7,7 @@ const OrderDetails = ({ orderItem }: any) => {
   return (
     <>
       <div className="px-7.5 w-full mt-4">
-        <p className="font-bold">Détails de la transaction :</p>
+        <p className="font-bold">Détails de la commande :</p>
       </div>
       <div className="items-center justify-between py-4.5 px-7.5 hidden md:flex w-full">
         <div className="min-w-[113px]">
@@ -54,8 +54,14 @@ const OrderDetails = ({ orderItem }: any) => {
         </div>
       </div>
       <div className="px-7.5 w-full mb-4">
-        <p className="font-normal">Adresse de livraison:</p>{" "}
+        <p className="font-semibold">Adresse de livraison:</p>{" "}
         <p>{orderItem.deliverAddress ?? "Non indiqué"}</p>
+      </div>
+      <div className="px-7.5 w-full mb-4">
+        <p className="font-semibold">Nom du commerçant :</p>{" "}
+        <p>
+          {orderItem?.OrderItem?.[0]?.product?.shop?.label ?? "Non indiqué"}
+        </p>
       </div>
       {/* add div separator */}
       <div className="w-full h-[1px] bg-gray-3"></div>
