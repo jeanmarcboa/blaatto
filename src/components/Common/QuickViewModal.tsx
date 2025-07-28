@@ -10,6 +10,7 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { resetQuickView } from "@/redux/features/quickView-slice";
 import { updateproductDetails } from "@/redux/features/product-details";
 import sepMillier from "./numberSeparator";
+import Link from "next/link";
 
 const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
@@ -174,6 +175,20 @@ const QuickViewModal = () => {
                 industry. Lorem Ipsum has.
               </p> */}
 
+              <div className="flex flex-col gap-4.5 border-y border-gray-3 mt-2 mb-4 py-4">
+                <div className="max-w-[670px] w-full">
+                  <p className="font-semibold text-lg text-dark">
+                    Commerçant :{" "}
+                    <Link
+                      className="text-green"
+                      href={"/boutique/" + product?.shop?.id}
+                    >
+                      <span> {product?.shop?.label} </span>
+                    </Link>
+                  </p>
+                </div>
+              </div>
+
               <div className="flex flex-col flex-wrap justify-between gap-5 mt-6 mb-7.5">
                 <div>
                   <h4 className="font-semibold text-lg text-dark mb-1">
@@ -189,7 +204,7 @@ const QuickViewModal = () => {
                   <h4 className="font-semibold text-lg text-dark mb-1">Prix</h4>
 
                   <span className="flex items-center gap-2">
-                    <span className="font-semibold text-dark text-xl xl:text-heading-4">
+                    <span className="font-semibold text-green text-xl xl:text-heading-4">
                       {sepMillier(product?.price)} FCFA
                     </span>
                   </span>
