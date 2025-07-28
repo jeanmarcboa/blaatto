@@ -28,7 +28,7 @@ export default {
   },
   updateUserPassword: (data, uuid, token) => {
     return axios.put(
-      `/api/accounts/${uuid}/update-password`,
+      `/api/accounts/update-password/${uuid}`,
       data,
       headersConfig(token)
     );

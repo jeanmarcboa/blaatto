@@ -32,11 +32,11 @@ const Footer = () => {
                     />
                   </svg>
                 </span>
-                685 Market Street,Las Vegas, LA 95820,United States.
+                Immeuble CGRAE 1er étage, Adjamé-Indénié, Abidjan, Côte d'Ivoire
               </li>
 
               <li>
-                <a href="#" className="flex items-center gap-4.5">
+                <div className="flex items-center gap-4.5">
                   <svg
                     width="24"
                     height="24"
@@ -61,12 +61,15 @@ const Footer = () => {
                       fill="#22AD5C"
                     />
                   </svg>
-                  (+225) 07-00-00-00-00
-                </a>
+                  <div className="flex flex-col items-center">
+                    <p>+225 27 20 28 67 53</p>
+                    <p>+225 07 67 22 99 36</p>
+                  </div>
+                </div>
               </li>
 
               <li>
-                <a href="#" className="flex items-center gap-4.5">
+                <div className="flex items-center gap-4.5">
                   <svg
                     width="24"
                     height="24"
@@ -81,8 +84,8 @@ const Footer = () => {
                       fill="#22AD5C"
                     />
                   </svg>
-                  support@example.com
-                </a>
+                  info@cotedivoirexport.ci
+                </div>
               </li>
             </ul>
 
@@ -264,14 +267,10 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="w-full sm:w-auto">
+          {/* <div className="w-full sm:w-auto">
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark lg:text-right">
-              Download App
+              Télécharger l'application
             </h2>
-
-            <p className="lg:text-right text-custom-sm mb-4">
-              Économisez 3000 FCFA avec l&apos;application
-            </p>
 
             <ul className="flex flex-col lg:items-end gap-3">
               <li>
@@ -328,7 +327,7 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
         {/* <!-- footer menu end --> */}
       </div>

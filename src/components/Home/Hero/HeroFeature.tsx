@@ -22,10 +22,10 @@ const featureData = [
 const HeroFeature = () => {
   return (
     <div className="max-w-[1060px] w-full mx-auto px-4 sm:px-8 xl:px-0 pb-10 lg:pb-12.5 xl:pb-15 pt-10 lg:pt-12.5 xl:pt-15">
-      <div className="flex flex-row flex-wrap items-center gap-4 xl:gap-6 mt-0">
+      <div className="flex flex-col lg:flex-row flex-wrap items-center gap-4 xl:gap-6 mt-0">
         {featureData.map((item, key) => (
           <div
-            className="flex items-center gap-4 bg-white p-4 rounded-md w-[30%]"
+            className="flex items-center gap-4 bg-white p-4 rounded-md w-[100%] lg:w-[30%]"
             key={key}
           >
             <Image

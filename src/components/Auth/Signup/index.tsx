@@ -112,7 +112,7 @@ const Signup = () => {
               setTimeout(() => {
                 setLoading(false);
                 setLoginData(res.data);
-                router.push("/shops-settings");
+                router.push("/mail-success");
               }, 1000);
             })
             .catch((error) => {

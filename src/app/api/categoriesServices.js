@@ -11,7 +11,7 @@ export default {
   },
   importCategories: (data, token) => {
     // console.log(data);
-    return axios.post(`/api/categories/upload`, data);
+    return axios.post(`/api/categories/upload`, data, headersConfig(token));
   },
   categorieList: () => {
     return axios.get(`/api/categories/`);
