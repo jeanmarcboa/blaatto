@@ -86,7 +86,7 @@ export const PageComponent = () => {
 
     // Envoi des données au backend
     product
-      .importProduct(formData)
+      .importProduct(formData, userInfo?.access_token)
       .then((response) => {
         console.log("Produit ajouté avec succès:", response);
         setTimeout(() => {

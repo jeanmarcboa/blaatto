@@ -342,7 +342,6 @@ export const AddProduct = () => {
                       onChange={(e) => setLimit(e.target.value)}
                       // className="mt-1 block w-full p-3 border border-gray-4 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                       className="mt-1 rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                      required
                     />
                   </div>
                   <div className="md:w-[49%]">

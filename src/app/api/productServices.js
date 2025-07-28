@@ -11,9 +11,9 @@ export default {
     // console.log(data);
     return axios.post(`/api/products`, data, headersConfig(token));
   },
-  importProduct: (data) => {
+  importProduct: (data, token) => {
     // console.log(data);
-    return axios.post(`/api/products/upload`, data);
+    return axios.post(`/api/products/upload`, data, headersConfig(token));
   },
   updateProduct: (id, data, token) => {
     // console.log(data);
