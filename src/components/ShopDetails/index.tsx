@@ -16,6 +16,7 @@ import shopData from "../Shop/shopData";
 
 import productAPI from "@/app/api/productServices";
 import sepMillier from "../Common/numberSeparator";
+import Link from "next/link";
 
 const ShopDetails = () => {
   const { productImages, setUpdateproductImages } = useImagesPreview();
@@ -167,70 +168,80 @@ const ShopDetails = () => {
                 <div className="max-w-[539px] w-full">
                   <div className="flex flex-col mb-3">
                     <h2 className="font-semibold text-xl sm:text-2xl xl:text-custom-3 text-dark">
-                      {product?.designation?.label}
+                      {product?.designation?.label} (Vendu par{" "}
+                      <strong>{product?.unitOfMesure}</strong>)
                     </h2>
-                    <h2 className="font-semibold text-xl sm:text-2xl xl:text-custom-3 text-dark">
-                      (Vendu par <strong>{product?.unitOfMesure}</strong>)
-                    </h2>
+                    <div className="flex flex-wrap gap-5.5 mb-4.5">
+                      <div className="flex items-center gap-1.5">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g clipPath="url(#clip0_375_9221)">
+                            <path
+                              d="M10 0.5625C4.78125 0.5625 0.5625 4.78125 0.5625 10C0.5625 15.2188 4.78125 19.4688 10 19.4688C15.2188 19.4688 19.4688 15.2188 19.4688 10C19.4688 4.78125 15.2188 0.5625 10 0.5625ZM10 18.0625C5.5625 18.0625 1.96875 14.4375 1.96875 10C1.96875 5.5625 5.5625 1.96875 10 1.96875C14.4375 1.96875 18.0625 5.59375 18.0625 10.0312C18.0625 14.4375 14.4375 18.0625 10 18.0625Z"
+                              fill="#22AD5C"
+                            />
+                            <path
+                              d="M12.6875 7.09374L8.9688 10.7187L7.2813 9.06249C7.00005 8.78124 6.56255 8.81249 6.2813 9.06249C6.00005 9.34374 6.0313 9.78124 6.2813 10.0625L8.2813 12C8.4688 12.1875 8.7188 12.2812 8.9688 12.2812C9.2188 12.2812 9.4688 12.1875 9.6563 12L13.6875 8.12499C13.9688 7.84374 13.9688 7.40624 13.6875 7.12499C13.4063 6.84374 12.9688 6.84374 12.6875 7.09374Z"
+                              fill="#22AD5C"
+                            />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_375_9221">
+                              <rect width="20" height="20" fill="white" />
+                            </clipPath>
+                          </defs>
+                        </svg>
+                        <span
+                          className={
+                            product?.stock === 0 ? "text-red" : "text-green"
+                          }
+                        >
+                          {product?.stock === 0 ? "En rupture" : "In Stock"}{" "}
+                        </span>
+                      </div>
+                    </div>
 
                     {/* <div className="inline-flex font-medium text-custom-sm text-white bg-green rounded py-0.5 px-2.5">
                       30% OFF
                     </div> */}
                   </div>
-
-                  <div className="flex flex-wrap gap-5.5 mb-4.5">
-                    <div className="flex items-center gap-1.5">
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g clipPath="url(#clip0_375_9221)">
-                          <path
-                            d="M10 0.5625C4.78125 0.5625 0.5625 4.78125 0.5625 10C0.5625 15.2188 4.78125 19.4688 10 19.4688C15.2188 19.4688 19.4688 15.2188 19.4688 10C19.4688 4.78125 15.2188 0.5625 10 0.5625ZM10 18.0625C5.5625 18.0625 1.96875 14.4375 1.96875 10C1.96875 5.5625 5.5625 1.96875 10 1.96875C14.4375 1.96875 18.0625 5.59375 18.0625 10.0312C18.0625 14.4375 14.4375 18.0625 10 18.0625Z"
-                            fill="#22AD5C"
-                          />
-                          <path
-                            d="M12.6875 7.09374L8.9688 10.7187L7.2813 9.06249C7.00005 8.78124 6.56255 8.81249 6.2813 9.06249C6.00005 9.34374 6.0313 9.78124 6.2813 10.0625L8.2813 12C8.4688 12.1875 8.7188 12.2812 8.9688 12.2812C9.2188 12.2812 9.4688 12.1875 9.6563 12L13.6875 8.12499C13.9688 7.84374 13.9688 7.40624 13.6875 7.12499C13.4063 6.84374 12.9688 6.84374 12.6875 7.09374Z"
-                            fill="#22AD5C"
-                          />
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_375_9221">
-                            <rect width="20" height="20" fill="white" />
-                          </clipPath>
-                        </defs>
-                      </svg>
-                      <span
-                        className={
-                          product?.stock === 0 ? "text-red" : "text-green"
-                        }
-                      >
-                        {product?.stock === 0 ? "En rupture" : "In Stock"}{" "}
-                      </span>
+                  <div className="flex flex-col gap-4.5 border-y border-gray-3 mt-2 mb-4 py-4">
+                    <div className="max-w-[670px] w-full">
+                      <p className="font-medium text-xl text-dark">
+                        Commerçant :{" "}
+                        <Link
+                          className="text-green"
+                          href={"/boutique/" + product?.shop?.id}
+                        >
+                          <span> {product?.shop?.label} </span>
+                        </Link>
+                      </p>
                     </div>
                   </div>
 
-                  <h3 className="font-medium text-custom-1 mb-4.5">
-                    <span className="text-2xl sm:text-2xl text-dark">
-                      Disponibilité: {sepMillier(product?.stock)}{" "}
+                  <p className="mb-4.5">
+                    <span className="text-dark">
+                      Disponibilité : {sepMillier(product?.stock)}{" "}
                       {product.unitOfMesure}
                     </span>
-                  </h3>
-                  <h3 className="font-medium text-custom-1 mb-4.5">
-                    <span className="text-2xl sm:text-2xl text-dark">
-                      Prix: {sepMillier(product?.price)} FCFA
+                  </p>
+                  <h3 className="font-medium text-custom-1">
+                    <span className="text-2xl sm:text-4xl text-green">
+                      {sepMillier(product?.price)} FCFA
                     </span>
                     {/* <span className="line-through"> ${product?.price} </span> */}
                   </h3>
 
                   <form onSubmit={(e) => e.preventDefault()}>
-                    <div className="flex flex-col gap-4.5 border-y border-gray-3 mt-7.5 mb-9 py-9">
+                    <div className="flex flex-col gap-4.5 border-y border-gray-3 mt-7.5 mb-9 py-4">
                       <div className="max-w-[670px] w-full">
-                        <h2 className="font-medium text-2xl text-dark mb-7">
-                          Description:
+                        <h2 className="font-medium text-2xl text-dark">
+                          Description :
                         </h2>
 
                         <p className="mb-6">{product?.description}</p>
