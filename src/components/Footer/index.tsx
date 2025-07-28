@@ -32,7 +32,7 @@ const Footer = () => {
                     />
                   </svg>
                 </span>
-                Immeuble CGRAE 1er étage, Adjamé-Indénié, Abidjan, Côte d'Ivoire
+                Immeuble CGRAE 1er étage, Adjamé-Indénié, Abidjan, Côte d&apos;Ivoire
               </li>
 
               <li>
