@@ -1,5 +1,9 @@
 const data = [
   {
+    id: 10,
+    img: "/images/logo/partner/logo-ci-export.png",
+  },
+  {
     id: 1,
     img: "/images/logo/partner/log-bad.jpeg",
   },

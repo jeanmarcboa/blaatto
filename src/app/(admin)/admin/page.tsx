@@ -242,7 +242,9 @@ export default function HomePage() {
               <div className="flex items-center">
                 <FiUsers className="w-12 h-12 text-white" />
                 <div className="ml-4 text-white">
-                  <h3 className="text-lg font-semibold">Nombre de marchants</h3>
+                  <h3 className="text-lg font-semibold">
+                    Nombre de commerçants
+                  </h3>
                   <p className="text-2xl">{merchants.length}</p>
                 </div>
               </div>

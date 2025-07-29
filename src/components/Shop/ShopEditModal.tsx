@@ -102,7 +102,7 @@ const ShopEditModal = ({
                   <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                     <div className="w-full">
                       <label htmlFor="email" className="block mb-2.5">
-                        Marchant
+                        Commerçant
                       </label>
 
                       <select
@@ -111,7 +111,7 @@ const ShopEditModal = ({
                         onChange={handleInputChange}
                         className="rounded-lg border border-gray-3 bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                       >
-                        <option value="">Sélectionnez un marchant</option>
+                        <option value="">Sélectionnez un commerçant</option>
                         {merchantList?.map((item: any, index: number) => (
                           <option value={item.id} key={index}>
                             {item.firstname + " " + item.lastname}
