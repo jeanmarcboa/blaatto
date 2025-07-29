@@ -239,6 +239,14 @@ export const ShopList = () => {
                 ? "Toutes les boutiques"
                 : "Mes boutiques"}
             </h2>
+            {!pageLoading && shopList.length === 0 && (
+              <Link
+                href="/shops-settings"
+                className="flex justify-center font-medium text-white bg-green py-3 px-6 rounded-lg ease-out duration-200 hover:bg-green-dark mt-7.5"
+              >
+                Ajouter une boutique
+              </Link>
+            )}
           </div>
           {successFull && (
             <div className="p-4 mb-4 text-sm text-green rounded-lg bg-green-light-5 dark:bg-gray-800 dark:text-green-400 w-full">
