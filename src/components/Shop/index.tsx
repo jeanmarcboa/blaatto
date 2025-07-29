@@ -237,7 +237,7 @@ export const ShopList = () => {
             <h2 className="font-medium text-dark text-2xl">
               {userInfo?.role?.code === "ADMIN"
                 ? "Toutes les boutiques"
-                : "Mes boutiques"}
+                : "Ma boutique"}
             </h2>
             {!pageLoading && shopList.length === 0 && (
               <Link

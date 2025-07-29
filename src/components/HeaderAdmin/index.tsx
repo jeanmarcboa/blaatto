@@ -71,8 +71,10 @@ const Header = () => {
   const fetchNotifications = () => {
     let receiverGroup = userInfo?.role?.code === "ADMIN" ? "ADMIN" : "MERCHANT";
     let receiverId =
-      userInfo?.role?.code === "MERCHANT" ? "receiverId=" + userInfo?.id : "";
-    let paramsData = "?" + receiverId + "&receiverGroup=" + receiverGroup;
+      userInfo?.role?.code === "MERCHANT"
+        ? "receiverId=" + userInfo?.id + "&"
+        : "";
+    let paramsData = "?" + receiverId + "receiverGroup=" + receiverGroup;
 
     notificationAPI
       .notificationsList(paramsData, userInfo?.access_token)
