@@ -6,7 +6,7 @@ import Image from "next/image";
 const SingleItem = ({ item }: { item: any }) => {
   return (
     <Link
-      href={"/boutique/" + item?.id}
+      href="/"
       className="group flex flex-col items-center"
     >
       <div className="max-w-[130px] w-full h-32.5 flex items-center justify-center mb-4">

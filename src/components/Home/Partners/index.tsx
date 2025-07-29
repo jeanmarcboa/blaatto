@@ -67,7 +67,7 @@ const Categories = () => {
               },
               // when window width is >= 768px
               1200: {
-                slidesPerView: 6,
+                slidesPerView: 7,
               },
             }}
           >
