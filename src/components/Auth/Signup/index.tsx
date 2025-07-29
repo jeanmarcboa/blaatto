@@ -100,27 +100,8 @@ const Signup = () => {
       Account.signUpMerchant(tmpformdata)
         .then((response) => {
           console.log(response);
-
-          // connect user after sign up
-          let data = {
-            username: username.toLocaleLowerCase(),
-            password: password,
-          };
-
-          Account.signIn(data)
-            .then((res) => {
-              setTimeout(() => {
-                setLoading(false);
-                setLoginData(res.data);
-                router.push("/mail-success");
-              }, 1000);
-            })
-            .catch((error) => {
-              console.log(error);
-              setLoading(false);
-              setError(true);
-              setErrorMessage(error.response.data.message);
-            });
+          setLoading(false);
+          router.push("/mail-success");
         })
         .catch((error) => {
           console.log(error);
