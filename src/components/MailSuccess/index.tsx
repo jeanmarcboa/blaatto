@@ -18,8 +18,18 @@ const MailSuccess = () => {
                 Votre compte a été crée avec succès
               </h3>
 
+              <p className="max-w-[491px] w-full mx-auto mb-5">
+                Veuillez consulter votre boîte mail.<br></br>Vous allez recevoir
+                deux e-mails distincts :
+              </p>
               <p className="max-w-[491px] w-full mx-auto mb-7.5">
-                Consultez votre boite mail pour activer votre compte.
+                Le premier contient un code d'activation à saisir. Le second
+                contient un lien sur lequel vous devrez cliquer pour créer un
+                nouveau mot de passe.
+              </p>
+              <p className="max-w-[491px] text-red w-full mx-auto mb-7.5">
+                👉 Assurez-vous de bien vérifier vos courriers indésirables
+                (spam) si vous ne voyez rien après quelques minutes.
               </p>
 
               <Link
