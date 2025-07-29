@@ -23,9 +23,9 @@ const MailSuccess = () => {
                 deux e-mails distincts :
               </p>
               <p className="max-w-[491px] w-full mx-auto mb-7.5">
-                Le premier contient un code d'activation à saisir. Le second
-                contient un lien sur lequel vous devrez cliquer pour créer un
-                nouveau mot de passe.
+                Le premier contient un code d&apos;activation à saisir. Le
+                second contient un lien sur lequel vous devrez cliquer pour
+                créer un nouveau mot de passe.
               </p>
               <p className="max-w-[491px] text-red w-full mx-auto mb-7.5">
                 👉 Assurez-vous de bien vérifier vos courriers indésirables
