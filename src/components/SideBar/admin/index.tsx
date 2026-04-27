@@ -44,6 +44,12 @@ export default function SideBar() {
       path: "/admin/medias",
     },
     {
+      title: "Publicités",
+      icon: <FiImage />,
+      link: "/admin/publicites",
+      path: "/admin/publicites",
+    },
+    {
       title: "Boutiques",
       icon: <FiBriefcase />,
       link: "/admin/boutiques",

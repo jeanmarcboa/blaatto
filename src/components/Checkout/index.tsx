@@ -85,29 +85,29 @@ const Checkout = () => {
     setTotalPrice(tmpTotalPrice);
   }, []);
 
-  const createUserAccountFromBillingInfo = () => {
-    console.log(billingInfo);
-    let data = {
-      lastname: billingInfo?.lastname,
-      firstname: billingInfo?.firstname,
-      email: billingInfo?.email,
-      phoneNumber: billingInfo?.phoneNumber,
-      username: billingInfo?.lastname,
-      password: billingInfo?.password,
-    };
-    accountAPI
-      .signUpCustomer(data)
-      .then((response: any) => {
-        console.log("User created successfully", response);
-        setUserID(response.data.id);
-        setTimeout(() => {
-          setOrder(response.data.id);
-        }, 2000);
-      })
-      .catch((error: any) => {
-        console.error("Error creating user", error);
-      });
-  };
+  // const createUserAccountFromBillingInfo = () => {
+  //   console.log(billingInfo);
+  //   let data = {
+  //     lastname: billingInfo?.lastname,
+  //     firstname: billingInfo?.firstname,
+  //     email: billingInfo?.email,
+  //     phoneNumber: billingInfo?.phoneNumber,
+  //     username: billingInfo?.lastname,
+  //     password: billingInfo?.password,
+  //   };
+  //   accountAPI
+  //     .signUpCustomer(data)
+  //     .then((response: any) => {
+  //       console.log("User created successfully", response);
+  //       setUserID(response.data.id);
+  //       setTimeout(() => {
+  //         setOrder(response.data.id);
+  //       }, 2000);
+  //     })
+  //     .catch((error: any) => {
+  //       console.error("Error creating user", error);
+  //     });
+  // };
 
   const setOrder = (id: string) => {
     //extract cart items from selectedCartItems to order.products
@@ -125,12 +125,12 @@ const Checkout = () => {
       deliveryAddress: billingInfo?.deliveryAddress,
       status: "En traiment",
     };
-    const orderNologged = {
-      products: orderProducts,
-      email: billingInfo?.email,
-      lastname: billingInfo?.lastname,
-      firstname: billingInfo?.firstname,
-    };
+    // const orderNologged = {
+    //   products: orderProducts,
+    //   email: billingInfo?.email,
+    //   lastname: billingInfo?.lastname,
+    //   firstname: billingInfo?.firstname,
+    // };
     console.log("userInfo?.access_token:", userInfo);
     orderAPI
       .createOrder(orderLogged, userInfo?.access_token)
@@ -153,32 +153,6 @@ const Checkout = () => {
             }, 2000);
           }
         }
-
-        // orderAPI
-        //   .buyOrder(response.data.id, payData, userInfo?.access_token)
-        //   .then((req) => {
-        //     console.log("Order paid successfully", req);
-
-        //     for (let i = 0; i < selectedCartItems.length; i++) {
-        //       const element = selectedCartItems[i];
-        //       dispatch(removeItemFromCart(element.id));
-
-        //       if (i == selectedCartItems.length - 1) {
-        //         setTimeout(() => {
-        //           router.push("/order/confirmation");
-        //           setLoading(false);
-        //         }, 2000);
-        //       }
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error paying order", error);
-        //     setTimeout(() => {
-        //       // router.push("/order/confirmation");
-        //       router.push("/error");
-        //       setLoading(false);
-        //     }, 2000);
-        //   });
       })
       .catch((error) => {
         console.error("Error creating order", error);

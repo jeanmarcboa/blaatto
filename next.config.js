@@ -2,7 +2,12 @@
 // next.config.js
 const nextConfig = {
   images: {
-    domains: ["eu-004.s3.synologyc2.net"],
+    domains: [
+      "eu-004.s3.synologyc2.net",
+      "4cf4ca27786c6d5a5e1172b157b290f0.r2.cloudflarestorage.com",
+      "fastly.picsum.photos",
+    ],
+    // domains: ["eu-004.s3.synologyc2.net"],
   },
   async rewrites() {
     return [
