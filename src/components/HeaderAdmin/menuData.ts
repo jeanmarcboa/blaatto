@@ -1,6 +1,6 @@
 import { Menu } from "@/types/Menu";
 
-export const menuData: Menu[] = [
+export const menuData: any[] = [
   {
     id: 1,
     title: "Accueil",
