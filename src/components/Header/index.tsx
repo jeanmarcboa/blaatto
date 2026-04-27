@@ -457,6 +457,7 @@ const Header = () => {
                       >
                         <Link
                           href={menuItem.path}
+                          target={menuItem.isExternal ? "_blank" : "_self"}
                           className={`hover:text-green text-custom-sm font-medium text-dark flex ${
                             stickyMenu ? "xl:py-4" : "xl:py-6"
                           }`}
