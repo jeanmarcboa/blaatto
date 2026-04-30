@@ -79,7 +79,7 @@ const ShopEditModal = ({
 
             <div>
               <form>
-                <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
+                {/* <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                   <div className="w-full">
                     <label htmlFor="email" className="block mb-2.5">
                       Status
@@ -96,7 +96,7 @@ const ShopEditModal = ({
                       <option value="0">Désactivé</option>
                     </select>
                   </div>
-                </div>
+                </div> */}
 
                 {userInfo?.role?.code === "ADMIN" && (
                   <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
