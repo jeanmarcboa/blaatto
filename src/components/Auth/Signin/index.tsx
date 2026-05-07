@@ -62,20 +62,20 @@ const Signin = () => {
         }, 1000);
       })
       .catch((err) => {
-        console.log(err.message);
-        const fakeData = {
-          lastname: "test",
-          firstname: "Admin",
-          email: "sb2@sb.com",
-          phoneNumber: "0946343784",
-          username: "sb2",
-          access_token: "hfhf0edvdgd-bdhdbjjbdhd-dbdgdvdhgsbne373-dvdggd",
-          role: {
-            code: "ADMIN",
-          },
-        };
-        setLoginData(fakeData);
-        router.push("/admin");
+        // console.log(err.message);
+        // const fakeData = {
+        //   lastname: "test",
+        //   firstname: "Admin",
+        //   email: "sb2@sb.com",
+        //   phoneNumber: "0946343784",
+        //   username: "sb2",
+        //   access_token: "hfhf0edvdgd-bdhdbjjbdhd-dbdgdvdhgsbne373-dvdggd",
+        //   role: {
+        //     code: "ADMIN",
+        //   },
+        // };
+        // setLoginData(fakeData);
+        // router.push("/admin");
         setLoading(false);
         setError(true);
         setErrorMessage(err.response.data.message);
