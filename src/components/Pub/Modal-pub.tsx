@@ -64,7 +64,7 @@ const Modal = ({
     formData.append("type", "IMAGE");
 
     pubAPI
-      .createPublication(item, userInfo?.access_token)
+      .createPublication(formData, userInfo?.access_token)
       .then((response) => {
         // if (uploadedfiles.length !== 0) {
         //   submitPhoto(uploadedfiles[0], response.data.id);
