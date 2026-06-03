@@ -41,7 +41,7 @@ const Medias = () => {
     pubAPI
       .publicationsListAdmin(userInfo?.access_token)
       .then((response) => {
-        setImages(response.data);
+        setImages(response.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -94,22 +94,93 @@ const Medias = () => {
               <div className="min-w-[1170px]">
                 {/* <!-- table header --> */}
                 <div className="flex items-center bg-gray-1 py-5.5 px-10">
-                  {/* <div className="min-w-[83px]"></div> */}
-                  <div className="min-w-[450px]">
-                    <p className="text-dark">Titre</p>
-                  </div>
-
-                  <div className="min-w-[205px]">
-                    <p className="text-dark">Status</p>
-                  </div>
-
-                  <div className="min-w-[205px]">
-                    <p className="text-dark">Date de création</p>
-                  </div>
-
-                  <div className="min-w-[150px]">
-                    <p className="text-dark text-right">Action</p>
-                  </div>
+                  <table className="min-w-full">
+                    <thead>
+                      <tr>
+                        <th className="py-5.5 px-10 bg-gray-1 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                          Fichier
+                        </th>
+                        <th className="py-5.5 px-10 bg-gray-1 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                          Titre
+                        </th>
+                        <th className="py-5.5 px-10 bg-gray-1 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                          Position
+                        </th>
+                        <th className="py-5.5 px-10 bg-gray-1 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="py-5.5 px-10 bg-gray-1 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                          Date de création
+                        </th>
+                        <th className="py-5.5 px-10 bg-gray-1 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray">
+                      {images.map((item, index) => (
+                        <tr key={index}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 h-40 w-40">
+                                <img
+                                  className="h-40 w-40"
+                                  src={item.imageUrl}
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">
+                              {item.title}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">
+                              {item.position}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                item.status === "DRAFT"
+                                  ? "bg-yellow-dark"
+                                  : "bg-green"
+                              }  text-white`}
+                            >
+                              {item.status === "DRAFT" ? "Brouillon" : "Publié"}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-500">
+                              {dayjs(item.createdAt).format(
+                                "DD/MM/YYYY, HH:mm:ss"
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="min-w-[20%] flex justify-end">
+                              {/* <button
+                      onClick={() => {}}
+                      aria-label="button for remove product from wishlist"
+                      className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 mr-4 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-blue-light-5 hover:border-blue-light-4 hover:text-green"
+                    >
+                      <FiEdit2 />
+                    </button> */}
+                              <button
+                                onClick={() => deletePhoto(item.id)}
+                                aria-label="button for remove product from wishlist"
+                                className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 bg-gray-2 border border-gray-3 ease-out duration-200 hover:bg-red-light-6 hover:border-red-light-4 hover:text-red"
+                              >
+                                <FiTrash />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
                 {loading && (
                   <div className="flex justify-center items-center m-4">
