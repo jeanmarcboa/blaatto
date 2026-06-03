@@ -3,6 +3,7 @@
 const nextConfig = {
   images: {
     domains: [
+      "bucket-cloudflare-app.blaatto.com",
       "eu-004.s3.synologyc2.net",
       "4cf4ca27786c6d5a5e1172b157b290f0.r2.cloudflarestorage.com",
       "fastly.picsum.photos",
@@ -15,6 +16,10 @@ const nextConfig = {
         source: "/api/:path*",
         destination: "http://localhost:8080/:path*",
       },
+      // {
+      //   source: "/api/:path*",
+      //   destination: "http://localhost:8080/:path*",
+      // },
     ];
   },
   // async rewrites() {

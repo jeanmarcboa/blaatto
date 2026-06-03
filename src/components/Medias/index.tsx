@@ -389,11 +389,11 @@ const Medias = () => {
                             <FiEye className="text-white text-2xl" />
                           </div>
                         </div>
-                        <Image
+                        <img
                           src={image.url}
                           alt="Product"
-                          width={150}
-                          height={150}
+                          // width={150}
+                          // height={150}
                           className="w-[150px] h-[100px] object-cover"
                         />
                       </div>

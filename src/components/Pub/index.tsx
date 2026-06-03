@@ -39,7 +39,7 @@ const Medias = () => {
 
   const fetchPubList = () => {
     pubAPI
-      .publicationsList()
+      .publicationsListAdmin(userInfo?.access_token)
       .then((response) => {
         setImages(response.data);
       })
