@@ -62,6 +62,7 @@ const Modal = ({
     formData.append("title", item.title);
     formData.append("position", item.position);
     formData.append("type", "IMAGE");
+    formData.append("status", item.status ?? "ACTIVE");
 
     pubAPI
       .createPublication(formData, userInfo?.access_token)
@@ -72,6 +73,7 @@ const Modal = ({
         setTimeout(() => {
           setLoading(false);
           refreshData();
+          closeModal();
         }, 1000);
       })
       .catch((error) => {
@@ -227,12 +229,25 @@ const Modal = ({
                 </select>
               </div>
               <div>
+                <p>Statut</p>
+                <select
+                  name="status"
+                  onChange={(e) => handleChange(e)}
+                  className="w-1/4 block p-4 text-md text-gray-900 border border-gray-4 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
+                >
+                  <option>---Selectionnez---</option>
+                  <option value="ACTIVE">Actif</option>
+                  <option value="DRAFT">Brouillon</option>
+                </select>
+              </div>
+              <div>
                 <button
                   type="submit"
                   onClick={handleSubmit}
                   className="w-[30%] flex justify-center font-medium text-white bg-green py-3 px-6 rounded-lg ease-out duration-200 hover:bg-green-dark mt-7.5"
+                  disabled={loading}
                 >
-                  Enregistrer
+                  {loading ? "Enregistrement en cours..." : "Enregistrer"}
                 </button>
               </div>
             </div>

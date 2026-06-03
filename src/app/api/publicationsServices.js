@@ -16,8 +16,8 @@ export default {
   publicationsList: () => {
     return axios.get(`/api/advertisements/public`);
   },
-  publicationsListAdmin: () => {
-    return axios.get(`/api/advertisements`);
+  publicationsListAdmin: (token) => {
+    return axios.get(`/api/advertisements`, headersConfig(token));
   },
   updatePublications: (data, uuid, token) => {
     return axios.put(`/api/advertisements/${uuid}`, data, headersConfig(token));
